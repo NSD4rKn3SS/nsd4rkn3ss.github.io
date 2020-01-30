@@ -1,7 +1,533 @@
 <!DOCTYPE html>
 <html>
-<body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
-</body>
+
+	<head>
+		<!-- META -->
+		<title></title>
+		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+		<meta name='viewport' content='width=device-width,height=device-height,initial-scale=1, user-scalable=no'>
+
+		<!-- FONTS -->
+		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
+
+		<!--<link href="https://fonts.googleapis.com/css?family=Quicksand:300,400,500,600,700&display=swap" rel="stylesheet"> -->
+
+		<!--STYLES -->
+		<link href='css/sk-icofont.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-core.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-mq.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-site.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-menu.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-content.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-form.css' rel='stylesheet' type='text/css'>
+
+		<!--SCRIPTS -->
+		<script src="js/jquery-3.4.1.min.js"></script>
+		<script src="js/pixi.min.js"></script>
+		<script src='js/function.js'></script>
+
+	</head>
+
+	<body>
+		<script>
+			//PIXI aliasok definiálása
+			let Application = PIXI.Application,
+				Container = PIXI.Container,
+				loader = PIXI.loader,
+				resources = PIXI.loader.resources,
+				Graphics = PIXI.Graphics,
+				TextureCache = PIXI.utils.TextureCache,
+				Sprite = PIXI.Sprite,
+				AnimatedSprite =  PIXI.extras.AnimatedSprite,
+				Text = PIXI.Text,
+				TextStyle = PIXI.TextStyle;
+
+			//PIXI app létrehozása
+			let app = new Application({
+				width: 512,
+				height: 512,
+				antialiasing: true,
+				transparent: false,
+				resolution: 1
+			});
+
+			//canvas automatikus átméretezése az ablakkal
+			/*
+            let windowSize = function() {
+                let viewPw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+                app.renderer.resize(viewPw, viewPh);
+            };
+
+            windowSize();
+            window.addEventListener("resize", windowSize);
+            */
+			//PIXI hozzáadása bodyhoz
+			document.body.appendChild(app.view);
+
+
+			//resourceok létrehozása
+			/*
+            loader
+                .add("img/scav/scav_attack.json")
+                .add("img/scav/scav_walk.json")
+                .add("img/scav/scav_stand.png")
+                .add("img/ulu.png")
+                .add("img/grass.png")
+                .add("img/orcrun/orcrun.json")
+                .add("img/treasureHunter.json")
+                .load(setup);
+            */
+			loader
+					.add("img/scav/frames/scavrun.json")
+					.add("img/orcrun/frames/orcrun.json")
+					.add("img/ulu.png")
+					.add("img/grass.png")
+					.add("img/treasureHunter.json")
+					.load(setup);
+
+			//többször használatos változók definiálása
+			let state, hero, ulu, scavs, chimes, exit, player, plains,
+					door, healthBar, message, gameScene, gameOverScene, enemies, id;
+
+
+			function setup() {
+
+				//alap jelenet hozzáadása a stagehez
+				gameScene = new Container();
+				app.stage.addChild(gameScene);
+
+				//Textúrák felparaméterezése
+				/*
+                id = {
+                    'scav' : {
+                        'attack' : resources["img/scav/scav_attack.json"].textures,
+                        'walk' : resources["img/scav/scav_walk.json"].textures,
+                        'stand' : resources["img/scav/scav_stand.png"].texture,
+                    },
+                    'orc' : resources["img/orcrun/orcrun.json"].textures,
+                    'ulu' : resources["img/ulu.png"].texture,
+                    'grass' : resources["img/grass.png"].texture,
+                    'orith' : resources["img/treasureHunter.json"].textures,
+                };
+                */
+
+				id = {
+					'scav' : resources["img/scav/frames/scavrun.json"].spritesheet,
+					'orc' : resources["img/orcrun/frames/orcrun.json"].spritesheet,
+					'ulu' : resources["img/ulu.png"].texture,
+					'grass' : resources["img/grass.png"].texture,
+					'orith' : resources["img/treasureHunter.json"].textures,
+				};
+
+				//Pálya alapja
+				plains = new Sprite(id['grass']);
+				gameScene.addChild(plains);
+
+
+				//Kijárat
+				door = new Sprite(id['orith']['door.png']);
+				door.position.set(28, 5);
+				gameScene.addChild(door);
+
+				//Játékos karakter
+				hero = new AnimatedSprite(id['orc'].animations["orcrun"]);
+				hero.animationSpeed = 0.2;
+				hero.x = 68;
+				hero.y = gameScene.height / 2 - hero.height / 2;
+				hero.vx = 0;
+				hero.vy = 0;
+				gameScene.addChild(hero);
+
+				//Item
+				ulu = new Sprite(id['ulu']);
+				ulu.x = gameScene.width - ulu.width - 48;
+				ulu.y = gameScene.height / 2 - ulu.height / 2;
+				gameScene.addChild(ulu);
+
+				//Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
+				let numberOfScavs = 6,
+						spacing = 48,
+						xOffset = 150,
+						speed = 2,
+						direction = 1;
+
+				scavs = [];
+
+				//Ellenfelek létrehozása az alapján hogy mennyit adtunk meg a `numberOfScavs` változóba
+				for (let i = 0; i < numberOfScavs; i++) {
+
+					//ellenfél sprite létrehozása, animáció gyorsaságának beállítása és indítása
+					let scav = new AnimatedSprite(id['scav'].animations["walk"]);
+					scav.animationSpeed = 0.2;
+					scav.play();
+
+					//Vízszintesen elrendezzük őket egymástól távolabb a `spacing` érték alapján.
+					//`xOffset` határozza meg a távolságot a képernyő bal oldalától ami alapján az első ellenfél hozzáadásra kerül
+					let x = spacing * i + xOffset;
+
+					//Adunk neki egy random Y pozíciót
+					let y = randomInt(0, app.stage.height - scav.height);
+
+					//Beállítjuk az éppen generált ellenfél pozícióját
+					scav.x = x;
+					scav.y = y;
+
+					//Beállítjuk az ellenfelek függőleges gyorsulását.
+					//Az irány avagy `direction` vagy `1` vagy `-1`.
+					//`1` azt jelenti hogy lefele míg a `-1` azt hogy felfele mozognak
+					//`direction` szorzása a `speed` (sebesség) -el, meghatározzás a függőleges mozgás irányt
+					scav.vy = speed * direction;
+
+					//Irány megváltoztatása a következő lefutásnál
+					direction *= -1;
+
+					//Ellenfél hozzá adása a `scavs` tömbhöz
+					scavs.push(scav);
+
+					//Ellenfél hozzáadása az alap jelenethez `gameScene`
+					gameScene.addChild(scav);
+				}
+
+				//Életerő vonal generálása
+				healthBar = new Container();
+				healthBar.position.set(app.stage.width - 170, 4)
+				gameScene.addChild(healthBar);
+
+				//Életerő sötét hátterének felparaméterezése
+				let innerBar = new Graphics();
+				innerBar.beginFill(0x000000);
+				innerBar.drawRect(0, 0, 128, 8);
+				innerBar.endFill();
+				healthBar.addChild(innerBar);
+
+				//Életerő vonal felparaméterezése
+				let outerBar = new Graphics();
+				outerBar.beginFill(0xFF3300);
+				outerBar.drawRect(0, 0, 128, 8);
+				outerBar.endFill();
+				healthBar.addChild(outerBar);
+				//könnyebb referenciáért beállítjuk ezt a tulajdonságot
+				healthBar.outer = outerBar;
+
+				//Meghalás esetére létrehozott jelenet `gameOver` ami alapértelmezetten nem látható
+				gameOverScene = new Container();
+				app.stage.addChild(gameOverScene);
+				gameOverScene.visible = false;
+
+				//Szöveg sprite létrehozása és hozzá adása a halál jelenethez
+				let style = new TextStyle({
+					fontFamily: "Futura",
+					fontSize: 64,
+					fill: "white"
+				});
+				message = new Text("The End!", style);
+				message.x = 120;
+				message.y = app.stage.height / 2 - 32;
+				gameOverScene.addChild(message);
+
+				//Billentyű leütések figyelése
+				let left = keyboard(37),
+						up = keyboard(38),
+						right = keyboard(39),
+						down = keyboard(40);
+
+				//Left arrow key `press` method
+				left.press = function() {
+
+					//Change the hero's velocity when the key is pressed
+					hero.vx = -5;
+					hero.vy = 0;
+					hero.play();
+					hero.rotation = 0;
+					hero.scale.x = -1;
+				};
+
+				//Left arrow key `release` method
+				left.release = function() {
+
+					//If the left arrow has been released, and the right arrow isn't down,
+					//and the hero isn't moving vertically:
+					//Stop the hero
+					if (!right.isDown && hero.vy === 0) {
+						hero.vx = 0;
+					}
+					hero.stop();
+				};
+
+				//Up
+				up.press = function() {
+					hero.vy = -5;
+					hero.vx = 0;
+					hero.play();
+					hero.scale.x = 1;
+					hero.rotation = 5;
+				};
+				up.release = function() {
+					if (!down.isDown && hero.vx === 0) {
+						hero.vy = 0;
+					}
+					hero.stop();
+				};
+
+				//Right
+				right.press = function() {
+					hero.vx = 5;
+					hero.vy = 0;
+					hero.play();
+					hero.rotation = 0;
+					hero.scale.x = 1;
+				};
+				right.release = function() {
+					if (!left.isDown && hero.vy === 0) {
+						hero.vx = 0;
+					}
+					hero.stop();
+				};
+
+				//Down
+				down.press = function() {
+					hero.vy = 5;
+					hero.vx = 0;
+					hero.play();
+					hero.scale.x = 1;
+					hero.rotation = -5;
+				};
+				down.release = function() {
+					if (!up.isDown && hero.vx === 0) {
+						hero.vy = 0;
+					}
+					hero.stop();
+				};
+
+				//Játék állapot beállítása
+				state = play;
+
+				//játék loop elindítása
+				app.ticker.add(delta => gameLoop(delta));
+
+			}
+
+			function gameLoop(delta){
+
+				//Update the current game state:
+				state(delta);
+			}
+
+			function play(delta) {
+				//use the hero's velocity to make it move
+				hero.x += hero.vx;
+				hero.y += hero.vy;
+
+				//Contain the hero inside the area of the dungeon
+				contain(hero, {x: 28, y: 28, width: 500, height: 500});
+				//contain(hero, stage);
+
+				//Set `heroHit` to `false` before checking for a collision
+				let heroHit = false;
+
+				//Loop through all the sprites in the `enemies` array
+				scavs.forEach(function(scav) {
+
+					//Move the scav
+					scav.y += scav.vy;
+
+					//Check the scav's screen boundaries
+					let scavHitsWall = contain(scav, {x: 32, y: 70, width: 460, height: 480});
+
+					//If the scav hits the top or bottom of the stage, reverse
+					//its direction
+					if (scavHitsWall === "top" || scavHitsWall === "bottom") {
+						scav.vy *= -1;
+					}
+
+					//Fordítjuk őket menetirány felé
+					if (scav.vy < 1) {
+						scav.scale.y = 1;
+					} else {
+						scav.scale.y = -1;
+					}
+
+					//Test for a collision. If any of the enemies are touching
+					//the hero, set `heroHit` to `true`
+					if(hitTestRectangle(hero, scav)) {
+						heroHit = true;
+					}
+				});
+
+				//If the hero is hit...
+				if(heroHit) {
+
+					//Make the hero semi-transparent
+					hero.alpha = 0.5;
+
+					//Reduce the width of the health bar's inner rectangle by 1 pixel
+					healthBar.outer.width -= 1;
+
+				} else {
+
+					//Make the hero fully opaque (non-transparent) if it hasn't been hit
+					hero.alpha = 1;
+				}
+
+				//Check for a collision between the hero and the ulu
+				if (hitTestRectangle(hero, ulu)) {
+
+					//If the ulu is touching the hero, center it over the hero
+					ulu.x = hero.x + 0;
+					ulu.y = hero.y + 0;
+				}
+
+				//Does the hero have enough health? If the width of the `innerBar`
+				//is less than zero, end the game and display "You lost!"
+				if (healthBar.outer.width < 0) {
+					state = end;
+					message.text = "You lost!";
+				}
+
+				//If the hero has brought the ulu to the exit,
+				//end the game and display "You won!"
+				if (hitTestRectangle(ulu, door)) {
+					state = end;
+					message.text = "You won!";
+				}
+			}
+
+			function end() {
+				gameScene.visible = false;
+				gameOverScene.visible = true;
+			}
+
+			/* Helper functions */
+
+			function contain(sprite, container) {
+
+				let collision = undefined;
+
+				//Left
+				if (sprite.x < container.x) {
+					sprite.x = container.x;
+					collision = "left";
+				}
+
+				//Top
+				if (sprite.y < container.y) {
+					sprite.y = container.y;
+					collision = "top";
+				}
+
+				//Right
+				if (sprite.x + sprite.width > container.width) {
+					sprite.x = container.width - sprite.width;
+					collision = "right";
+				}
+
+				//Bottom
+				if (sprite.y + sprite.height > container.height) {
+					sprite.y = container.height - sprite.height;
+					collision = "bottom";
+				}
+
+				//Return the `collision` value
+				return collision;
+			}
+
+			//The `hitTestRectangle` function
+			function hitTestRectangle(r1, r2) {
+
+				//Define the variables we'll need to calculate
+				let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+
+				//hit will determine whether there's a collision
+				hit = false;
+
+				//Find the center points of each sprite
+				r1.centerX = r1.x + r1.width / 2;
+				r1.centerY = r1.y + r1.height / 2;
+				r2.centerX = r2.x + r2.width / 2;
+				r2.centerY = r2.y + r2.height / 2;
+
+				//Find the half-widths and half-heights of each sprite
+				r1.halfWidth = r1.width / 2;
+				r1.halfHeight = r1.height / 2;
+				r2.halfWidth = r2.width / 2;
+				r2.halfHeight = r2.height / 2;
+
+				//Calculate the distance vector between the sprites
+				vx = r1.centerX - r2.centerX;
+				vy = r1.centerY - r2.centerY;
+
+				//Figure out the combined half-widths and half-heights
+				combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+				combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+
+				//Check for a collision on the x axis
+				if (Math.abs(vx) < combinedHalfWidths) {
+
+					//A collision might be occuring. Check for a collision on the y axis
+					if (Math.abs(vy) < combinedHalfHeights) {
+
+						//There's definitely a collision happening
+						hit = true;
+					} else {
+
+						//There's no collision on the y axis
+						hit = false;
+					}
+				} else {
+
+					//There's no collision on the x axis
+					hit = false;
+				}
+
+				//`hit` will be either `true` or `false`
+				return hit;
+			};
+
+
+			//The `randomInt` helper function
+			function randomInt(min, max) {
+				return Math.floor(Math.random() * (max - min + 1)) + min;
+			}
+
+			//The `keyboard` helper function
+			function keyboard(keyCode) {
+				var key = {};
+				key.code = keyCode;
+				key.isDown = false;
+				key.isUp = true;
+				key.press = undefined;
+				key.release = undefined;
+				//The `downHandler`
+				key.downHandler = function(event) {
+					if (event.keyCode === key.code) {
+						if (key.isUp && key.press) key.press();
+						key.isDown = true;
+						key.isUp = false;
+					}
+					event.preventDefault();
+				};
+
+				//The `upHandler`
+				key.upHandler = function(event) {
+					if (event.keyCode === key.code) {
+						if (key.isDown && key.release) key.release();
+						key.isDown = false;
+						key.isUp = true;
+					}
+					event.preventDefault();
+				};
+
+				//Attach event listeners
+				window.addEventListener(
+						"keydown", key.downHandler.bind(key), false
+				);
+				window.addEventListener(
+						"keyup", key.upHandler.bind(key), false
+				);
+				return key;
+			}
+		</script>
+	</body>
+
 </html>

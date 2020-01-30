@@ -1,0 +1,47 @@
+{"frames": {
+
+"walk1.png":
+{
+	"frame": {"x":0,"y":44,"w":17,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":40},
+	"sourceSize": {"w":17,"h":40}
+},
+"walk2.png":
+{
+	"frame": {"x":0,"y":0,"w":16,"h":44},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":44},
+	"sourceSize": {"w":16,"h":44}
+},
+"walk3.png":
+{
+	"frame": {"x":0,"y":84,"w":17,"h":40},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":17,"h":40},
+	"sourceSize": {"w":17,"h":40}
+},
+"walk4.png":
+{
+	"frame": {"x":16,"y":0,"w":16,"h":44},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":16,"h":44},
+	"sourceSize": {"w":16,"h":44}
+}},
+"animations": {
+	"walk": ["walk1.png","walk2.png","walk3.png","walk4.png"]
+},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "scavrun.png",
+	"format": "RGBA8888",
+	"size": {"w":32,"h":124},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:e426768e692447685ecc8f6739dde924:1728100a910fcf388cfb35ff01a3352c:d64c2ec2eed0803459e9057750e6e7c4$"
+}
+}

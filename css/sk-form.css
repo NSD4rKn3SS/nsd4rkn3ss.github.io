@@ -1,0 +1,48 @@
+/* ----- FORM ELEMENTS START ----- */
+.form-cnt {}
+.form-main {}
+.form-row {}
+.form-col {}
+.form-item {}
+
+/* TEXT/NUMBER INPUTS */
+.form-item input[type='text'] {}
+.form-item input[type='password'] {}
+.form-item input[type='email'] {}
+.form-item input[type='tel'] {}	/*<input type="tel" name="phone" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"> */
+.form-item input[type='number'] {}
+
+/* BUTTON INPUTS */
+.form-item button,
+.form-item input[type='button'],
+.form-item input[type='submit'],
+.form-item input[type='reset'] {
+	border: none;
+	background-color: var(--btn-color);
+	color: var(--btn-text);
+}
+.form-item button {}
+.form-item input[type='button'] {}
+.form-item input[type='submit'] {}
+.form-item input[type='reset'] {}
+
+/* CHECK TYPE INPUTS */
+.form-item input[type='radio'] {}
+.form-item input[type='checkbox'] {}
+
+/* TEXTAREA */
+.form-item textarea {}
+
+/* COLORPICKER */
+.form-item input[type='color'] {}
+
+/* DATETIME */
+.form-item input[type='date'] {}
+.form-item input[type='datetime-local'] {}
+
+/* RANGE */
+.form-item input[type='range'] {}
+
+/* FILE */
+.form-item input[type='file'] {}
+/* ----- FORM ELEMENTS END ----- */

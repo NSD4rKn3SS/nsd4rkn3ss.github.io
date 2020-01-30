@@ -1,0 +1,61 @@
+/* ----- CONTENT START ----- */
+.content-outer {
+
+}
+
+.content-inner {
+
+}
+
+.details-cnt {}
+
+.det-title { margin: 10px 0px 5px; }
+.det-lead { font-size: 18px; }
+
+.details-cnt h1,.details-cnt h2,.details-cnt h3,.details-cnt h4,.details-cnt h5,.details-cnt h6 { font-weight: bold; }
+.details-cnt h1 { font-size: 30px; }
+.details-cnt h2 { font-size: 28px; }
+.details-cnt h3 { font-size: 26px; }
+.details-cnt h4 { font-size: 24px; }
+.details-cnt h5 { font-size: 22px; }
+.details-cnt h6 { font-size: 20px; }
+
+.details-cnt p { font-size: 16px; }
+
+.details-cnt a {}
+.details-cnt a:visited {}
+.details-cnt a:hover {}
+.details-cnt a:focus {}
+.details-cnt a:active {}
+
+.details-cnt span {}
+
+.details-cnt div {}
+
+.details-cnt ul { padding-left: 55px; }
+.details-cnt ol { padding-left: 45px; }
+.details-cnt ul li,
+.details-cnt ol li {
+	font-size: 16px;
+	padding: 10px 0px;
+	font-style: italic;
+	list-style: initial;
+}
+.details-cnt ol li {
+	list-style: decimal;
+	padding-left: 5px;
+}
+
+.details-cnt blockquote:before {}
+.details-cnt blockquote:after {}
+.details-cnt blockquote {
+
+}
+.details-cnt img {
+	max-width: 100%;
+	margin: 10px auto;
+	display: block
+}
+
+.downloads-cnt {}
+/* ----- CONTENT END ----- */
