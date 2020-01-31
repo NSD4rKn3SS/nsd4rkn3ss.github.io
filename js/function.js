@@ -177,7 +177,7 @@ $(document).ready(function($) {
         //Bal oldalra mozgatás
         leftStart = function() {
             //Hős sebességének változtatása lenyomásra
-            hero.vx = -5; //x tengelyen való negatív eltolás
+            hero.vx = -2.5; //x tengelyen való negatív eltolás
             hero.vy = 0;  //y tengelyen nem változtatunk
             hero.play();  //Sprite animáció lejátszása
             hero.rotation = 0; //Sprite forgatásának alapra állítása
@@ -197,7 +197,7 @@ $(document).ready(function($) {
 
         //Jobb oldalra mozgatás
         rightStart = function() {
-            hero.vx = 5;
+            hero.vx = 2.5;
             hero.vy = 0;
             hero.play();
             hero.rotation = 0;
@@ -212,7 +212,7 @@ $(document).ready(function($) {
 
         //Felfele mozgatás
         upStart = function() {
-            hero.vy = -5;
+            hero.vy = -2.5;
             hero.vx = 0;
             hero.play();
             hero.scale.x = 1;
@@ -227,7 +227,7 @@ $(document).ready(function($) {
 
         //Lefele mozgatás
         downStart = function() {
-            hero.vy = 5;
+            hero.vy = 2.5;
             hero.vx = 0;
             hero.play();
             hero.scale.x = 1;
