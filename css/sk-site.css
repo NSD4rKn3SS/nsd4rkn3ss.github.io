@@ -29,6 +29,7 @@ body {
 	padding: 0;
 	max-width: 512px;
 	width: 100vw;
+	height: 100vh;
 	overflow: hidden;
 }
 
@@ -72,9 +73,9 @@ body {
 	height: 100px;
 }
 .ulubtns .key {
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
+	width: 80px;
+	height: 80px;
+	line-height: 80px;
 	text-align: center;
 	position: absolute;
 	font-size: 30px;
@@ -87,38 +88,38 @@ body {
 }
 .key.down {
 	transform: translate(-50%, 0);
-	bottom: -50px;
+	bottom: -80px;
 	left: 50%;
 }
 .key.left {
 	transform: translate(-50%, 0);
 	bottom: 0px;
-	left: calc(50% - 50px);
+	left: calc(50% - 80px);
 }
 .key.right {
 	transform: translate(-50%, 0);
 	bottom: 0px;
-	left: calc(50% + 50px);
+	left: calc(50% + 80px);
 }
 .key.leftup {
 	transform: translate(-50%, 0) rotate(45deg);
 	top: 0px;
-	left: calc(50% - 50px);
+	left: calc(50% - 80px);
 }
 .key.leftdown {
 	transform: translate(-50%, 0) rotate(-45deg);
-	bottom: -50px;
-	left: calc(50% - 50px);
+	bottom: -80px;
+	left: calc(50% - 80px);
 }
 .key.rightup {
 	transform: translate(-50%, 0) rotate(-45deg);
 	top: 0px;
-	left: calc(50% + 50px);
+	left: calc(50% + 80px);
 }
 .key.rightdown {
 	transform: translate(-50%, 0) rotate(45deg);
-	bottom: -50px;
-	left: calc(50% + 50px);
+	bottom: -80px;
+	left: calc(50% + 80px);
 }
 
 .key.attack {
