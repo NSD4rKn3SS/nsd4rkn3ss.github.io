@@ -276,20 +276,20 @@ $(document).ready(function($) {
 
 
         //Balra nyíl `press` nyomás & `release` elengedés viselkedése
-        left.press = leftStart();
-        left.release = leftStop();
+        left.press =  function(){ leftStart(); };
+        left.release = function(){ leftStop(); };
 
         //Jobbra nyíl `press` nyomás & `release` elengedés viselkedése
-        right.press = rightStart();
-        right.release =  rightStop();
+        right.press = function(){ rightStart(); };
+        right.release = function(){ rightStop(); };
 
         //Felfele nyíl `press` nyomás & `release` elengedés viselkedése
-        up.press = upStart();
-        up.release = upStop();
+        up.press = function(){ upStart(); };
+        up.release = function(){ upStop(); };
 
         //Lefele nyíl `press` nyomás & `release` elengedés viselkedése
-        down.press = downStart();
-        down.release = downStop();
+        down.press = function(){ downStart(); };
+        down.release = function(){ downStop(); };
 
         //Játék állapot beállítása
         state = play;
@@ -511,5 +511,10 @@ $(document).ready(function($) {
         window.addEventListener("keydown", key.downHandler.bind(key), false);
         window.addEventListener("keyup", key.upHandler.bind(key), false);
         return key;
+    }
+    if ('ontouchstart' in window) {
+        $('#uluBtns').show();
+    } else {
+        $('#uluBtns').hide();
     }
 });
