@@ -55,8 +55,10 @@ body {
 /* ----- GAME START ----- */
 .ulugame-cnt {}
 .ulugame {
-	width: 512px;
-	height: 512px;
+	max-width: 512px;
+	max-height: 512px;
+	width: 100vw;
+	height: auto;
 	margin: 0 auto;
 }
 .ulubtns {
@@ -118,6 +120,7 @@ body {
 	transform: translate(-50%, 0) rotate(175deg);
 	bottom: 0px;
 	left: 50%;
+	color: #333;
 }
 /* ----- GAME END ----- */
 

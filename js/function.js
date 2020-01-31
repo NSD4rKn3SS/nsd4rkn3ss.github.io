@@ -21,16 +21,20 @@ $(document).ready(function($) {
     });
 
     //canvas automatikus átméretezése az ablakkal
-    /*
+    function diff(a, b) {
+        return  ((a * 100) / b) / 100;
+    }
     let windowSize = function() {
         let viewPw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
-        app.renderer.resize(viewPw, viewPh);
+        if (viewPw < 512 || viewPh < 512) {
+            app.stage.scale.set(diff(viewPw, 512));
+        }
     };
 
     windowSize();
     window.addEventListener("resize", windowSize);
-    */
+
     //PIXI hozzáadása bodyhoz
     //document.body.appendChild(app.view);
     document.getElementById('uluGame').appendChild(app.view);
@@ -55,6 +59,8 @@ $(document).ready(function($) {
         //alap jelenet hozzáadása a stagehez
         gameScene = new Container();
         app.stage.addChild(gameScene);
+
+
 
         //Textúrák felparaméterezése
         id = {
@@ -91,10 +97,10 @@ $(document).ready(function($) {
         gameScene.addChild(ulu);
 
         //Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
-        let numberOfScavs = 6,
+        let numberOfScavs = 8,
             spacing = 48,
             xOffset = 150,
-            speed = 2,
+            speed = randomInt(1, 3),
             direction = 1;
 
         scavs = [];
@@ -386,11 +392,37 @@ $(document).ready(function($) {
 
             //Megnézzük az orientációját az ellenfélnek és affelé forgatjuk
             scav.heading = Math.atan2(scav.vy, scav.vx);
-            scav.rotation = scav.heading + 1.5;
+            scav.rotation = scav.heading + 1.55;
 
             //Ha egy ellenfél nekimegy a falnak, megfordítjuk a mozgás irányát
-            if (scavHitsWall === "top" || scavHitsWall === "bottom") { scav.vy *= -1; }
-            if (scavHitsWall === "left" || scavHitsWall === "right") { scav.vx *= -1; }
+            if (scavHitsWall === "top" || scavHitsWall === "bottom") {
+                if (randomInt(1, 2) === 1) {
+                    if (scav.vx === 0) {
+                        if (randomInt(1, 2) === 1) {
+                            scav.vx = randomInt(1, 3) * 1;
+                        } else {
+                            scav.vx = randomInt(1, 3) * -1;
+                        }
+                     } else {
+                        scav.vx = 0;
+                    }
+                }
+                scav.vy *= -1;
+            }
+            if (scavHitsWall === "left" || scavHitsWall === "right") {
+                if (randomInt(1, 2) === 1) {
+                    if (scav.vy === 0) {
+                        if (randomInt(1, 2) === 1) {
+                            scav.vy = randomInt(1, 3) * 1;
+                        } else {
+                            scav.vy = randomInt(1, 3) * -1;
+                        }
+                    } else {
+                        scav.vy = 0;
+                    }
+                }
+                scav.vx *= -1;
+            }
 
             //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
             //akkor átállítjuk a `heroHit` attributumot `true`-ra
