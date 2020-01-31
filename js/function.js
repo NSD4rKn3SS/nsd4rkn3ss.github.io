@@ -124,6 +124,9 @@ $(document).ready(function($) {
             //`direction` szorzása a `speed` (sebesség) -el, meghatározzás a függőleges mozgás irányt
             scav.vy = speed * direction;
 
+            //Beállítjuk az ellenfél vízszintes gyorsulását a játékos irányába
+            scav.vx = speed * direction;
+
             //Irány megváltoztatása a következő lefutásnál
             direction *= -1;
 
@@ -325,20 +328,18 @@ $(document).ready(function($) {
 
             //Mozgatjuk az ellenfeleket
             scav.y += scav.vy;
+            scav.x += scav.vx;
 
             //Beállítjuk az ellenfeleknél is a pálya területet
-            let scavHitsWall = contain(scav, {x: 32, y: 70, width: 460, height: 480});
+            let scavHitsWall = contain(scav, {x: 60, y: 70, width: 460, height: 480});
 
-            //Ha egy ellenfél nekimegy a falnak, megfordítjuk a mozgás irányát majd fordítjuk őket menetirány felé
-            if (scavHitsWall === "top" || scavHitsWall === "bottom") {
-                scav.vy *= -1;
+            //Megnézzük az orientációját az ellenfélnek és affelé forgatjuk
+            scav.heading = Math.atan2(scav.vy, scav.vx);
+            scav.rotation = scav.heading + 1.5;
 
-                if (scav.vy < 1) {
-                    scav.scale.y = 1;
-                } else {
-                    scav.scale.y = -1;
-                }
-            }
+            //Ha egy ellenfél nekimegy a falnak, megfordítjuk a mozgás irányát
+            if (scavHitsWall === "top" || scavHitsWall === "bottom") { scav.vy *= -1; }
+            if (scavHitsWall === "left" || scavHitsWall === "right") { scav.vx *= -1; }
 
             //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
             //akkor átállítjuk a `heroHit` attributumot `true`-ra

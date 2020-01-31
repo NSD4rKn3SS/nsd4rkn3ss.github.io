@@ -56,7 +56,7 @@
         <key>jxrCompressionLevel</key>
         <uint>0</uint>
         <key>ditherType</key>
-        <enum type="SettingsBase::DitherType">NearestNeighbour</enum>
+        <enum type="SettingsBase::DitherType">PngQuantLow</enum>
         <key>backgroundColor</key>
         <uint>0</uint>
         <key>libGdx</key>
@@ -181,8 +181,8 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk1.png</key>
-            <key type="filename">Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk3.png</key>
+            <key type="filename">walk1.png</key>
+            <key type="filename">walk3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -197,8 +197,8 @@
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk2.png</key>
-            <key type="filename">Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk4.png</key>
+            <key type="filename">walk2.png</key>
+            <key type="filename">walk4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
@@ -216,10 +216,10 @@
         </map>
         <key>fileList</key>
         <array>
-            <filename>Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk1.png</filename>
-            <filename>Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk2.png</filename>
-            <filename>Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk3.png</filename>
-            <filename>Z:/.barnabas/z3_2019/prototype/img/scav/frames/walk4.png</filename>
+            <filename>walk1.png</filename>
+            <filename>walk2.png</filename>
+            <filename>walk3.png</filename>
+            <filename>walk4.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
