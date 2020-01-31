@@ -352,8 +352,8 @@ $(document).ready(function($) {
         if(heroHit) {
             //Átlátszóbbá tesszük a hőst
             hero.alpha = 0.5;
-            //Majd csökkentjük az életerő vonalát 1 pixellel
-            healthBar.outer.width -= 1;
+            //Majd csökkentjük az életerő vonalát 5 pixellel
+            healthBar.outer.width -= 2;
         } else {
             //Ha nem kap ütést, marad ugyan annyira látható
             hero.alpha = 1;
