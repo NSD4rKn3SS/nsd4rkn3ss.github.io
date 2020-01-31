@@ -16,7 +16,7 @@ $(document).ready(function($) {
         width: 512,
         height: 512,
         antialiasing: true,
-        transparent: false,
+        transparent: true,
         resolution: 1
     });
 
@@ -150,7 +150,7 @@ $(document).ready(function($) {
 
         //Életerő sötét hátterének felparaméterezése
         let innerBar = new Graphics();
-        innerBar.beginFill(0x383838);
+        innerBar.beginFill(0x000000);
         innerBar.drawRect(0, 0, 128, 8);
         innerBar.endFill();
         healthBar.addChild(innerBar);
