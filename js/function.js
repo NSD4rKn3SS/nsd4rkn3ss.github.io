@@ -175,7 +175,7 @@ $(document).ready(function($) {
         gameOverScene.addChild(message);
 
         //Mozgatás funkciók definiálása
-        let leftStart, leftStop, rightStart, rightStop, upStart, upStop, downStart, downStop, leftUpStart, leftUpStop, rightUpStart, rightUpStop, leftDownStart, leftDownStop, rightDownStart, rightDownStop;
+        let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop;
 
         //Bal oldalra mozgatás
         leftStart = function() {
@@ -187,16 +187,6 @@ $(document).ready(function($) {
             hero.scale.x = -1; //Sprite tükrözése X tengelyen tehát vízszintesen
         };
 
-        leftStop = function() {
-            //Ha már nem nyomjuk a gombot, ÉS a jobb nyíl nincs lenyomva,
-            //ÉS a hős nem mozog az Y tengelyen tehát vertikálisan:
-            //Akkor megállítjuk a hőst
-            if (!right.isDown && hero.vy === 0) {
-                hero.vx = 0;
-                hero.stop(); //Sprite animáció megállítása
-            }
-        };
-
         //Jobb oldalra mozgatás
         rightStart = function() {
             hero.vx = 2.5;
@@ -204,12 +194,6 @@ $(document).ready(function($) {
             hero.play();
             hero.rotation = 0;
             hero.scale.x = 1;
-        };
-        rightStop = function() {
-            if (!left.isDown && hero.vy === 0) {
-                hero.vx = 0;
-                hero.stop();
-            }
         };
 
         //Felfele mozgatás
@@ -220,12 +204,6 @@ $(document).ready(function($) {
             hero.scale.x = 1;
             hero.rotation = 5;
         };
-        upStop = function() {
-            if (!down.isDown && hero.vx === 0) {
-                hero.vy = 0;
-                hero.stop();
-            }
-        };
 
         //Lefele mozgatás
         downStart = function() {
@@ -234,12 +212,6 @@ $(document).ready(function($) {
             hero.play();
             hero.scale.x = 1;
             hero.rotation = -5;
-        };
-        downStop = function() {
-            if (!up.isDown && hero.vx === 0) {
-                hero.vy = 0;
-                hero.stop();
-            }
         };
 
         //Balra fel mozgatás
@@ -250,11 +222,7 @@ $(document).ready(function($) {
             hero.rotation = -2.5;
             hero.scale.x = 1;
         };
-        leftUpStop = function() {
-            hero.vx = 0;
-            hero.vy = 0;
-            hero.stop();
-        };
+
         //Jobbra fel mozgatás
         rightUpStart = function() {
             hero.vx = 2.5;
@@ -263,11 +231,7 @@ $(document).ready(function($) {
             hero.rotation = 2.5;
             hero.scale.x = -1;
         };
-        rightUpStop = function() {
-            hero.vx = 0;
-            hero.vy = 0;
-            hero.stop();
-        };
+
         //Balra le mozgatás
         leftDownStart = function() {
             hero.vx = -2.5;
@@ -276,11 +240,7 @@ $(document).ready(function($) {
             hero.rotation = 2.5;
             hero.scale.x = 1;
         };
-        leftDownStop = function() {
-            hero.vx = 0;
-            hero.vy = 0;
-            hero.stop();
-        };
+
         //Jobbra le mozgatás
         rightDownStart = function() {
             hero.vx = 2.5;
@@ -289,85 +249,101 @@ $(document).ready(function($) {
             hero.rotation = -2.5;
             hero.scale.x = -1;
         };
-        rightDownStop = function() {
+
+        //Mozgatás megállítása
+        mvmntStop = function() {
             hero.vx = 0;
             hero.vy = 0;
-            hero.stop();
+            hero.stop(); //Sprite animáció megállítása
         };
-
 
         //Touch irányítás
         //Bal gomb
         $('#touchLeft').bind('touchstart', function(e) {
             leftStart();
         }).bind('touchend', function(e) {
-            leftStop();
+            mvmntStop();
         });
         //Jobb gomb
         $('#touchRight').bind('touchstart', function(e) {
             rightStart();
         }).bind('touchend', function(e) {
-            rightStop();
+            mvmntStop();
         });
         //Fel gomb
         $('#touchUp').bind('touchstart', function(e) {
             upStart();
         }).bind('touchend', function(e) {
-            upStop();
+            mvmntStop();
         });
         //Le gomb
         $('#touchDown').bind('touchstart', function(e) {
             downStart();
         }).bind('touchend', function(e) {
-            downStop();
+            mvmntStop();
         });
         //BalFel gomb
         $('#touchLeftUp').bind('touchstart', function(e) {
             leftUpStart();
         }).bind('touchend', function(e) {
-            leftUpStop();
+            mvmntStop();
         });
         //BalLe gomb
         $('#touchLeftDown').bind('touchstart', function(e) {
             leftDownStart();
         }).bind('touchend', function(e) {
-            leftDownStop();
+            mvmntStop();
         });
         //JobbFel gomb
         $('#touchRightUp').bind('touchstart', function(e) {
             rightUpStart();
         }).bind('touchend', function(e) {
-            rightUpStop();
+            mvmntStop();
         });
         //JobbLe gomb
         $('#touchRightDown').bind('touchstart', function(e) {
             rightDownStart();
         }).bind('touchend', function(e) {
-            rightDownStop();
+            mvmntStop();
         });
 
         //Billentyű leütések figyelése
-        let left = keyboard(37),
-            up = keyboard(38),
-            right = keyboard(39),
-            down = keyboard(40);
+        //Új billentyű leütés érzékelés
+        // postfix U,D,L,R for Up down left right
+        const KEY_U = 1;
+        const KEY_D = 2;
+        const KEY_L = 4;
+        const KEY_R = 8;
+        const KEY_UL = KEY_U + KEY_L; // up left
+        const KEY_UR = KEY_U + KEY_R; // up Right
+        const KEY_DL = KEY_D + KEY_L; // down left
+        const KEY_DR = KEY_D + KEY_R; // down right
 
+        var arrowBits = 0;  // the value to hold the bits
+        const KEY_BITS = [4,1,8,2]; // left up right down
+        const KEY_MASKS = [0b1011,0b1110,0b0111,0b1101]; // left up right down
+        window.onkeydown = window.onkeyup = function (e) {
+            if(e.keyCode >= 37 && e.keyCode <41){
+                if(e.type === "keydown"){
+                    arrowBits |= KEY_BITS[e.keyCode - 37];
+                }else{
+                    arrowBits &= KEY_MASKS[e.keyCode - 37];
+                }
+            }
 
-        //Balra nyíl `press` nyomás & `release` elengedés viselkedése
-        left.press =  function(){ leftStart(); };
-        left.release = function(){ leftStop(); };
-
-        //Jobbra nyíl `press` nyomás & `release` elengedés viselkedése
-        right.press = function(){ rightStart(); };
-        right.release = function(){ rightStop(); };
-
-        //Felfele nyíl `press` nyomás & `release` elengedés viselkedése
-        up.press = function(){ upStart(); };
-        up.release = function(){ upStop(); };
-
-        //Lefele nyíl `press` nyomás & `release` elengedés viselkedése
-        down.press = function(){ downStart(); };
-        down.release = function(){ downStop(); };
+            if (arrowBits) {
+                if (arrowBits == KEY_L) { leftStart(); }
+                if (arrowBits == KEY_R) { rightStart(); }
+                if (arrowBits == KEY_U) { upStart(); }
+                if (arrowBits == KEY_D) { downStart(); }
+                if (arrowBits == KEY_UL) { leftUpStart(); }
+                if (arrowBits == KEY_DL) { leftDownStart(); }
+                if (arrowBits == KEY_UR) { rightUpStart(); }
+                if (arrowBits == KEY_DR) { rightDownStart(); }
+            } else {
+                mvmntStop();
+            }
+        };
 
         //Játék állapot beállítása
         state = play;
@@ -548,46 +524,11 @@ $(document).ready(function($) {
         return hit;
     }
 
-
     //A `randomInt` helper funkció
     function randomInt(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    //A `keyboard` helper funkció
-    function keyboard(keyCode) {
-        var key = {};
-        key.code = keyCode;
-        key.isDown = false;
-        key.isUp = true;
-        key.press = undefined;
-        key.release = undefined;
-
-        //Gomb lenyomás érzékelése `downHandler`
-        key.downHandler = function(event) {
-            if (event.keyCode === key.code) {
-                if (key.isUp && key.press) key.press();
-                key.isDown = true;
-                key.isUp = false;
-            }
-            event.preventDefault();
-        };
-
-        //Gomb felengedés érzékelése `upHandler`
-        key.upHandler = function(event) {
-            if (event.keyCode === key.code) {
-                if (key.isDown && key.release) key.release();
-                key.isDown = false;
-                key.isUp = true;
-            }
-            event.preventDefault();
-        };
-
-        //Eseményfigyelők hozzáadása
-        window.addEventListener("keydown", key.downHandler.bind(key), false);
-        window.addEventListener("keyup", key.upHandler.bind(key), false);
-        return key;
-    }
     if ('ontouchstart' in window) {
         $('#uluBtns').show();
     } else {
