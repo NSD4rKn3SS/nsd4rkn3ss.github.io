@@ -175,7 +175,7 @@ $(document).ready(function($) {
         gameOverScene.addChild(message);
 
         //Mozgatás funkciók definiálása
-        let leftStart, leftStop, rightStart, rightStop, upStart, upStop, downStart, downStop;
+        let leftStart, leftStop, rightStart, rightStop, upStart, upStop, downStart, downStop, leftUpStart, leftUpStop, rightUpStart, rightUpStop, leftDownStart, leftDownStop, rightDownStart, rightDownStop;
 
         //Bal oldalra mozgatás
         leftStart = function() {
@@ -196,7 +196,6 @@ $(document).ready(function($) {
                 hero.stop(); //Sprite animáció megállítása
             }
         };
-
 
         //Jobb oldalra mozgatás
         rightStart = function() {
@@ -243,6 +242,58 @@ $(document).ready(function($) {
             }
         };
 
+        //Balra fel mozgatás
+        leftUpStart = function() {
+            hero.vx = -2.5;
+            hero.vy = -2.5;
+            hero.play();
+            hero.rotation = -2.5;
+            hero.scale.x = 1;
+        };
+        leftUpStop = function() {
+            hero.vx = 0;
+            hero.vy = 0;
+            hero.stop();
+        };
+        //Jobbra fel mozgatás
+        rightUpStart = function() {
+            hero.vx = 2.5;
+            hero.vy = -2.5;
+            hero.play();
+            hero.rotation = 2.5;
+            hero.scale.x = -1;
+        };
+        rightUpStop = function() {
+            hero.vx = 0;
+            hero.vy = 0;
+            hero.stop();
+        };
+        //Balra le mozgatás
+        leftDownStart = function() {
+            hero.vx = -2.5;
+            hero.vy = 2.5;
+            hero.play();
+            hero.rotation = 2.5;
+            hero.scale.x = 1;
+        };
+        leftDownStop = function() {
+            hero.vx = 0;
+            hero.vy = 0;
+            hero.stop();
+        };
+        //Jobbra le mozgatás
+        rightDownStart = function() {
+            hero.vx = 2.5;
+            hero.vy = 2.5;
+            hero.play();
+            hero.rotation = -2.5;
+            hero.scale.x = -1;
+        };
+        rightDownStop = function() {
+            hero.vx = 0;
+            hero.vy = 0;
+            hero.stop();
+        };
 
 
         //Touch irányítás
@@ -269,6 +320,30 @@ $(document).ready(function($) {
             downStart();
         }).bind('touchend', function(e) {
             downStop();
+        });
+        //BalFel gomb
+        $('#touchLeftUp').bind('touchstart', function(e) {
+            leftUpStart();
+        }).bind('touchend', function(e) {
+            leftUpStop();
+        });
+        //BalLe gomb
+        $('#touchLeftDown').bind('touchstart', function(e) {
+            leftDownStart();
+        }).bind('touchend', function(e) {
+            leftDownStop();
+        });
+        //JobbFel gomb
+        $('#touchRightUp').bind('touchstart', function(e) {
+            rightUpStart();
+        }).bind('touchend', function(e) {
+            rightUpStop();
+        });
+        //JobbLe gomb
+        $('#touchRightDown').bind('touchstart', function(e) {
+            rightDownStart();
+        }).bind('touchend', function(e) {
+            rightDownStop();
         });
 
         //Billentyű leütések figyelése

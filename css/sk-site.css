@@ -71,6 +71,7 @@ body {
 	text-align: center;
 	position: absolute;
 	font-size: 30px;
+	color: #C7C7C7;
 }
 .key.up {
 	transform: translate(-50%, 0);
@@ -79,7 +80,7 @@ body {
 }
 .key.down {
 	transform: translate(-50%, 0);
-	bottom: 0px;
+	bottom: -50px;
 	left: 50%;
 }
 .key.left {
@@ -91,6 +92,32 @@ body {
 	transform: translate(-50%, 0);
 	bottom: 0px;
 	left: calc(50% + 50px);
+}
+.key.leftup {
+	transform: translate(-50%, 0) rotate(45deg);
+	top: 0px;
+	left: calc(50% - 50px);
+}
+.key.leftdown {
+	transform: translate(-50%, 0) rotate(-45deg);
+	bottom: -50px;
+	left: calc(50% - 50px);
+}
+.key.rightup {
+	transform: translate(-50%, 0) rotate(-45deg);
+	top: 0px;
+	left: calc(50% + 50px);
+}
+.key.rightdown {
+	transform: translate(-50%, 0) rotate(45deg);
+	bottom: -50px;
+	left: calc(50% + 50px);
+}
+
+.key.attack {
+	transform: translate(-50%, 0) rotate(175deg);
+	bottom: 0px;
+	left: 50%;
 }
 /* ----- GAME END ----- */
 
