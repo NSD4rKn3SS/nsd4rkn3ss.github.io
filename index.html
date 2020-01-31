@@ -67,17 +67,6 @@
 
 
 			//resourceok létrehozása
-			/*
-            loader
-                .add("img/scav/scav_attack.json")
-                .add("img/scav/scav_walk.json")
-                .add("img/scav/scav_stand.png")
-                .add("img/ulu.png")
-                .add("img/grass.png")
-                .add("img/orcrun/orcrun.json")
-                .add("img/treasureHunter.json")
-                .load(setup);
-            */
 			loader
 					.add("img/scav/frames/scavrun.json")
 					.add("img/orcrun/frames/orcrun.json")
@@ -98,20 +87,6 @@
 				app.stage.addChild(gameScene);
 
 				//Textúrák felparaméterezése
-				/*
-                id = {
-                    'scav' : {
-                        'attack' : resources["img/scav/scav_attack.json"].textures,
-                        'walk' : resources["img/scav/scav_walk.json"].textures,
-                        'stand' : resources["img/scav/scav_stand.png"].texture,
-                    },
-                    'orc' : resources["img/orcrun/orcrun.json"].textures,
-                    'ulu' : resources["img/ulu.png"].texture,
-                    'grass' : resources["img/grass.png"].texture,
-                    'orith' : resources["img/treasureHunter.json"].textures,
-                };
-                */
-
 				id = {
 					'scav' : resources["img/scav/frames/scavrun.json"].spritesheet,
 					'orc' : resources["img/orcrun/frames/orcrun.json"].spritesheet,
@@ -232,27 +207,24 @@
 						right = keyboard(39),
 						down = keyboard(40);
 
-				//Left arrow key `press` method
+				//Bal nyíl `press` nyomás & `release` elengedés viselkedése
 				left.press = function() {
-
-					//Change the hero's velocity when the key is pressed
-					hero.vx = -5;
-					hero.vy = 0;
-					hero.play();
-					hero.rotation = 0;
-					hero.scale.x = -1;
+					//Hős sebességének változtatása lenyomásra
+					hero.vx = -5; //x tengelyen való negatív eltolás
+					hero.vy = 0;  //y tengelyen nem változtatunk
+					hero.play();  //Sprite animáció lejátszása
+					hero.rotation = 0; //Sprite forgatásának alapra állítása
+					hero.scale.x = -1; //Sprite tükrözése X tengelyen tehát vízszintesen
 				};
 
-				//Left arrow key `release` method
 				left.release = function() {
-
-					//If the left arrow has been released, and the right arrow isn't down,
-					//and the hero isn't moving vertically:
-					//Stop the hero
+					//Ha már nem nyomjuk a gombot, ÉS a jobb nyíl nincs lenyomva,
+					//ÉS a hős nem mozog az Y tengelyen tehát vertikálisan:
+					//Akkor megállítjuk a hőst
 					if (!right.isDown && hero.vy === 0) {
 						hero.vx = 0;
+						hero.stop(); //Sprite animáció megállítása
 					}
-					hero.stop();
 				};
 
 				//Up
@@ -266,8 +238,8 @@
 				up.release = function() {
 					if (!down.isDown && hero.vx === 0) {
 						hero.vy = 0;
+						hero.stop();
 					}
-					hero.stop();
 				};
 
 				//Right
@@ -281,8 +253,8 @@
 				right.release = function() {
 					if (!left.isDown && hero.vy === 0) {
 						hero.vx = 0;
+						hero.stop();
 					}
-					hero.stop();
 				};
 
 				//Down
@@ -296,8 +268,8 @@
 				down.release = function() {
 					if (!up.isDown && hero.vx === 0) {
 						hero.vy = 0;
+						hero.stop();
 					}
-					hero.stop();
 				};
 
 				//Játék állapot beállítása
@@ -310,187 +282,184 @@
 
 			function gameLoop(delta){
 
-				//Update the current game state:
+				//Jelenlegi játékállapot frissítése:
 				state(delta);
 			}
 
 			function play(delta) {
-				//use the hero's velocity to make it move
+				//A hős sebességét használva, mozgatjuk a grafikáját
 				hero.x += hero.vx;
 				hero.y += hero.vy;
 
-				//Contain the hero inside the area of the dungeon
+				//Hős pályaterületen tartása
+				//X a játszhatő terület első vízszintes pontja
+				//Y az első függőleges
+				//width és height a maximális szélessége és hosszúsága a pályának
 				contain(hero, {x: 28, y: 28, width: 500, height: 500});
 				//contain(hero, stage);
 
-				//Set `heroHit` to `false` before checking for a collision
+				//Ütközés előtt beállítjuk a hős attributumát `heroHit`, `false`-ra
 				let heroHit = false;
 
-				//Loop through all the sprites in the `enemies` array
+				//Végig loopoljuk az összes Sprite-ot az ellenfelek tömbjében
 				scavs.forEach(function(scav) {
 
-					//Move the scav
+					//Mozgatjuk az ellenfeleket
 					scav.y += scav.vy;
 
-					//Check the scav's screen boundaries
+					//Beállítjuk az ellenfeleknél is a pálya területet
 					let scavHitsWall = contain(scav, {x: 32, y: 70, width: 460, height: 480});
 
-					//If the scav hits the top or bottom of the stage, reverse
-					//its direction
+					//Ha egy ellenfél nekimegy a falnak, megfordítjuk a mozgás irányát majd fordítjuk őket menetirány felé
 					if (scavHitsWall === "top" || scavHitsWall === "bottom") {
 						scav.vy *= -1;
+
+						if (scav.vy < 1) {
+							scav.scale.y = 1;
+						} else {
+							scav.scale.y = -1;
+						}
 					}
 
-					//Fordítjuk őket menetirány felé
-					if (scav.vy < 1) {
-						scav.scale.y = 1;
-					} else {
-						scav.scale.y = -1;
-					}
-
-					//Test for a collision. If any of the enemies are touching
-					//the hero, set `heroHit` to `true`
+					//Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
+					//akkor átállítjuk a `heroHit` attributumot `true`-ra
 					if(hitTestRectangle(hero, scav)) {
 						heroHit = true;
 					}
 				});
 
-				//If the hero is hit...
+				//Ha a hős ütést kap...
 				if(heroHit) {
-
-					//Make the hero semi-transparent
+					//Átlátszóbbá tesszük a hőst
 					hero.alpha = 0.5;
-
-					//Reduce the width of the health bar's inner rectangle by 1 pixel
+					//Majd csökkentjük az életerő vonalát 1 pixellel
 					healthBar.outer.width -= 1;
-
 				} else {
-
-					//Make the hero fully opaque (non-transparent) if it hasn't been hit
+					//Ha nem kap ütést, marad ugyan annyira látható
 					hero.alpha = 1;
 				}
 
-				//Check for a collision between the hero and the ulu
+				//Megnézzük hogy a hős megtalálta-e a kincset a pályán
 				if (hitTestRectangle(hero, ulu)) {
-
-					//If the ulu is touching the hero, center it over the hero
+					//Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
 					ulu.x = hero.x + 0;
 					ulu.y = hero.y + 0;
 				}
 
-				//Does the hero have enough health? If the width of the `innerBar`
-				//is less than zero, end the game and display "You lost!"
+				//Elég életereje van még a hősnek?
+				//Ha az életerő kevesebb mint 0 akkor vége a játéknak
+				//És megjelenítjük a végüzenetet
 				if (healthBar.outer.width < 0) {
 					state = end;
 					message.text = "You lost!";
 				}
 
-				//If the hero has brought the ulu to the exit,
-				//end the game and display "You won!"
+				//Ha a hős elvitte a kincset az ajtóig,
+				//akkor megnyerte a játékot
 				if (hitTestRectangle(ulu, door)) {
 					state = end;
 					message.text = "You won!";
 				}
 			}
 
+			//A játék végén, a játék alap jelenete nem látható
+			//míg a játék végének jelenete igen
 			function end() {
 				gameScene.visible = false;
 				gameOverScene.visible = true;
 			}
 
-			/* Helper functions */
+			/* Segítő funkciók */
 
 			function contain(sprite, container) {
 
 				let collision = undefined;
 
-				//Left
+				//Bal
 				if (sprite.x < container.x) {
 					sprite.x = container.x;
 					collision = "left";
 				}
 
-				//Top
+				//Felső
 				if (sprite.y < container.y) {
 					sprite.y = container.y;
 					collision = "top";
 				}
 
-				//Right
+				//Jobb
 				if (sprite.x + sprite.width > container.width) {
 					sprite.x = container.width - sprite.width;
 					collision = "right";
 				}
 
-				//Bottom
+				//Alsó
 				if (sprite.y + sprite.height > container.height) {
 					sprite.y = container.height - sprite.height;
 					collision = "bottom";
 				}
 
-				//Return the `collision` value
+				//ütközés `collision` értékkel való visszatérés
 				return collision;
 			}
 
-			//The `hitTestRectangle` function
+			//Az ütközéseket tesztelő funkció `hitTestRectangle`
 			function hitTestRectangle(r1, r2) {
 
-				//Define the variables we'll need to calculate
+				//Változók definiálása amiket ki kell számolni
 				let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
 
-				//hit will determine whether there's a collision
+				//A `hit` határozza meg hogy történt-e ütközés
 				hit = false;
 
-				//Find the center points of each sprite
-				r1.centerX = r1.x + r1.width / 2;
-				r1.centerY = r1.y + r1.height / 2;
+				//Sprite-ok középpontjának megtalálása
+				r1.centerX = r1.x + r1.width / 2;	//Első sprite vízszintes kpt.-ja
+				r1.centerY = r1.y + r1.height / 2;	//Első sprite függőleges kpt.-ja
 				r2.centerX = r2.x + r2.width / 2;
 				r2.centerY = r2.y + r2.height / 2;
 
-				//Find the half-widths and half-heights of each sprite
-				r1.halfWidth = r1.width / 2;
-				r1.halfHeight = r1.height / 2;
+				//Fél-magasság és fél-szélesség kiszámítása a Sprite-oknál
+				r1.halfWidth = r1.width / 2;	//Első szélességének a fele
+				r1.halfHeight = r1.height / 2;	//Első magasságának a fele
 				r2.halfWidth = r2.width / 2;
 				r2.halfHeight = r2.height / 2;
 
-				//Calculate the distance vector between the sprites
-				vx = r1.centerX - r2.centerX;
-				vy = r1.centerY - r2.centerY;
+				//Távolság vektorok kiszámítása
+				vx = r1.centerX - r2.centerX;	//vízszintes távolság vektor kiszámítása két Sprite között
+				vy = r1.centerY - r2.centerY;	//függőleges távolság vektor kiszámítása két Sprite között
 
-				//Figure out the combined half-widths and half-heights
+				//Összegzett Fél-magasság és fél-szélesség kiszámítása
 				combinedHalfWidths = r1.halfWidth + r2.halfWidth;
 				combinedHalfHeights = r1.halfHeight + r2.halfHeight;
 
-				//Check for a collision on the x axis
+				//X tengelyen való ütközés vizsgálása
+				//vízszintes vektor abszolút értéke kisebb mint az összegzett fél-szélesség
 				if (Math.abs(vx) < combinedHalfWidths) {
 
-					//A collision might be occuring. Check for a collision on the y axis
+					//Ha van ütközés akkor az Y tengelyen való ütközés vizsgálása
+					//függőleges vektor abszolút értéke kisebb mint az összegzett fél-magasság
 					if (Math.abs(vy) < combinedHalfHeights) {
-
-						//There's definitely a collision happening
+						//Megbizonyosodtunk az ütközésről
 						hit = true;
 					} else {
-
-						//There's no collision on the y axis
+						//Nem nincs ütközés
 						hit = false;
 					}
 				} else {
-
-					//There's no collision on the x axis
+					//Nincs ütközés az X tengelyen így nincs szükség további vizsgálatra
 					hit = false;
 				}
-
-				//`hit` will be either `true` or `false`
+				//`hit` értékével visszatérünk ami innentől vagy `true` vagy `false`
 				return hit;
-			};
+			}
 
 
-			//The `randomInt` helper function
+			//A `randomInt` helper funkció
 			function randomInt(min, max) {
 				return Math.floor(Math.random() * (max - min + 1)) + min;
 			}
 
-			//The `keyboard` helper function
+			//A `keyboard` helper funkció
 			function keyboard(keyCode) {
 				var key = {};
 				key.code = keyCode;
@@ -498,7 +467,8 @@
 				key.isUp = true;
 				key.press = undefined;
 				key.release = undefined;
-				//The `downHandler`
+
+				//Gomb lenyomás érzékelése `downHandler`
 				key.downHandler = function(event) {
 					if (event.keyCode === key.code) {
 						if (key.isUp && key.press) key.press();
@@ -508,7 +478,7 @@
 					event.preventDefault();
 				};
 
-				//The `upHandler`
+				//Gomb felengedés érzékelése `upHandler`
 				key.upHandler = function(event) {
 					if (event.keyCode === key.code) {
 						if (key.isDown && key.release) key.release();
@@ -518,13 +488,9 @@
 					event.preventDefault();
 				};
 
-				//Attach event listeners
-				window.addEventListener(
-						"keydown", key.downHandler.bind(key), false
-				);
-				window.addEventListener(
-						"keyup", key.upHandler.bind(key), false
-				);
+				//Eseményfigyelők hozzáadása
+				window.addEventListener("keydown", key.downHandler.bind(key), false);
+				window.addEventListener("keyup", key.upHandler.bind(key), false);
 				return key;
 			}
 		</script>
