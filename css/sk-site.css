@@ -25,6 +25,9 @@ body {
 	background-color: #383838;
 	margin: 0;
 	padding: 0;
+	max-width: 512px;
+	width: 100vw;
+	overflow: hidden;
 }
 
 [class*=mw-][class*=-inner],
