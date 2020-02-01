@@ -29,7 +29,7 @@ $(document).ready(function($) {
         let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         if (viewPw < 512 || viewPh < 512) {
             app.stage.scale.set(diff(viewPw, 512));
-            $('#uluGame canvas').css('margin-top', '-'+diff(viewPw, 512)+'%');
+            $('#uluBtns').css('margin-top', '-'+diff(viewPw, 512)+'%');
         }
     };
 
