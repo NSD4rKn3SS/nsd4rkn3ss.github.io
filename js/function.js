@@ -408,6 +408,7 @@ $(document).ready(function($) {
                 scav.vy *= -1;
             }
             if (scavHitsWall === "left" || scavHitsWall === "right") {
+            	/*
                 if (randomInt(1, 2) === 1) {
                     if (scav.vy === 0) {
                         if (randomInt(1, 2) === 1) {
@@ -418,7 +419,7 @@ $(document).ready(function($) {
                     } else {
                         scav.vy = 0;
                     }
-                }
+                }*/
                 scav.vx *= -1;
             }
 
