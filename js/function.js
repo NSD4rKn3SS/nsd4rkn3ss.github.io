@@ -20,15 +20,20 @@ $(document).ready(function($) {
         resolution: 1
     });
 
-    //canvas automatikus átméretezése az ablakkal
+    //canvas beltartalmának automatikus átméretezése az ablakkal
+    //Különbözeti százalékszámítás funkciója
     let diff = function(a, b) {
         return  ((a * 100) / b) / 100;
     }
+
     let windowSize = function() {
         let viewPw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+        //megvizsgáljuk hogy kisebb-e a viewport a játék méreténél
         if (viewPw < 512 || viewPh < 512) {
+        	//százalékos arányba csökkentjük a játék beltartalmát
             app.stage.scale.set(diff(viewPw, 512));
+            //eltolást alkalmazunk az irányítógombokra annyival amennyivel kisebb a játék beltartalma
             $('#uluBtns').css('margin-top', '-'+(512 - viewPw)+'px');
         }
     };
