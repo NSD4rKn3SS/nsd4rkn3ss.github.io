@@ -29,7 +29,7 @@ $(document).ready(function($) {
         let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         if (viewPw < 512 || viewPh < 512) {
             app.stage.scale.set(diff(viewPw, 512));
-            $('#uluBtns').css('margin-top', '-'+512-viewPw+'px');
+            $('#uluBtns').css('margin-top', '-'+(512 - viewPw)+'px');
         }
     };
 
@@ -408,7 +408,6 @@ $(document).ready(function($) {
                 scav.vy *= -1;
             }
             if (scavHitsWall === "left" || scavHitsWall === "right") {
-            	/*
                 if (randomInt(1, 2) === 1) {
                     if (scav.vy === 0) {
                         if (randomInt(1, 2) === 1) {
@@ -419,7 +418,7 @@ $(document).ready(function($) {
                     } else {
                         scav.vy = 0;
                     }
-                }*/
+                }
                 scav.vx *= -1;
             }
 
