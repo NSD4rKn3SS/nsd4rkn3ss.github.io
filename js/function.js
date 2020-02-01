@@ -21,7 +21,7 @@ $(document).ready(function($) {
     });
 
     //canvas automatikus átméretezése az ablakkal
-    function diff(a, b) {
+    let diff = function(a, b) {
         return  ((a * 100) / b) / 100;
     }
     let windowSize = function() {
@@ -29,6 +29,7 @@ $(document).ready(function($) {
         let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         if (viewPw < 512 || viewPh < 512) {
             app.stage.scale.set(diff(viewPw, 512));
+            $('#uluGame canvas').css('margin-top', '-'+diff(viewPw, 512)+'%');
         }
     };
 
@@ -60,8 +61,6 @@ $(document).ready(function($) {
         gameScene = new Container();
         app.stage.addChild(gameScene);
 
-
-
         //Textúrák felparaméterezése
         id = {
             'scav' : resources["img/scav/frames/scavrun.json"].spritesheet,
@@ -74,7 +73,6 @@ $(document).ready(function($) {
         //Pálya alapja
         plains = new Sprite(id['grass']);
         gameScene.addChild(plains);
-
 
         //Kijárat
         door = new Sprite(id['orith']['door.png']);
