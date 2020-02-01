@@ -420,8 +420,10 @@ $(document).ready(function($) {
                         } else {
                             scav.vy = randomInt(1, 3) * -1;
                         }
+                    } else if (scav.vx != 0) {
+                    	scav.vy = 0;
                     } else {
-                        scav.vy = 0;
+                    	scav.vy = randomInt(1, 3) * -1;
                     }
                 }
                 scav.vx *= -1;
