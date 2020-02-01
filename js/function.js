@@ -17,7 +17,7 @@ $(document).ready(function($) {
         height: 512,
         antialiasing: true,
         transparent: true,
-        resolution: devicePixelRatio
+        resolution: 1
     });
 
     //canvas automatikus átméretezése az ablakkal
@@ -25,16 +25,12 @@ $(document).ready(function($) {
         return  ((a * 100) / b) / 100;
     }
     let windowSize = function() {
-    	/*
         let viewPw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
         let viewPh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
         if (viewPw < 512 || viewPh < 512) {
             app.stage.scale.set(diff(viewPw, 512));
             $('#uluBtns').css('margin-top', '-'+Math.floor(diff(viewPw, 512) * 100)+'px');
         }
-        */
-        const parent = app.view.parentNode;
-        app.renderer.resize(parent.clientWidth, parent.clientHeight);
     };
 
     windowSize();
