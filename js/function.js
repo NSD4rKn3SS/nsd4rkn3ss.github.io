@@ -431,6 +431,17 @@ $(document).ready(function($) {
                 scav.vx *= -1;
             }
 
+            /*
+            scavs.forEach(function(otherScav) {
+                if (hitTestRectangle(scav, otherScav)) {
+                    scav.vy *= -1;
+                    scav.vx *= -1;
+                    otherScav.vy *= -1;
+                    otherScav.vx *= -1;
+                }
+            });
+            */
+
             //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
             //akkor átállítjuk a `heroHit` attributumot `true`-ra
             if(hitTestRectangle(hero, scav)) {
@@ -442,7 +453,7 @@ $(document).ready(function($) {
         if(heroHit) {
             //Átlátszóbbá tesszük a hőst
             hero.alpha = 0.5;
-            //Majd csökkentjük az életerő vonalát 5 pixellel
+            //Majd csökkentjük az életerő vonalát 2 pixellel
             healthBar.outer.width -= 2;
         } else {
             //Ha nem kap ütést, marad ugyan annyira látható
@@ -481,6 +492,7 @@ $(document).ready(function($) {
 
     /* Segítő funkciók */
 
+    //Ütközés a pályával `container`
     function contain(sprite, container) {
 
         let collision = undefined;
