@@ -406,8 +406,10 @@ $(document).ready(function($) {
                         } else {
                             scav.vx = randomInt(1, 3) * -1;
                         }
-                     } else {
+                    } else if (scav.vy !== 0) {
                         scav.vx = 0;
+                    } else {
+                        scav.vx = randomInt(1, 3) * -1;
                     }
                 }
                 scav.vy *= -1;
@@ -420,7 +422,7 @@ $(document).ready(function($) {
                         } else {
                             scav.vy = randomInt(1, 3) * -1;
                         }
-                    } else if (scav.vx != 0) {
+                    } else if (scav.vx !== 0) {
                     	scav.vy = 0;
                     } else {
                     	scav.vy = randomInt(1, 3) * -1;
