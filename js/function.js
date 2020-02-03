@@ -154,14 +154,14 @@ $(document).ready(function($) {
         //Életerő sötét hátterének felparaméterezése
         let innerBar = new Graphics();
         innerBar.beginFill(0x000000);
-        innerBar.drawRect(0, 0, 128, 8);
+        innerBar.drawRect(100, 495, 128, 8);
         innerBar.endFill();
         healthBar.addChild(innerBar);
 
         //Életerő vonal felparaméterezése
         let outerBar = new Graphics();
         outerBar.beginFill(0xFF3300);
-        outerBar.drawRect(0, 0, 128, 8);
+        outerBar.drawRect(100,495, 128, 8);
         outerBar.endFill();
         healthBar.addChild(outerBar);
         //könnyebb referenciáért beállítjuk ezt a tulajdonságot
@@ -341,14 +341,14 @@ $(document).ready(function($) {
             }
 
             if (arrowBits) {
-                if (arrowBits == KEY_L) { leftStart(); }
-                if (arrowBits == KEY_R) { rightStart(); }
-                if (arrowBits == KEY_U) { upStart(); }
-                if (arrowBits == KEY_D) { downStart(); }
-                if (arrowBits == KEY_UL) { leftUpStart(); }
-                if (arrowBits == KEY_DL) { leftDownStart(); }
-                if (arrowBits == KEY_UR) { rightUpStart(); }
-                if (arrowBits == KEY_DR) { rightDownStart(); }
+                if (arrowBits === KEY_L) { leftStart(); }
+                if (arrowBits === KEY_R) { rightStart(); }
+                if (arrowBits === KEY_U) { upStart(); }
+                if (arrowBits === KEY_D) { downStart(); }
+                if (arrowBits === KEY_UL) { leftUpStart(); }
+                if (arrowBits === KEY_DL) { leftDownStart(); }
+                if (arrowBits === KEY_UR) { rightUpStart(); }
+                if (arrowBits === KEY_DR) { rightDownStart(); }
             } else {
                 mvmntStop();
             }
@@ -431,9 +431,11 @@ $(document).ready(function($) {
                 scav.vx *= -1;
             }
 
+            //Ellenfelek ütköztetése egymással
             /*
             scavs.forEach(function(otherScav) {
-                if (hitTestRectangle(scav, otherScav)) {
+                let randomScavHit = randomInt(1, 2);
+                if (hitTestRectangle(scav, otherScav) && randomScavHit === 2) {
                     scav.vy *= -1;
                     scav.vx *= -1;
                     otherScav.vy *= -1;
@@ -441,6 +443,28 @@ $(document).ready(function($) {
                 }
             });
             */
+
+            //Ellenfelek megszínezése sebességük alapján
+            /*
+            let scavSpeed = scav.vx + scav.vy;
+            let speedColorIndex = {
+                '-6' : '0xFF0000',
+                '-5' : '0x0000FF',
+                '-4' : '0x0000FF',
+                '-3' : '0x00FF00',
+                '-2' : '0x00FF00',
+                '-1' : '0xFFFFFF',
+                '0' : '0xFFFFFF',
+                '1' : '0xFFFFFF',
+                '2' : '0x00FF00',
+                '3' : '0x00FF00',
+                '4' : '0x0000FF',
+                '5' : '0x0000FF',
+                '6' : '0xFF0000',
+            };
+            scav.tint = speedColorIndex[scavSpeed];
+            */
+
 
             //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
             //akkor átállítjuk a `heroHit` attributumot `true`-ra
