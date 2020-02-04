@@ -59,7 +59,7 @@ $(document).ready(function($) {
 
     //többször használatos változók definiálása
     let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-        door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet;
+        door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs;
 
     hpBarSet = function(x, y) {
         healthBar.position.set(x - 25, y - 20);
@@ -120,8 +120,8 @@ $(document).ready(function($) {
         gameScene.addChild(ulu);
 
         //Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
-        let numberOfScavs = randomInt(6,12),
-            spacing = 48,
+        numberOfScavs = randomInt(6,12);
+        let spacing = 48,
             xOffset = 150,
             speed = 2,
             direction = 1;
@@ -537,9 +537,9 @@ $(document).ready(function($) {
             }
 
             if (hitTestRectangle(hero, ulu)) {
-                message.text = ("You've got the Ulu-mulu! \n But it wasn't enough  \n Survived "+playtime+" seconds");
+                message.text = ("You've got the Ulu-mulu! \n But it wasn't enough \n There were "+numberOfScavs+" Scavengers \n Survived "+playtime+" seconds");
             } else {
-                message.text = ("Scavengers feed on your flesh! \n Survived "+playtime+" seconds");
+                message.text = ("Scavengers feed on your flesh! \n There were "+numberOfScavs+" Scavengers \n Survived "+playtime+" seconds");
             }
 
         }
@@ -555,7 +555,7 @@ $(document).ready(function($) {
             }
             var hpLeft = Math.floor(100 - (healthBar.outer.width * 2));
             if (hpLeft === 0) {hpLeft = 'no'};
-            message.text = ("You survived the hunt! \n Took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
+            message.text = ("You survived the hunt! \n There were "+numberOfScavs+" Scavengers \n Took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
         }
     }
 
