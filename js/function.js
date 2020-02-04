@@ -48,15 +48,17 @@ $(document).ready(function($) {
 
     //resourceok létrehozása
     loader
-        .add("img/scav/frames/scavrun.json")
-        .add("img/orcrun/frames/orcrun.json")
+        .add("img/scav/scavrun.json")
+        .add("img/orcrun/orcrun.json")
+        .add("img/water/water.json")
         .add("img/ulu.png")
         .add("img/grass.png")
         .add("img/treasureHunter.json")
+        .add("img/door.png")
         .load(setup);
 
     //többször használatos változók definiálása
-    let state, hero, ulu, scavs, chimes, exit, player, plains,
+    let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
         door, healthBar, message, gameScene, gameOverScene, enemies, id;
 
 
@@ -68,20 +70,28 @@ $(document).ready(function($) {
 
         //Textúrák felparaméterezése
         id = {
-            'scav' : resources["img/scav/frames/scavrun.json"].spritesheet,
-            'orc' : resources["img/orcrun/frames/orcrun.json"].spritesheet,
+            'scav' : resources["img/scav/scavrun.json"].spritesheet,
+            'orc' : resources["img/orcrun/orcrun.json"].spritesheet,
+            'water' : resources["img/water/water.json"].spritesheet,
             'ulu' : resources["img/ulu.png"].texture,
             'grass' : resources["img/grass.png"].texture,
+            'door' : resources["img/door.png"].texture,
             'orith' : resources["img/treasureHunter.json"].textures,
         };
 
         //Pálya alapja
+        waters = new AnimatedSprite(id['water'].animations["water"]);
+        waters.wrapMode = PIXI.WRAP_MODES.REPEAT;
+        waters.animationSpeed = 0.1;
+        waters.play();
+        console.log(waters);
         plains = new Sprite(id['grass']);
+        gameScene.addChild(waters);
         gameScene.addChild(plains);
 
         //Kijárat
-        door = new Sprite(id['orith']['door.png']);
-        door.position.set(28, 5);
+        door = new Sprite(id['door']);
+        door.position.set(40, 430);
         gameScene.addChild(door);
 
         //Játékos karakter
@@ -97,8 +107,13 @@ $(document).ready(function($) {
 
         //Item
         ulu = new Sprite(id['ulu']);
-        ulu.x = gameScene.width - ulu.width - 48;
-        ulu.y = gameScene.height / 2 - ulu.height / 2;
+
+        //ulu.x = gameScene.width - ulu.width - 48;
+        //ulu.y = gameScene.height / 2 - ulu.height / 2;
+        ulu.x = 450;
+        ulu.y = 60;
+        ulu.anchor.y = 0.5;
+        ulu.anchor.x = 0.5;
         gameScene.addChild(ulu);
 
         //Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
@@ -379,7 +394,7 @@ $(document).ready(function($) {
         //X a játszhatő terület első vízszintes pontja
         //Y az első függőleges
         //width és height a maximális szélessége és hosszúsága a pályának
-        contain(hero, {x: 28, y: 28, width: 500, height: 510});
+        contain(hero, {x: 45, y: 45, width: 495, height: 510});
         //contain(hero, stage);
 
         //Ütközés előtt beállítjuk a hős attributumát `heroHit`, `false`-ra
