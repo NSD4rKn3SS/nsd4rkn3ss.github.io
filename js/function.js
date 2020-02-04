@@ -24,7 +24,7 @@ $(document).ready(function($) {
     //Különbözeti százalékszámítás funkciója
     let diff = function(a, b) {
         return  ((a * 100) / b) / 100;
-    }
+    };
 
     let windowSize = function() {
         let viewPw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
@@ -59,7 +59,7 @@ $(document).ready(function($) {
 
     //többször használatos változók definiálása
     let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-        door, healthBar, message, gameScene, gameOverScene, enemies, id;
+        door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime;
 
 
     function setup() {
@@ -84,7 +84,6 @@ $(document).ready(function($) {
         waters.wrapMode = PIXI.WRAP_MODES.REPEAT;
         waters.animationSpeed = 0.1;
         waters.play();
-        console.log(waters);
         plains = new Sprite(id['grass']);
         gameScene.addChild(waters);
         gameScene.addChild(plains);
@@ -171,14 +170,14 @@ $(document).ready(function($) {
         //Életerő sötét hátterének felparaméterezése
         let innerBar = new Graphics();
         innerBar.beginFill(0x000000);
-        innerBar.drawRect(0, 0, 128, 8);
+        innerBar.drawRect(0, 0, 100, 8);
         innerBar.endFill();
         healthBar.addChild(innerBar);
 
         //Életerő vonal felparaméterezése
         let outerBar = new Graphics();
         outerBar.beginFill(0xFF3300);
-        outerBar.drawRect(0,0, 128, 8);
+        outerBar.drawRect(0,0, 100, 8);
         outerBar.endFill();
         healthBar.addChild(outerBar);
         //könnyebb referenciáért beállítjuk ezt a tulajdonságot
@@ -192,13 +191,16 @@ $(document).ready(function($) {
         //Szöveg sprite létrehozása és hozzá adása a halál jelenethez
         let style = new TextStyle({
             fontFamily: "Futura",
-            fontSize: 64,
+            fontSize: 32,
+            align : 'center',
             fill: "white"
         });
-        message = new Text("The End!", style);
-        message.x = 120;
-        message.y = app.stage.height / 2 - 32;
+        message = new Text("You Died! \n and survived \n X seconds", style);
+        message.x = app.stage.width / 2;
+        message.y = app.stage.height / 2;
+        message.anchor.set(0.5);
         gameOverScene.addChild(message);
+        console.log(gameOverScene);
 
         //Mozgatás funkciók definiálása
         let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop;
@@ -371,6 +373,12 @@ $(document).ready(function($) {
             }
         };
 
+        timerHS = {
+            'start' : Math.floor(Date.now() / 1000),
+            'current' : '',
+            'end' : '',
+        };
+
         //Játék állapot beállítása
         state = play;
 
@@ -386,6 +394,9 @@ $(document).ready(function($) {
     }
 
     function play(delta) {
+        //Frissítjük az időbélyeget
+        timerHS['current'] = Math.floor(Date.now() / 1000);
+
         //A hős sebességét használva, mozgatjuk a grafikáját
         hero.x += hero.vx;
         hero.y += hero.vy;
@@ -499,8 +510,8 @@ $(document).ready(function($) {
         if(heroHit) {
             //Átlátszóbbá tesszük a hőst
             hero.alpha = 0.5;
-            //Majd csökkentjük az életerő vonalát 2 pixellel
-            healthBar.outer.width -= 2;
+            //Majd csökkentjük az életerő vonalát 1 pixellel
+            healthBar.outer.width -= 1;
         } else {
             //Ha nem kap ütést, marad ugyan annyira látható
             hero.alpha = 1;
@@ -518,14 +529,26 @@ $(document).ready(function($) {
         //És megjelenítjük a végüzenetet
         if (healthBar.outer.width < 0) {
             state = end;
-            message.text = "You lost!";
+            //Megnézzük a végső időt, majd összevetjük a kezdéssel
+            if (!timerHS['end']) {
+                timerHS['end'] = Math.floor(Date.now() / 1000);
+                playtime = timerHS['end'] - timerHS['start'];
+            }
+            message.text = ("Scavengers feed on your flesh! \n Survived "+playtime+" seconds");
         }
 
         //Ha a hős elvitte a kincset az ajtóig,
         //akkor megnyerte a játékot
         if (hitTestRectangle(ulu, door)) {
             state = end;
-            message.text = "You won!";
+            //Megnézzük a végső időt, majd összevetjük a kezdéssel
+            if (!timerHS['end']) {
+                timerHS['end'] = Math.floor(Date.now() / 1000);
+                playtime = timerHS['end'] - timerHS['start'];
+            }
+            var hpLeft = 100 - healthBar.outer.width;
+            if (hpLeft === 0) {hpLeft = 'no'};
+            message.text = ("You survived the hunt! \n Took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
         }
     }
 
@@ -537,6 +560,15 @@ $(document).ready(function($) {
     }
 
     /* Segítő funkciók */
+
+    //Időkalkuláció
+    function timeDiff(timestamp1, timestamp2) {
+        var difference = timestamp1 - timestamp2;
+        //var daysDifference = Math.floor(difference/1000/60/60/24);
+        var secfference = Math.floor(difference/1000);
+
+        return secDifference;
+    }
 
     //Ütközés a pályával `container`
     function contain(sprite, container) {
