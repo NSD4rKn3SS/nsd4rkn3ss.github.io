@@ -59,7 +59,11 @@ $(document).ready(function($) {
 
     //többször használatos változók definiálása
     let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-        door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime;
+        door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet;
+
+    hpBarSet = function(x, y) {
+        healthBar.position.set(x - 25, y - 20);
+    };
 
 
     function setup() {
@@ -164,20 +168,20 @@ $(document).ready(function($) {
 
         //Életerő vonal generálása
         healthBar = new Container();
-        healthBar.position.set(app.stage.width - 170, 4)
+        healthBar.position.set(hero.x - 25, hero.y - 20);
         gameScene.addChild(healthBar);
 
         //Életerő sötét hátterének felparaméterezése
         let innerBar = new Graphics();
         innerBar.beginFill(0x000000);
-        innerBar.drawRect(0, 0, 100, 8);
+        innerBar.drawRect(0, 0, 50, 4);
         innerBar.endFill();
         healthBar.addChild(innerBar);
 
         //Életerő vonal felparaméterezése
         let outerBar = new Graphics();
         outerBar.beginFill(0xFF3300);
-        outerBar.drawRect(0,0, 100, 8);
+        outerBar.drawRect(0,0, 50, 4);
         outerBar.endFill();
         healthBar.addChild(outerBar);
         //könnyebb referenciáért beállítjuk ezt a tulajdonságot
@@ -400,6 +404,7 @@ $(document).ready(function($) {
         //A hős sebességét használva, mozgatjuk a grafikáját
         hero.x += hero.vx;
         hero.y += hero.vy;
+        hpBarSet(hero.x, hero.y);
 
         //Hős pályaterületen tartása
         //X a játszhatő terület első vízszintes pontja
@@ -510,7 +515,7 @@ $(document).ready(function($) {
         if(heroHit) {
             //Átlátszóbbá tesszük a hőst
             hero.alpha = 0.5;
-            //Majd csökkentjük az életerő vonalát 1 pixellel
+            //Majd csökkentjük az életerő vonalát 1 pixellel azaz 2 ponttal
             healthBar.outer.width -= 1;
         } else {
             //Ha nem kap ütést, marad ugyan annyira látható
@@ -552,7 +557,7 @@ $(document).ready(function($) {
                 timerHS['end'] = Math.floor(Date.now() / 1000);
                 playtime = timerHS['end'] - timerHS['start'];
             }
-            var hpLeft = Math.floor(100 - healthBar.outer.width);
+            var hpLeft = Math.floor(100 - (healthBar.outer.width * 2));
             if (hpLeft === 0) {hpLeft = 'no'};
             message.text = ("You survived the hunt! \n Took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
         }
