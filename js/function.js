@@ -120,7 +120,7 @@ $(document).ready(function($) {
         gameScene.addChild(ulu);
 
         //Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
-        let numberOfScavs = randomInt(5,12),
+        let numberOfScavs = randomInt(6,12),
             spacing = 48,
             xOffset = 150,
             speed = 2,
