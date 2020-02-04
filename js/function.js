@@ -534,7 +534,13 @@ $(document).ready(function($) {
                 timerHS['end'] = Math.floor(Date.now() / 1000);
                 playtime = timerHS['end'] - timerHS['start'];
             }
-            message.text = ("Scavengers feed on your flesh! \n Survived "+playtime+" seconds");
+
+            if (hitTestRectangle(hero, ulu)) {
+                message.text = ("You've got the Ulu-mulu! \n But it wasn't enough  \n Survived "+playtime+" seconds");
+            } else {
+                message.text = ("Scavengers feed on your flesh! \n Survived "+playtime+" seconds");
+            }
+
         }
 
         //Ha a hős elvitte a kincset az ajtóig,
