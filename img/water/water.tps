@@ -88,9 +88,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>4096</int>
             <key>height</key>
-            <int>2048</int>
+            <int>4096</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -182,13 +182,6 @@
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">frames/water1.png</key>
-            <key type="filename">frames/water10.png</key>
-            <key type="filename">frames/water11.png</key>
-            <key type="filename">frames/water12.png</key>
-            <key type="filename">frames/water13.png</key>
-            <key type="filename">frames/water14.png</key>
-            <key type="filename">frames/water15.png</key>
-            <key type="filename">frames/water16.png</key>
             <key type="filename">frames/water2.png</key>
             <key type="filename">frames/water3.png</key>
             <key type="filename">frames/water4.png</key>
@@ -196,10 +189,9 @@
             <key type="filename">frames/water6.png</key>
             <key type="filename">frames/water7.png</key>
             <key type="filename">frames/water8.png</key>
-            <key type="filename">frames/water9.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
-                <point_f>0,0</point_f>
+                <point_f>0.5,0.5</point_f>
                 <key>spriteScale</key>
                 <double>1</double>
                 <key>scale9Enabled</key>
@@ -215,13 +207,6 @@
         <key>fileList</key>
         <array>
             <filename>frames/water1.png</filename>
-            <filename>frames/water10.png</filename>
-            <filename>frames/water11.png</filename>
-            <filename>frames/water12.png</filename>
-            <filename>frames/water13.png</filename>
-            <filename>frames/water14.png</filename>
-            <filename>frames/water15.png</filename>
-            <filename>frames/water16.png</filename>
             <filename>frames/water2.png</filename>
             <filename>frames/water3.png</filename>
             <filename>frames/water4.png</filename>
@@ -229,7 +214,6 @@
             <filename>frames/water6.png</filename>
             <filename>frames/water7.png</filename>
             <filename>frames/water8.png</filename>
-            <filename>frames/water9.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
