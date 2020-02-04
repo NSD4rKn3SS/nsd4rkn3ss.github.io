@@ -199,7 +199,7 @@ $(document).ready(function($) {
             fill: "white"
         });
         message = new Text("You Died! \n and survived \n X seconds", style);
-        message.x = app.stage.width / 2;
+        message.x = app.stage.width / 2 - 54;
         message.y = app.stage.height / 2;
         message.anchor.set(0.5);
         gameOverScene.addChild(message);
@@ -337,6 +337,62 @@ $(document).ready(function($) {
         }).bind('touchend', function(e) {
             mvmntStop();
         });
+
+        //Swipe irányítás
+        /*
+        let touchHandler = {
+            getTouches : function(evt) {
+                return  evt.touches ||             // browser API
+                        evt.originalEvent.touches; // jQuery
+            },
+            handleTouchStart : function(evt) {
+                const firstTouch = touchHandler.getTouches(evt)[0];                                      
+                xDown = firstTouch.clientX;                                      
+                yDown = firstTouch.clientY;                                      
+            },
+            handleTouchMove : function(evt) {
+                if ( ! xDown || ! yDown ) {
+                    return;
+                }
+
+                var xUp = evt.touches[0].clientX;                                    
+                var yUp = evt.touches[0].clientY;
+
+                var xDiff = xDown - xUp;
+                var yDiff = yDown - yUp;
+
+                if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
+                    if ( xDiff > 0 ) {
+                        console.log('left swipe');
+                        leftStart();
+                    } else {
+                        console.log('right swipe');
+                        rightStart();
+                    }                       
+                } else {
+                    if ( yDiff > 0 ) {
+                        console.log('up swipe');
+                        upStart();
+                    } else { 
+                        console.log('down swipe');
+                        downStart();
+                    }                                                                 
+                }
+                // reset values
+                xDown = null;
+                yDown = null;                                             
+            },
+            init : function() {
+                document.addEventListener('touchstart', touchHandler.handleTouchStart, false);        
+                document.addEventListener('touchmove', touchHandler.handleTouchMove, false);
+
+                var xDown = null;                                                        
+                var yDown = null;    
+            }
+        };
+        
+        touchHandler.init();
+        */
 
         //Billentyű leütések figyelése
         //Új billentyű leütés érzékelés
@@ -669,5 +725,6 @@ $(document).ready(function($) {
         $('#uluBtns').show();
     } else {
         $('#uluBtns').hide();
-    }
+    };
+
 });
