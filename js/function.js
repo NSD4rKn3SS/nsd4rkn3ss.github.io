@@ -92,6 +92,8 @@ $(document).ready(function($) {
         hero.vx = 0;
         hero.vy = 0;
         gameScene.addChild(hero);
+        hero.anchor.y = 0.5;
+        hero.anchor.x = 0.5;
 
         //Item
         ulu = new Sprite(id['ulu']);
@@ -377,7 +379,7 @@ $(document).ready(function($) {
         //X a játszhatő terület első vízszintes pontja
         //Y az első függőleges
         //width és height a maximális szélessége és hosszúsága a pályának
-        contain(hero, {x: 28, y: 28, width: 500, height: 500});
+        contain(hero, {x: 28, y: 28, width: 500, height: 510});
         //contain(hero, stage);
 
         //Ütközés előtt beállítjuk a hős attributumát `heroHit`, `false`-ra
@@ -391,7 +393,7 @@ $(document).ready(function($) {
             scav.x += scav.vx;
 
             //Beállítjuk az ellenfeleknél is a pálya területet
-            let scavHitsWall = contain(scav, {x: 60, y: 70, width: 460, height: 480});
+            let scavHitsWall = contain(scav, {x: 45, y: 50, width: 480, height: 500});
 
             //Megnézzük az orientációját az ellenfélnek és affelé forgatjuk
             scav.heading = Math.atan2(scav.vy, scav.vx);
@@ -431,11 +433,15 @@ $(document).ready(function($) {
                 scav.vx *= -1;
             }
 
+            //Megadjuk a forgatási középpontjukat
+            scav.anchor.y = 0.5;
+            scav.anchor.x = 0.5;
+
             //Ellenfelek ütköztetése egymással
             /*
             scavs.forEach(function(otherScav) {
                 let randomScavHit = randomInt(1, 2);
-                if (hitTestRectangle(scav, otherScav) && randomScavHit === 2) {
+                if (hitTestRectangle(scav, otherScav)) {
                     scav.vy *= -1;
                     scav.vx *= -1;
                     otherScav.vy *= -1;
@@ -443,6 +449,7 @@ $(document).ready(function($) {
                 }
             });
             */
+
 
             //Ellenfelek megszínezése sebességük alapján
             /*
