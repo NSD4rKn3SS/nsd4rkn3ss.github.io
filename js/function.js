@@ -546,7 +546,7 @@ $(document).ready(function($) {
                 timerHS['end'] = Math.floor(Date.now() / 1000);
                 playtime = timerHS['end'] - timerHS['start'];
             }
-            var hpLeft = 100 - healthBar.outer.width;
+            var hpLeft = Math.floor(100 - healthBar.outer.width);
             if (hpLeft === 0) {hpLeft = 'no'};
             message.text = ("You survived the hunt! \n Took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
         }
