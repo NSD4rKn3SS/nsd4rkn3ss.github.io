@@ -1,4 +1,4 @@
-###### Scavanger Hunter
+## Scavanger Hunter
 
 
 I created a little minigame to learn about PixiJS and its functionalities.
