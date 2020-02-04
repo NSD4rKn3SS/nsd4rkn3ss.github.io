@@ -199,7 +199,7 @@ $(document).ready(function($) {
             fill: "white"
         });
         message = new Text("You Died! \n and survived \n X seconds", style);
-        message.x = app.stage.width / 2 - 54;
+        message.x = app.stage.width / 2;
         message.y = app.stage.height / 2;
         message.anchor.set(0.5);
         gameOverScene.addChild(message);
@@ -337,9 +337,8 @@ $(document).ready(function($) {
         }).bind('touchend', function(e) {
             mvmntStop();
         });
-
-        //Swipe irányítás
         /*
+        //Swipe irányítás
         let touchHandler = {
             getTouches : function(evt) {
                 return  evt.touches ||             // browser API
@@ -349,6 +348,11 @@ $(document).ready(function($) {
                 const firstTouch = touchHandler.getTouches(evt)[0];                                      
                 xDown = firstTouch.clientX;                                      
                 yDown = firstTouch.clientY;                                      
+            },
+            handleTouchEnd : function(evt) {
+                mvmntStop();                                     
+                xDown = null;
+                yDown = null;                                   
             },
             handleTouchMove : function(evt) {
                 if ( ! xDown || ! yDown ) {
@@ -361,20 +365,32 @@ $(document).ready(function($) {
                 var xDiff = xDown - xUp;
                 var yDiff = yDown - yUp;
 
-                if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
+                if(xDiff < 0 && yDiff > 0 ) {
+                    console.log('righ up');
+                    rightUpStart();
+                } else if(xDiff < 0 && yDiff < 0 ) {
+                    console.log('righ down');
+                    rightDownStart();
+                } else if(xDiff > 0 && yDiff > 0 ) {
+                    console.log('left up');
+                    leftUpStart();
+                } else if(xDiff > 0 && yDiff < 0 ) {
+                    console.log('left down');
+                    leftDownStart();
+                } else if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
                     if ( xDiff > 0 ) {
-                        console.log('left swipe');
+                        console.log('left');
                         leftStart();
                     } else {
-                        console.log('right swipe');
+                        console.log('right');
                         rightStart();
                     }                       
                 } else {
                     if ( yDiff > 0 ) {
-                        console.log('up swipe');
+                        console.log('up');
                         upStart();
                     } else { 
-                        console.log('down swipe');
+                        console.log('down');
                         downStart();
                     }                                                                 
                 }
@@ -385,6 +401,7 @@ $(document).ready(function($) {
             init : function() {
                 document.addEventListener('touchstart', touchHandler.handleTouchStart, false);        
                 document.addEventListener('touchmove', touchHandler.handleTouchMove, false);
+                document.addEventListener('touchend', touchHandler.handleTouchEnd, false);
 
                 var xDown = null;                                                        
                 var yDown = null;    
@@ -393,7 +410,7 @@ $(document).ready(function($) {
         
         touchHandler.init();
         */
-
+        
         //Billentyű leütések figyelése
         //Új billentyű leütés érzékelés
         // postfix U,D,L,R for Up down left right
