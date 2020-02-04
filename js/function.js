@@ -123,14 +123,13 @@ $(document).ready(function($) {
         let numberOfScavs = 8,
             spacing = 48,
             xOffset = 150,
-            speed = randomInt(1, 3),
+            speed = 2,
             direction = 1;
 
         scavs = [];
 
         //Ellenfelek létrehozása az alapján hogy mennyit adtunk meg a `numberOfScavs` változóba
         for (let i = 0; i < numberOfScavs; i++) {
-
             //ellenfél sprite létrehozása, animáció gyorsaságának beállítása és indítása
             let scav = new AnimatedSprite(id['scav'].animations["walk"]);
             scav.animationSpeed = 0.2;
@@ -151,10 +150,10 @@ $(document).ready(function($) {
             //Az irány avagy `direction` vagy `1` vagy `-1`.
             //`1` azt jelenti hogy lefele míg a `-1` azt hogy felfele mozognak
             //`direction` szorzása a `speed` (sebesség) -el, meghatározzás a függőleges mozgás irányt
-            scav.vy = speed * direction;
+            scav.vy = randomInt(1, 4) * direction;
 
             //Beállítjuk az ellenfél vízszintes gyorsulását a játékos irányába
-            scav.vx = speed * direction;
+            scav.vx = randomInt(2, 4) * direction;
 
             //Irány megváltoztatása a következő lefutásnál
             direction *= -1;
@@ -481,26 +480,23 @@ $(document).ready(function($) {
             });
             */
 
-
-            //Ellenfelek megszínezése sebességük alapján
             /*
-            let scavSpeed = scav.vx + scav.vy;
+            //Ellenfelek megszínezése sebességük alapján
+            let scavSpeed = Math.abs(scav.vx) + Math.abs(scav.vy);
             let speedColorIndex = {
-                '-6' : '0xFF0000',
-                '-5' : '0x0000FF',
-                '-4' : '0x0000FF',
-                '-3' : '0x00FF00',
-                '-2' : '0x00FF00',
-                '-1' : '0xFFFFFF',
-                '0' : '0xFFFFFF',
-                '1' : '0xFFFFFF',
-                '2' : '0x00FF00',
-                '3' : '0x00FF00',
-                '4' : '0x0000FF',
-                '5' : '0x0000FF',
-                '6' : '0xFF0000',
+                '0' : '0xDDFFFF',
+                '1' : '0xDDFFFF',
+                '2' : '0xFFDDFF',
+                '3' : '0xFFDDFF',
+                '4' : '0xFFFFDD',
+                '5' : '0xFFFFDD',
+                '6' : '0xDDDDFF',
+                '7' : '0xFFDDDD',
+                '8' : '0xDDFFDD',
             };
+            //scav.alpha = 0.5;
             scav.tint = speedColorIndex[scavSpeed];
+            scav.blendMode = PIXI.BLEND_MODES.COLOR_DODGE;
             */
 
 
