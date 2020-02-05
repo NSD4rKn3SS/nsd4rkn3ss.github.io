@@ -193,17 +193,17 @@ $(document).ready(function($) {
 
         //Szöveg sprite létrehozása és hozzá adása a halál jelenethez
         let style = new TextStyle({
-            fontFamily: "Futura",
-            fontSize: 32,
+            fontFamily: "GothicInGame",
+            fontSize: 46,
+            fontWeight: 400,
             align : 'center',
-            fill: "white"
+            fill: 'white'
         });
         message = new Text("You Died! \n and survived \n X seconds", style);
         message.x = app.stage.width / 2;
         message.y = app.stage.height / 2;
         message.anchor.set(0.5);
         gameOverScene.addChild(message);
-        console.log(gameOverScene);
 
         //Mozgatás funkciók definiálása
         let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop;

@@ -1,6 +1,21 @@
 /* -----------------------------*/
 /* 	 	SITE MAIN STYLE START	*/
 /* -----------------------------*/
+@font-face {
+	src: url("../fonts/Gothic_Titel_Offiziell.ttf");
+	font-family: 'GothicTitle';
+	font-display: swap;
+	font-size: 46px;
+	font-weight: 400;
+
+}
+@font-face {
+	src: url("../fonts/Gothic_Ingame_Offiziell.ttf");
+	font-family: 'GothicInGame';
+	font-display: swap;
+	font-size: 32px;
+	font-weight: 400;
+}
 :root {
 	--txt-color: #222;
 	--site-color: #108FD8;
@@ -23,7 +38,7 @@ html { overflow: hidden; height: 100vh; }
 body {
 	font-size: 16px;
 	color: var(--txt-color);
-	font-family: Roboto, sans-serif;
+	font-family: 'GothicInGame', sans-serif;
 	background-color: #383838;
 	margin: 0 auto;
 	padding: 0;
@@ -127,6 +142,95 @@ body {
 	bottom: 0px;
 	left: 50%;
 	color: #333;
+}
+
+.ulutouch-wrapper {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: calc(100vh - 50px);
+	width: 100vw;
+}
+.ulutouch {
+	top:0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+
+.gametitle {
+	font-family: 'GothicTitle', sans-serif;
+	font-size: 64px;
+	width: 100%;
+	float: left;
+	text-align: center;
+	color: #DDD;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	line-height: 1em;
+}
+.playmenu {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 999;
+}
+
+.playBtn {
+	color: #DDD;
+	line-height: 1em;
+	text-align: center;
+	font-size: 46px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.ctrlScheme,
+.ctrlScheme label {
+	float: left;
+	width: 100%;
+}
+.ctrlScheme label {
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+}
+.ctrlScheme .schemeOpt {
+	width: calc(100% / 3);
+	float: left;
+	position: relative;
+	padding-top: 20px;
+
+}
+.ctrlScheme .schemeOpt input[type='radio'] {
+	position: absolute;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	width: 100%;
+	border:none;
+}
+.ctrlScheme .schemeOpt span {
+	color: #DDD;
+	line-height: 16px;
+	text-align: center;
+	font-size: 32px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	width: 100%;
+	float: left;
+}
+.ctrlScheme .schemeOpt input[type='radio']:checked ~ span {
+	color: #901a17;
 }
 /* ----- GAME END ----- */
 
