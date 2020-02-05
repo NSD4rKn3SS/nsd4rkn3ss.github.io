@@ -174,10 +174,12 @@ body {
 .playmenu {
 	position: fixed;
 	top: 0;
-	left: 0;
+	left: 50%;
+	transform: translateX(-50%);
 	width: 100vw;
 	height: 100vh;
 	z-index: 999;
+	max-width: 600px
 }
 
 .playBtn {
@@ -197,6 +199,7 @@ body {
 .ctrlScheme label {
 	float: left;
 	width: 100%;
+	max-width: 600px;
 }
 .ctrlScheme label {
 	cursor: pointer;
@@ -204,6 +207,7 @@ body {
 }
 .ctrlScheme .schemeOpt {
 	width: calc(100% / 3);
+	max-width: 600px;
 	float: left;
 	position: relative;
 	padding-top: 20px;
@@ -230,7 +234,58 @@ body {
 	float: left;
 }
 .ctrlScheme .schemeOpt input[type='radio']:checked ~ span {
-	color: #901a17;
+	color: #ca1b17;
+}
+
+.endscreen,
+.gameModifiers,
+.gameModifiers  label {
+	padding-top: 20px;
+	padding-left: 10px;
+	padding-right: 10px;
+	float: left;
+	width: 100%;
+	max-width: 600px;
+}
+.endscreen span,
+.gameModifiers span {
+	color: #DDD;
+	line-height: 16px;
+	text-align: left;
+	font-size: 32px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	width: 50%;
+	float: left;
+}
+.gameModifiers select {
+	float: right;
+	width: auto;
+	max-width: 50%;
+	height: 30px;
+	padding: 0px 10px;
+	outline: none;
+	border: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+.endscreen {
+	position: absolute;
+    top: 50vw;
+    left: 50%;
+    transform: translateX(-50%);
+    padding-top: 0px;
+    z-index: 999;
+}
+.endscreen span {
+	margin: 0 auto;
+    display: block;
+    text-align: center;
+    padding: 10px 0px;
+	float: none;
 }
 /* ----- GAME END ----- */
 
@@ -261,3 +316,4 @@ body {
 
 }
 /* ---- MEDIA QUERIES END ---- */
+
