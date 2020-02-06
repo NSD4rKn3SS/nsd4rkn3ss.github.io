@@ -580,7 +580,10 @@ $(document).ready(function($) {
         //míg a játék végének jelenete igen
         function end() {
             $('#uluBtns').hide();
-            let pointsAquired = (numberOfScavs * (100 - hpLeft)) - (playtime * 10);
+            let pointsAquired = false;
+            if (pointsAquired) {} else {
+                pointsAquired = (numberOfScavs * (100 - hpLeft)) - (playtime * 10);
+            }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
             gameScene.visible = false;
@@ -728,7 +731,7 @@ $(document).ready(function($) {
         // Fire off the request to /form.php
         request = $.ajax({
             url: localPath+"scorePost.php",
-            type: "post",
+            type: "get",
             data: serializedData
         });
 
