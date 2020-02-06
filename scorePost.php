@@ -1,5 +1,4 @@
 <?php
-
 $postedName = $_GET['name'];
 $postedPoints = $_GET['points'];
 
