@@ -583,6 +583,8 @@ $(document).ready(function($) {
             let pointsAquired = false;
             if (pointsAquired) {} else {
                 pointsAquired = (numberOfScavs * (100 - hpLeft)) - (playtime * 10);
+                if (pointsAquired < 0) {pointsAquired = 0;}
+                if (pointsAquired > 2400) {pointsAquired = 0;}
             }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();

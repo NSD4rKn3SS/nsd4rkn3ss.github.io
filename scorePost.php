@@ -3,6 +3,12 @@
 $postedName = $_GET['name'];
 $postedPoints = $_GET['points'];
 
+if ($postedPoints < 0) {
+    $postedPoints = 0;
+} elseif ($postedPoints > 2400) {
+    $postedPoints = 'cheater';
+}
+
 $xml_doc = new DomDocument;
 $xml_doc->Load('highscores.xml');
 $scores = $xml_doc->getElementsByTagName('HIGHSCORES')->item(0);
