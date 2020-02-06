@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 	<head>
 		<!-- META -->
 		<title>Scavanger Hunter</title>
 		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 		<meta name='viewport' content='width=device-width,height=device-height,initial-scale=1, user-scalable=no'>
+		<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+		<link rel="icon" href="./favicon.ico" type="image/x-icon">
 
 		<!-- FONTS -->
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,200i,300,300i,400,400i,600,600i,700,700i,900,900i&display=swap" rel="stylesheet">
@@ -69,9 +71,19 @@
 					</select>
 				</label>
 			</div>
+			<div class="highscore-wrapper">
+				<button class="col-a centered" type="button" onclick="loadXML()">Show Highscores</button>
+				<table class="highscore" id="highScore"></table>
+			</div>
 		</div>
 		<div class="endscreen" id="endScreen" style="display:none;">
 			<span id="playAgain">Play again?</span>
+			<form class="scoreform" name="highscore" method="POST" id="highscoreForm">
+				<label for="scoreName">Name:</label>
+				<input id="scoreName" required name="name" type="text" value="" />
+				<input type="number" hidden value="" id="scorePoints" name="points">
+				<input type="submit" value="Send" />
+			</form>
 		</div>
 		<div class="ulutouch-wrapper">
 			<div class="ulutouch" id="uluTouch" data-ctrlsheme="2"></div>
@@ -112,6 +124,7 @@
 				</div>
 			</div>
 		</div>
+
 	</body>
 
 </html>

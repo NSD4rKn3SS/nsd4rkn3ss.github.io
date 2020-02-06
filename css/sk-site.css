@@ -287,6 +287,62 @@ body {
     padding: 10px 0px;
 	float: none;
 }
+.highscore {
+	margin: 0 auto;
+}
+.highscore tr {}
+.highscore th,
+.highscore td {
+	color: #DDD;
+	line-height: 16px;
+	font-size: 32px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	text-align: center;
+	padding: 5px 10px;
+}
+.highscore tr:nth-child(odd) td {
+	color: #A5A5A5;
+}
+.highscore th {	color: #ca1b17; }
+
+.scoreform {
+	text-align: center;
+	padding: 20px;
+}
+.scoreform input {
+	height: 30px;
+	padding: 0px 10px;
+	outline: none;
+	border: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+}
+.highscore-wrapper button,
+.scoreform input[type='submit'] {
+	height: 30px;
+	background: none;
+	color: #333;
+	outline: none;
+	border: none;
+	padding: 0px 20px;
+	background-color: #DDD;
+}
+.scoreform label {
+	color: #DDD;
+	line-height: 16px;
+	font-size: 32px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	text-align: center;
+	padding: 5px 10px;
+}
+
 /* ----- GAME END ----- */
 
 
