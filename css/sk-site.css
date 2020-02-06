@@ -291,6 +291,13 @@ body {
 .highscore {
 	margin: 0 auto;
 }
+.highscore tbody {
+	max-height: 150px;
+    overflow: auto;
+    height: 150px;
+    display: block;
+    padding-right: 10px;
+}
 .highscore tr {}
 .highscore th,
 .highscore td {
