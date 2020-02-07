@@ -782,7 +782,7 @@ function parseXML(xml) {
     let x = xmlDoc.getElementsByTagName("SCORE");
     //x.sort(function(a, b){return b-a});
     let scores = [];
-    for (i = 0; i <x.length; i++) {
+    for (i = 0; i < x.length; i++) {
         let name = x[i].getElementsByTagName("NAME")[0].childNodes[0].nodeValue;
         let score = x[i].getElementsByTagName("POINTS")[0].childNodes[0].nodeValue;
         scores.push({name : name, score : score});
