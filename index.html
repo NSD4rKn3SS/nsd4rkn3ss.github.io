@@ -18,10 +18,10 @@
 		<link href='css/sk-icofont.min.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-core.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-mq.css' rel='stylesheet' type='text/css'>
-		<link href='css/sk-site.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-menu.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-content.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-form.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-site.css' rel='stylesheet' type='text/css'>
 
 		<!--SCRIPTS -->
 		<script src="js/jquery-3.4.1.min.js"></script>
@@ -41,18 +41,24 @@
 			<img class="col-a centered" src="./img/scavBanner.png"  alt=""/>
 
 			<!-- MENU BTNS -->
-			<div class="menu-btn-cnt">
+			<div class="menu-btn-cnt pad-t-20">
 
-				<span class="playBtn col-a centered" id="playBtn">Start</span>
-
-				<div class="highscore-menu col-a centered">
-					<div class="highscore-wrapper">
-						<button class="col-a centered" type="button" onclick="loadXML()">Show Highscores</button>
-						<table class="highscore" id="highScore"></table>
-					</div>
+				<div class="menu-sub col-10 active">
+					<span class="menu-btn playBtn col-a centered" id="playBtn">Start</span>
+					<span class="menu-btn highscore-btn col-a centerd">Highscores</span>
+					<span class="menu-btn highscore-btn col-a centerd">Options</span>
+					<span class="menu-btn donate-btn col-a centerd">Donate</span>
 				</div>
 
-				<div class="modifiers-menu">
+				<div class="menu-sub highscore-menu col-a centered" >
+					<div class="highscore-wrapper">
+						<button class="col-a centered menu-btn" type="button" onclick="loadXML()">Show Highscores</button>
+						<table class="highscore" id="highScore"></table>
+					</div>
+					<span class="menu-btn back-btn col-a centerd">Back</span>
+				</div>
+
+				<div class="menu-sub modifiers-menu">
 					<!-- MODIFIERS -->
 					<div class="gameModifiers" id="modifiers">
 						<label>
@@ -68,9 +74,10 @@
 							</select>
 						</label>
 					</div>
+					<span class="menu-btn back-btn col-a centerd">Back</span>
 				</div>
 
-				<div class="options-menu">
+				<div class="menu-sub options-menu">
 					<div class="options-controls">
 						<div class="ctrlScheme" id="ctrlScheme">
 							<div class="schemeOpt">
@@ -96,9 +103,9 @@
 					<div class="options-audio">
 						<span>Nothing is here, yet!</span>
 					</div>
+					<span class="menu-btn back-btn col-a centerd">Back</span>
 				</div>
 
-				<span class="donate-btn">Donate</span>
 
 			</div>
 
