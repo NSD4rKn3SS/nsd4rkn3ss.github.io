@@ -32,49 +32,79 @@
 	</head>
 
 	<body>
+		<!-- START MENU -->
 		<div class="playmenu" id="playMenu">
+
+			<!-- TITLE SCREEN -->
 			<h1 class="gametitle">Scavanger Hunter</h1>
+
 			<img class="col-a centered" src="./img/scavBanner.png"  alt=""/>
-			<span class="playBtn col-a centered" id="playBtn">Start</span>
-			<div class="ctrlScheme" id="ctrlScheme">
-				<div class="schemeOpt">
-					<label>
-						<input type="radio" name="ctrlScheme" value="keyboard" checked>
-						<span>Keyboard<br>arrows</span>
-					</label>
+
+			<!-- MENU BTNS -->
+			<div class="menu-btn-cnt">
+
+				<span class="playBtn col-a centered" id="playBtn">Start</span>
+
+				<div class="highscore-menu col-a centered">
+					<div class="highscore-wrapper">
+						<button class="col-a centered" type="button" onclick="loadXML()">Show Highscores</button>
+						<table class="highscore" id="highScore"></table>
+					</div>
 				</div>
-				<div class="schemeOpt">
-					<label>
-						<input type="radio" name="ctrlScheme" value="joystick">
-						<span>Virtual<br>joystick</span>
-					</label>
+
+				<div class="modifiers-menu">
+					<!-- MODIFIERS -->
+					<div class="gameModifiers" id="modifiers">
+						<label>
+							<span>Number of scavengers:</span>
+							<select name="numberOfScavs" id="numberOfScavs">
+								<option value="random" selected>Random between 6-12</option>
+								<option value="6">6</option>
+								<option value="8">8</option>
+								<option value="10">10</option>
+								<option value="12">12</option>
+								<option value="16">16</option>
+								<option value="24">Insane</option>
+							</select>
+						</label>
+					</div>
 				</div>
-				<div class="schemeOpt">
-					<label>
-						<input type="radio" name="ctrlScheme" value="pad">
-						<span>Classic<br>touch</span>
-					</label>
+
+				<div class="options-menu">
+					<div class="options-controls">
+						<div class="ctrlScheme" id="ctrlScheme">
+							<div class="schemeOpt">
+								<label>
+									<input type="radio" name="ctrlScheme" value="keyboard" checked>
+									<span>Keyboard<br>arrows</span>
+								</label>
+							</div>
+							<div class="schemeOpt">
+								<label>
+									<input type="radio" name="ctrlScheme" value="joystick">
+									<span>Virtual<br>joystick</span>
+								</label>
+							</div>
+							<div class="schemeOpt">
+								<label>
+									<input type="radio" name="ctrlScheme" value="pad">
+									<span>Classic<br>touch</span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="options-audio">
+						<span>Nothing is here, yet!</span>
+					</div>
 				</div>
+
+				<span class="donate-btn">Donate</span>
+
 			</div>
-			<div class="gameModifiers" id="modifiers">
-				<label>
-					<span>Number of scavengers:</span>
-					<select name="numberOfScavs" id="numberOfScavs">
-						<option value="random" selected>Random between 6-12</option>
-						<option value="6">6</option>
-						<option value="8">8</option>
-						<option value="10">10</option>
-						<option value="12">12</option>
-						<option value="16">16</option>
-						<option value="24">Insane</option>
-					</select>
-				</label>
-			</div>
-			<div class="highscore-wrapper">
-				<button class="col-a centered" type="button" onclick="loadXML()">Show Highscores</button>
-				<table class="highscore" id="highScore"></table>
-			</div>
+
 		</div>
+
+		<!-- END SCREEN -->
 		<div class="endscreen" id="endScreen" style="display:none;">
 			<span id="playAgain">Play again?</span>
 			<form class="scoreform" name="highscore" method="GET" id="highscoreForm">
@@ -84,9 +114,13 @@
 				<input type="submit" value="Send" />
 			</form>
 		</div>
+
+		<!-- VIRTUAL JOYSTICK -->
 		<div class="ulutouch-wrapper">
 			<div class="ulutouch" id="uluTouch" data-ctrlsheme="2"></div>
 		</div>
+
+		<!-- TOUCH BUTTONS -->
 		<div class="row">
 			<div class="mw-600">
 				<div class="ulugame-cnt col-a centered">
