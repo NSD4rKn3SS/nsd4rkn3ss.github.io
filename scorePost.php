@@ -7,7 +7,7 @@ if (!isset($_GET['points']) || !isset($_GET['name'])) {
 
 	if ($postedPoints < 0) {
 	    $postedPoints = 0;
-	} elseif ($postedPoints > 2400) {
+	} elseif ($postedPoints > 24000) {
 	    $postedPoints = 'cheater';
 	}
 	$xml_doc = new DomDocument;

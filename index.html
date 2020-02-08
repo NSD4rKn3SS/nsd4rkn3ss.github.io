@@ -18,81 +18,125 @@
 		<link href='css/sk-icofont.min.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-core.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-mq.css' rel='stylesheet' type='text/css'>
-		<link href='css/sk-site.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-menu.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-content.css' rel='stylesheet' type='text/css'>
 		<link href='css/sk-form.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-site.css' rel='stylesheet' type='text/css'>
 
 		<!--SCRIPTS -->
 		<script src="js/jquery-3.4.1.min.js"></script>
 		<script src="js/pixi.min.js"></script>
 		<script src="js/virtualjoystick.js"></script>
-		<!--<script src='js/control.js'></script>-->
 		<script src='js/function.js'></script>
 
 	</head>
 
 	<body>
+		<!-- START MENU -->
 		<div class="playmenu" id="playMenu">
+
+			<!-- TITLE SCREEN -->
 			<h1 class="gametitle">Scavanger Hunter</h1>
+
 			<img class="col-a centered" src="./img/scavBanner.png"  alt=""/>
-			<span class="playBtn col-a centered" id="playBtn">Start</span>
-			<div class="ctrlScheme" id="ctrlScheme">
-				<div class="schemeOpt">
-					<label>
-						<input type="radio" name="ctrlScheme" value="keyboard" checked>
-						<span>Keyboard<br>arrows</span>
-					</label>
+
+			<!-- MENU BTNS -->
+			<div class="menu-btn-cnt pad-t-20">
+
+				<div class="menu-sub col-10 active" id="mainMenu">
+					<span class="menu-btn playBtn col-a" id="playBtn" onclick="$('#mainMenu').removeClass('active'); $('#gameWindow').addClass('active');">Start</span>
+					<span class="menu-btn highscore-btn col-a" onclick="loadXML(); $('#mainMenu').removeClass('active'); $('#scoreMenu').addClass('active');">Highscores</span>
+					<span class="menu-btn options-btn col-a" onclick="$('#mainMenu').removeClass('active'); $('#optionsMenu').addClass('active');">Options</span>
+					<span class="menu-btn modifiers-btn col-a" onclick="$('#mainMenu').removeClass('active'); $('#modMenu').addClass('active');">Modifiers</span>
 				</div>
-				<div class="schemeOpt">
-					<label>
-						<input type="radio" name="ctrlScheme" value="joystick">
-						<span>Virtual<br>joystick</span>
-					</label>
+
+				<div class="menu-sub highscore-menu col-10" id="scoreMenu">
+					<div class="highscore-wrapper col-10">
+						<table class="highscore" id="highScore"></table>
+					</div>
+					<span class="menu-btn back-btn col-a" onclick="$('#mainMenu').addClass('active'); $('#scoreMenu').removeClass('active');">Back</span>
 				</div>
-				<div class="schemeOpt">
-					<label>
-						<input type="radio" name="ctrlScheme" value="pad">
-						<span>Classic<br>touch</span>
-					</label>
+
+				<div class="menu-sub modifiers-menu col-a" id="modMenu">
+					<!-- MODIFIERS -->
+					<div class="gameModifiers col-a" id="modifiers">
+						<label>
+							<span>Number of scavengers:</span>
+							<select name="numberOfScavs" id="numberOfScavs">
+								<option value="random" selected>Random between 6-12</option>
+								<option value="6">6</option>
+								<option value="8">8</option>
+								<option value="10">10</option>
+								<option value="12">12</option>
+								<option value="16">16</option>
+								<option value="24">Insane</option>
+							</select>
+						</label>
+					</div>
+					<span class="menu-btn back-btn col-a" onclick="$('#mainMenu').addClass('active'); $('#modMenu').removeClass('active');">Back</span>
 				</div>
+
+				<div class="menu-sub options-menu col-10" id="optionsMenu">
+					<div class="options-controls col-10 mar-b-30">
+						<div class="ctrlScheme col-a" id="ctrlScheme">
+							<div class="schemeOpt">
+								<label>
+									<input type="radio" name="ctrlScheme" value="keyboard" checked>
+									<span>Keyboard<br>arrows</span>
+								</label>
+							</div>
+							<div class="schemeOpt">
+								<label>
+									<input type="radio" name="ctrlScheme" value="joystick">
+									<span>Virtual<br>joystick</span>
+								</label>
+							</div>
+							<div class="schemeOpt">
+								<label>
+									<input type="radio" name="ctrlScheme" value="pad">
+									<span>Classic<br>touch</span>
+								</label>
+							</div>
+						</div>
+					</div>
+					<!--
+					<div class="options-audio col-10">
+						<span>Nothing is here, yet!</span>
+					</div>
+					-->
+					<span class="menu-btn back-btn col-a" onclick="$('#mainMenu').addClass('active'); $('#optionsMenu').removeClass('active');">Back</span>
+				</div>
+
+
 			</div>
-			<div class="gameModifiers" id="modifiers">
-				<label>
-					<span>Number of scavengers:</span>
-					<select name="numberOfScavs" id="numberOfScavs">
-						<option value="random" selected>Random between 6-12</option>
-						<option value="6">6</option>
-						<option value="8">8</option>
-						<option value="10">10</option>
-						<option value="12">12</option>
-						<option value="16">16</option>
-						<option value="24">Insane</option>
-					</select>
-				</label>
-			</div>
-			<div class="highscore-wrapper">
-				<button class="col-a centered" type="button" onclick="loadXML()">Show Highscores</button>
-				<table class="highscore" id="highScore"></table>
-			</div>
+
 		</div>
+
+		<!-- END SCREEN -->
 		<div class="endscreen" id="endScreen" style="display:none;">
-			<span id="playAgain">Play again?</span>
 			<form class="scoreform" name="highscore" method="GET" id="highscoreForm">
-				<label for="scoreName">Name:</label>
-				<input id="scoreName" required name="name" type="text" value="" />
+				<label class="mar-b-30" for="scoreName">Name:</label>
+				<input class="mar-b-30" id="scoreName" required name="name" type="text" value="" />
 				<input type="number" hidden value="" id="scorePoints" name="points">
-				<input type="submit" value="Send" />
+				<span class="row mar-t-20"></span>
+				<input type="submit" value="Send Score" />
 			</form>
+			<span class="menu-btn" id="playAgain">Back to menu</span>
 		</div>
+
+		<!-- VIRTUAL JOYSTICK -->
 		<div class="ulutouch-wrapper">
 			<div class="ulutouch" id="uluTouch" data-ctrlsheme="2"></div>
 		</div>
-		<div class="row">
+
+		<!-- GAME -->
+		<div class="row" id="gameWindow">
 			<div class="mw-600">
 				<div class="ulugame-cnt col-a centered">
 					<div class="ulugame" id="uluGame"></div>
 				</div>
+
+				<!-- TOUCH BUTTONS -->
 				<div class="ulubtns col-a centered" id="uluBtns" data-ctrlsheme="1" style="display:none;">
 					<div class="key up" id="touchUp">
 						<i class="icofont-arrow-up"></i>

@@ -182,19 +182,6 @@ body {
 	max-width: 600px
 }
 
-.playBtn {
-	color: #DDD;
-	line-height: 1em;
-	text-align: center;
-	font-size: 46px;
-	font-weight: normal;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-	text-rendering: optimizeLegibility;
-	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
-}
-
 .ctrlScheme,
 .ctrlScheme label {
 	float: left;
@@ -247,7 +234,6 @@ body {
 	width: 100%;
 	max-width: 600px;
 }
-.endscreen span,
 .gameModifiers span {
 	color: #DDD;
 	line-height: 16px;
@@ -280,23 +266,17 @@ body {
     padding-top: 0px;
     z-index: 999;
 }
-.endscreen span {
-	margin: 0 auto;
-    display: block;
-    text-align: center;
-    padding: 10px 0px;
-	float: none;
-	cursor: pointer;
-}
+
 .highscore {
 	margin: 0 auto;
 }
 .highscore tbody {
-	max-height: 150px;
-    overflow: auto;
-    height: 150px;
-    display: block;
-    padding-right: 10px;
+	max-height: 290px;
+	overflow: auto;
+	height: 290px;
+	display: block;
+	padding-right: 10px;
+	margin-bottom: 25px;
 }
 .highscore tr {}
 .highscore th,
@@ -329,15 +309,49 @@ body {
 	-moz-appearance: none;
 	appearance: none;
 }
+.playBtn,
+.menu-btn,
 .highscore-wrapper button,
 .scoreform input[type='submit'] {
-	height: 30px;
-	background: none;
-	color: #333;
+	color: #DDD;
+	line-height: 20px;
+	text-align: center;
+	font-size: 35px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	cursor: pointer;
+	-webkit-tap-highlight-color: transparent;
+	background-color: transparent;
+	border: 1px solid #DDD;
 	outline: none;
-	border: none;
+	width: auto;
+	float: none;
+	display: table;
+	margin: 0 auto;
+	font-family: 'GothicTitle', sans-serif;
+	margin-bottom: 20px;
+	padding-bottom: 9.5px;
+	padding-left: 20px;
+	transition: color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+	padding-right: 20px;
+}
+
+.menu-btn:active,
+.menu-btn:hover {
+	color: #a91d19;
+	border-color: #a91d19;
+}
+
+.menu-sub {
+	display: none;
+	visibility: hidden;
 	padding: 0px 20px;
-	background-color: #DDD;
+}
+.menu-sub.active {
+	display: block;
+	visibility: visible;
 }
 .scoreform label {
 	color: #DDD;
