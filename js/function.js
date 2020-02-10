@@ -22,7 +22,7 @@ $(document).ready(function($) {
     startGame = function(ctrlScheme, scavMod) {
         //többször használatos változók definiálása
         let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft;
+            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft, uluPos;
 
         //PIXI app létrehozása
         let app = new Application({
