@@ -1,25 +1,58 @@
-function checkLocalStorage() {
-    if (typeof(Storage) !== "undefined") {
-        // Code for localStorage/sessionStorage.
-        return true;
-    } else {
-        // Sorry! No Web Storage support..
-        return false;
+function setCookie(name, value, daysToLive) {
+    // Encode value in order to escape semicolons, commas, and whitespace
+    let cookie = name + "=" + encodeURIComponent(value);
+
+    if(typeof daysToLive === "number") {
+        /* Sets the max-age attribute so that the cookie expires
+        after the specified number of days */
+        cookie += "; max-age=" + (daysToLive*24*60*60);
+
+        document.cookie = cookie;
     }
 }
 
-let controller, scavMod, gameMode;
+function getCookie(name) {
+    // Split cookie string and get all individual name=value pairs in an array
+    let cookieArr = document.cookie.split(";");
 
-function getGameSettings() {
-    controller = localStorage.getItem('ctrlScheme') ? localStorage.getItem('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
-    scavMod =  localStorage.getItem('numberOfScavs') ? localStorage.getItem('numberOfScavs') : $('#numberOfScavs').val();
-    gameMode =  localStorage.getItem('gameMode') ? localStorage.getItem('gameMode') : $('#gameMode input:checked').attr('value');
+    // Loop through the array elements
+    for(var i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
 
+        /* Removing whitespace at the beginning of the cookie name
+        and compare it with the given string */
+        if(name == cookiePair[0].trim()) {
+            // Decode the cookie value and return
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+
+    // Return null if not found
+    return null;
+}
+
+function checkCookie(name) {
+    // Get cookie using our custom function
+    let cookieName = getCookie(name);
+
+    if (cookieName) { return true; } else { return false;}
+}
+let controller, scavMod, gameMode, updateInfoBox;
+
+updateInfoBox = function() {
     $('#currSettings').empty().append(
         'Number of scavengers: <i>'+scavMod+'</i>' +
         '<br>Control scheme: <i>'+controller+'</i>' +
-        '<br>Game mode: <i>'+gameMode+'</i>'
+        '<br>Game mode: <i>'+gameMode+'</i>' +
+        '<br><small>* Cookies are used to store these data</small>'
     );
+};
+
+function getGameSettings() {
+    controller = checkCookie('ctrlScheme') ? getCookie('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
+    scavMod =  checkCookie('numberOfScavs') ? getCookie('numberOfScavs') : $('#numberOfScavs').val();
+    gameMode =  checkCookie('gameMode') ? getCookie('gameMode') : $('#gameMode input:checked').attr('value');
+    updateInfoBox();
 }
 
 function setGameSettings() {
@@ -27,17 +60,11 @@ function setGameSettings() {
     scavMod = $('#numberOfScavs').val();
     gameMode = $('#gameMode input:checked').attr('value');
 
-    if (checkLocalStorage() === true){
-        localStorage.setItem(gameMode, gameMode);
-        localStorage.setItem(ctrlScheme, controller);
-        localStorage.setItem(numberOfScavs, scavMod);
-    }
+    setCookie('gameMode', gameMode, 7);
+    setCookie('ctrlScheme', controller, 7);
+    setCookie('numberOfScavs', scavMod, 7);
 
-    $('#currSettings').empty().append(
-        'Number of scavengers: <i>'+scavMod+'</i>' +
-        '<br>Control scheme: <i>'+controller+'</i>' +
-        '<br>Game mode: <i>'+gameMode+'</i>'
-    );
+    updateInfoBox();
 }
 
 let startGame = false;

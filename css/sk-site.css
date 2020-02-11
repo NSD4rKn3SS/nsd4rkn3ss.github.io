@@ -253,6 +253,12 @@ body {
 	float: left;
 }
 
+.options-set span small {
+	font-size: 12px;
+	font-family: Arial;
+	opacity: 0.6;
+}
+
 .options-set span i {
 	color: #a91d19;
 }
