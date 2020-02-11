@@ -194,8 +194,13 @@ $(document).ready(function($) {
 
             //ulu.x = gameScene.width - ulu.width - 48;
             //ulu.y = gameScene.height / 2 - ulu.height / 2;
-            ulu.x = 450;
-            ulu.y = 60;
+            if (currGameMode === 'new') {
+                ulu.x = 256;
+                ulu.y = 256;
+            } else {
+                ulu.x = 450;
+                ulu.y = 60;
+            }
             ulu.anchor.y = 0.5;
             ulu.anchor.x = 0.5;
             gameScene.addChild(ulu);
@@ -605,14 +610,51 @@ $(document).ready(function($) {
 
             function uluSetPost(mode) {
                   if (mode === 'new') {
-                      ulu.x = hero.x - 15;
-                      ulu.y = hero.y + 10;
-                      ulu.scale.x = -1;
-                      /*
-                      ulu.anchor.x = 0.5;
-                      ulu.anchor.y = -1;
-                      */
+                      ulu.scale.x = hero.scale.x;
+                      if (hero.scale.x === -1) {
+                          ulu.x = hero.x - 23;
+                          ulu.scale.y = -1;
+                          ulu.y = hero.y + 6;
+                      }
+                      if (hero.scale.x === 1) {
+                          ulu.x = hero.x + 19;
+                          ulu.scale.y = 1;
+                          ulu.y = hero.y + 4;
+                      }
                       ulu.rotation = hero.rotation;
+                      if (hero.rotation === -5) {
+                          ulu.scale.x = hero.scale.x;
+                          ulu.scale.y = hero.scale.y;
+                          ulu.x = hero.x + 4;
+                          ulu.y = hero.y + 22;
+                      }
+                      if (hero.rotation === 5) {
+                          ulu.scale.x = hero.scale.x;
+                          ulu.scale.y = hero.scale.y;
+                          ulu.x = hero.x + 10;
+                          ulu.y = hero.y - 20;
+                      }
+
+                      //Balra fel mozgatás
+                      if (hero.rotation === -2.5 && hero.scale.x === 1) {
+                          ulu.x = hero.x - 15;
+                          ulu.y = hero.y - 17;
+                      }
+                      //Jobbra fel mozgatás
+                      if (hero.rotation === 2.5 && hero.scale.x === -1) {
+                          ulu.x = hero.x + 15;
+                          ulu.y = hero.y - 17;
+                      }
+                      //Balra le mozgatás
+                      if (hero.rotation === 2.5 && hero.scale.x === 1) {
+                          ulu.x = hero.x - 15;
+                          ulu.y = hero.y + 17;
+                      }
+                      //Jobbra le mozgatás
+                      if (hero.rotation === -2.5 && hero.scale.x === -1) {
+                          ulu.x = hero.x + 15;
+                          ulu.y = hero.y + 17;
+                      }
                   } else {
                       //Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
                       ulu.x = hero.x + 0;
@@ -781,7 +823,6 @@ $(document).ready(function($) {
     getGameSettings();
 
     $('#playBtn').on('click touchstart', function (e) {
-        setGameSettings();
         getGameSettings();
         startGame(controller, scavMod, gameMode);
     });
