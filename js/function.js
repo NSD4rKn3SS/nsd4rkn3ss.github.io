@@ -732,7 +732,8 @@ $(document).ready(function($) {
         let localPath = location.href.replace(/[^/]*$/, '');
         // Fire off the request to /form.php
         request = $.ajax({
-            url: localPath+"scorePost.php",
+            //url: localPath+"scorePost.php",
+            url: "https://nsd4rkn3ss.000webhostapp.com/scorePost.php",
             type: "get",
             data: serializedData
         });
@@ -771,7 +772,8 @@ function loadXML() {
             parseXML(this);
         }
     };
-    xhttp.open("GET", "highscores.xml", true);
+    //xhttp.open("GET", "highscores.xml", true);
+    xhttp.open("GET", "https://nsd4rkn3ss.000webhostapp.com/highscores.xml", true);
     xhttp.send();
 }
 
