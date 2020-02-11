@@ -7,7 +7,7 @@ if (!isset($_GET['points']) || !isset($_GET['name'])) {
 	$postedPoints = $_GET['points'];
 
 	if ($postedPoints < 0) {
-	    $postedPoints = 0;
+	    $postedPoints = '0';
 	} elseif ($postedPoints > 11520000) {
 	    $postedPoints = 'cheater';
 	}

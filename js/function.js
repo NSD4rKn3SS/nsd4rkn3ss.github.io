@@ -747,10 +747,17 @@ $(document).ready(function($) {
         function end() {
             $('#uluBtns').hide();
             let pointsAquired = false;
-            if (pointsAquired) {} else {
-                pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * ((10 * deadScav) * 2)) / playtime;
-                if (pointsAquired < 0) {pointsAquired = 0;}
-                if (pointsAquired > 11520000) {pointsAquired = 0;}
+            if (!pointsAquired) {
+                if (gameMode === 'new' && gotUlu) {
+                    pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * ((10 * deadScav) * 2)) / playtime;
+                } else if (gameMode === 'new' && !gotUlu) {
+                    pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * (10 * deadScav)) / playtime;
+                } else if (gameMode === 'classic') {
+                    pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * 2) / playtime;
+                }
+                
+                if (pointsAquired < 0) {pointsAquired = '0';}
+                if (pointsAquired > 11520000) {pointsAquired = '0';}
             }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
