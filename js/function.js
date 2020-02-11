@@ -758,6 +758,7 @@ $(document).ready(function($) {
                 
                 if (pointsAquired < 0) {pointsAquired = '0';}
                 if (pointsAquired > 11520000) {pointsAquired = '0';}
+                console.log(pointsAquired);
             }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
