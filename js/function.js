@@ -1,3 +1,77 @@
+function setCookie(name, value, daysToLive) {
+    // Encode value in order to escape semicolons, commas, and whitespace
+    let cookie = name + "=" + encodeURIComponent(value);
+
+    if(typeof daysToLive === "number") {
+        /* Sets the max-age attribute so that the cookie expires
+        after the specified number of days */
+        cookie += "; max-age=" + (daysToLive*24*60*60);
+
+        document.cookie = cookie;
+    }
+}
+
+function getCookie(name) {
+    // Split cookie string and get all individual name=value pairs in an array
+    let cookieArr = document.cookie.split(";");
+
+    // Loop through the array elements
+    for(var i = 0; i < cookieArr.length; i++) {
+        let cookiePair = cookieArr[i].split("=");
+
+        /* Removing whitespace at the beginning of the cookie name
+        and compare it with the given string */
+        if(name == cookiePair[0].trim()) {
+            // Decode the cookie value and return
+            return decodeURIComponent(cookiePair[1]);
+        }
+    }
+
+    // Return null if not found
+    return null;
+}
+
+function checkCookie(name) {
+    // Get cookie using our custom function
+    let cookieName = getCookie(name);
+
+    if (cookieName) { return true; } else { return false;}
+}
+let controller, scavMod, gameMode, updateInfoBox;
+let deadScav = 0;
+
+updateInfoBox = function() {
+    $('#currSettings').empty().append(
+        'Number of scavengers: <i>'+scavMod+'</i>' +
+        '<br>Control scheme: <i>'+controller+'</i>' +
+        '<br>Game mode: <i>'+gameMode+'</i>' +
+        '<br><small>* Cookies are used to store these data</small>'
+    );
+};
+
+function getGameSettings() {
+    controller = checkCookie('ctrlScheme') ? getCookie('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
+    scavMod =  checkCookie('numberOfScavs') ? getCookie('numberOfScavs') : $('#numberOfScavs').val();
+    gameMode =  checkCookie('gameMode') ? getCookie('gameMode') : $('#gameMode input:checked').attr('value');
+    updateInfoBox();
+}
+
+function setGameSettings(from) {
+    if (from === 'settings') {
+        controller = $('#ctrlScheme input:checked').attr('value');
+        gameMode = $('#gameMode input:checked').attr('value');
+
+        setCookie('gameMode', gameMode, 7);
+        setCookie('ctrlScheme', controller, 7);
+    }
+    if (from === 'mods') {
+        scavMod = $('#numberOfScavs').val();
+        setCookie('numberOfScavs', scavMod, 7);
+    }
+
+    updateInfoBox();
+}
+
 let startGame = false;
 
 $(document).ready(function($) {
@@ -19,10 +93,12 @@ $(document).ready(function($) {
         return  ((a * 100) / b) / 100;
     };
 
-    startGame = function(ctrlScheme, scavMod) {
+    startGame = function(ctrlScheme, scavMod, gameMode) {
         //többször használatos változók definiálása
         let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft;
+            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft, gotUlu, currGameMode;
+
+        currGameMode = gameMode;
 
         //PIXI app létrehozása
         let app = new Application({
@@ -123,8 +199,13 @@ $(document).ready(function($) {
 
             //ulu.x = gameScene.width - ulu.width - 48;
             //ulu.y = gameScene.height / 2 - ulu.height / 2;
-            ulu.x = 450;
-            ulu.y = 60;
+            if (currGameMode === 'new') {
+                ulu.x = 256;
+                ulu.y = 256;
+            } else {
+                ulu.x = 450;
+                ulu.y = 60;
+            }
             ulu.anchor.y = 0.5;
             ulu.anchor.x = 0.5;
             gameScene.addChild(ulu);
@@ -221,7 +302,28 @@ $(document).ready(function($) {
             gameOverScene.addChild(message);
 
             //Mozgatás funkciók definiálása
-            let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop;
+            let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop, heroAttack;
+
+            heroAttack = function() {
+                ulu.hitArea = new PIXI.Rectangle(0, 0, 45, 45);
+                $.each(scavs, function (i,v) {
+                    if (scavs[i]._destroyed === false) {
+                        if (hitTestRectangle(ulu, scavs[i])) {
+                            deadScav += + 1;
+                            gameScene.removeChild(scavs[i]);
+                            scavs[i].destroy();
+                            scavs[i].visible = false;
+                            scavs[i].renderable = false;
+                            scavs[i].tint = 0xFF3333;
+                            //console.log(scavs[i]);
+                            //scavs.splice(i, 1);
+                            //delete(scavs[i]);
+                        } else {
+                            scavs[i].tint = 0xFFFFFF;
+                        }
+                    }
+                });
+            };
 
             //Bal oldalra mozgatás
             leftStart = function() {
@@ -321,7 +423,8 @@ $(document).ready(function($) {
                     const KEY_BITS = [4,1,8,2]; // left up right down
                     const KEY_MASKS = [0b1011,0b1110,0b0111,0b1101]; // left up right down
                     window.onkeydown = window.onkeyup = function (e) {
-                        if(e.keyCode >= 37 && e.keyCode <41){
+                        if (e.keyCode === 17 && gameMode === 'new' ) { heroAttack(); }
+                        if (e.keyCode >= 37 && e.keyCode <41){
                             if(e.type === "keydown"){
                                 arrowBits |= KEY_BITS[e.keyCode - 37];
                             }else{
@@ -430,96 +533,103 @@ $(document).ready(function($) {
             let heroHit = false;
 
             //Végig loopoljuk az összes Sprite-ot az ellenfelek tömbjében
-            scavs.forEach(function(scav) {
+            if (scavs.length > 0) {
+                //console.log(scavs);
+                scavs.forEach(function(scav) {
+                    if (scav._destroyed === false) {
+                        //Mozgatjuk az ellenfeleket
+                        scav.y += scav.vy;
+                        scav.x += scav.vx;
 
-                //Mozgatjuk az ellenfeleket
-                scav.y += scav.vy;
-                scav.x += scav.vx;
+                        //Beállítjuk az ellenfeleknél is a pálya területet
+                        let scavHitsWall = contain(scav, {x: 45, y: 50, width: 480, height: 500});
 
-                //Beállítjuk az ellenfeleknél is a pálya területet
-                let scavHitsWall = contain(scav, {x: 45, y: 50, width: 480, height: 500});
+                        //Megnézzük az orientációját az ellenfélnek és affelé forgatjuk
+                        scav.heading = Math.atan2(scav.vy, scav.vx);
+                        scav.rotation = scav.heading + 1.55;
 
-                //Megnézzük az orientációját az ellenfélnek és affelé forgatjuk
-                scav.heading = Math.atan2(scav.vy, scav.vx);
-                scav.rotation = scav.heading + 1.55;
-
-                //Ha egy ellenfél nekimegy a falnak, megfordítjuk a mozgás irányát
-                if (scavHitsWall === "top" || scavHitsWall === "bottom") {
-                    if (randomInt(1, 2) === 1) {
-                        if (scav.vx === 0) {
+                        //Ha egy ellenfél nekimegy a falnak, megfordítjuk a mozgás irányát
+                        if (scavHitsWall === "top" || scavHitsWall === "bottom") {
                             if (randomInt(1, 2) === 1) {
-                                scav.vx = randomInt(1, 3) * 1;
-                            } else {
-                                scav.vx = randomInt(1, 3) * -1;
+                                if (scav.vx === 0) {
+                                    if (randomInt(1, 2) === 1) {
+                                        scav.vx = randomInt(1, 3) * 1;
+                                    } else {
+                                        scav.vx = randomInt(1, 3) * -1;
+                                    }
+                                } else if (scav.vy !== 0) {
+                                    scav.vx = 0;
+                                } else {
+                                    scav.vx = randomInt(1, 3) * -1;
+                                }
                             }
-                        } else if (scav.vy !== 0) {
-                            scav.vx = 0;
-                        } else {
-                            scav.vx = randomInt(1, 3) * -1;
+                            scav.vy *= -1;
                         }
-                    }
-                    scav.vy *= -1;
-                }
-                if (scavHitsWall === "left" || scavHitsWall === "right") {
-                    if (randomInt(1, 2) === 1) {
-                        if (scav.vy === 0) {
+                        if (scavHitsWall === "left" || scavHitsWall === "right") {
                             if (randomInt(1, 2) === 1) {
-                                scav.vy = randomInt(1, 3) * 1;
-                            } else {
-                                scav.vy = randomInt(1, 3) * -1;
+                                if (scav.vy === 0) {
+                                    if (randomInt(1, 2) === 1) {
+                                        scav.vy = randomInt(1, 3) * 1;
+                                    } else {
+                                        scav.vy = randomInt(1, 3) * -1;
+                                    }
+                                } else if (scav.vx !== 0) {
+                                    scav.vy = 0;
+                                } else {
+                                    scav.vy = randomInt(1, 3) * -1;
+                                }
                             }
-                        } else if (scav.vx !== 0) {
-                            scav.vy = 0;
-                        } else {
-                            scav.vy = randomInt(1, 3) * -1;
+                            scav.vx *= -1;
                         }
-                    }
-                    scav.vx *= -1;
-                }
 
-                //Megadjuk a forgatási középpontjukat
-                scav.anchor.y = 0.5;
-                scav.anchor.x = 0.5;
+                        //Megadjuk a forgatási középpontjukat
+                        scav.anchor.y = 0.5;
+                        scav.anchor.x = 0.5;
 
-                //Ellenfelek ütköztetése egymással
-                /*
-                scavs.forEach(function(otherScav) {
-                    let randomScavHit = randomInt(1, 2);
-                    if (hitTestRectangle(scav, otherScav)) {
-                        scav.vy *= -1;
-                        scav.vx *= -1;
-                        otherScav.vy *= -1;
-                        otherScav.vx *= -1;
+                        //Ellenfelek ütköztetése egymással
+                        /*
+                        scavs.forEach(function(otherScav) {
+                            let randomScavHit = randomInt(1, 2);
+                            if (hitTestRectangle(scav, otherScav)) {
+                                scav.vy *= -1;
+                                scav.vx *= -1;
+                                otherScav.vy *= -1;
+                                otherScav.vx *= -1;
+                            }
+                        });
+                        */
+
+                        /*
+                        //Ellenfelek megszínezése sebességük alapján
+                        let scavSpeed = Math.abs(scav.vx) + Math.abs(scav.vy);
+                        let speedColorIndex = {
+                            '0' : '0xDDFFFF',
+                            '1' : '0xDDFFFF',
+                            '2' : '0xFFDDFF',
+                            '3' : '0xFFDDFF',
+                            '4' : '0xFFFFDD',
+                            '5' : '0xFFFFDD',
+                            '6' : '0xDDDDFF',
+                            '7' : '0xFFDDDD',
+                            '8' : '0xDDFFDD',
+                        };
+                        //scav.alpha = 0.5;
+                        scav.tint = speedColorIndex[scavSpeed];
+                        scav.blendMode = PIXI.BLEND_MODES.COLOR_DODGE;
+                        */
+
+
+                        //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
+                        //akkor átállítjuk a `heroHit` attributumot `true`-ra
+                        if(hitTestRectangle(hero, scav)) {
+                            heroHit = true;
+                        }
                     }
                 });
-                */
+            } else {
 
-                /*
-                //Ellenfelek megszínezése sebességük alapján
-                let scavSpeed = Math.abs(scav.vx) + Math.abs(scav.vy);
-                let speedColorIndex = {
-                    '0' : '0xDDFFFF',
-                    '1' : '0xDDFFFF',
-                    '2' : '0xFFDDFF',
-                    '3' : '0xFFDDFF',
-                    '4' : '0xFFFFDD',
-                    '5' : '0xFFFFDD',
-                    '6' : '0xDDDDFF',
-                    '7' : '0xFFDDDD',
-                    '8' : '0xDDFFDD',
-                };
-                //scav.alpha = 0.5;
-                scav.tint = speedColorIndex[scavSpeed];
-                scav.blendMode = PIXI.BLEND_MODES.COLOR_DODGE;
-                */
+            }
 
-
-                //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
-                //akkor átállítjuk a `heroHit` attributumot `true`-ra
-                if(hitTestRectangle(hero, scav)) {
-                    heroHit = true;
-                }
-            });
 
             //Ha a hős ütést kap...
             if(heroHit) {
@@ -532,11 +642,64 @@ $(document).ready(function($) {
                 hero.alpha = 1;
             }
 
+            //Kincs pozíciónálásának funkciója
+            function uluSetPost(mode) {
+                ulu.scale.x = hero.scale.x;
+                if (hero.scale.x === -1) {
+                    ulu.x = hero.x - 23;
+                    ulu.scale.y = -1;
+                    ulu.y = hero.y + 6;
+                }
+                if (hero.scale.x === 1) {
+                    ulu.x = hero.x + 19;
+                    ulu.scale.y = 1;
+                    ulu.y = hero.y + 4;
+                }
+                ulu.rotation = hero.rotation;
+                if (hero.rotation === -5) {
+                    ulu.scale.x = hero.scale.x;
+                    ulu.scale.y = hero.scale.y;
+                    ulu.x = hero.x + 4;
+                    ulu.y = hero.y + 22;
+                }
+                if (hero.rotation === 5) {
+                    ulu.scale.x = hero.scale.x;
+                    ulu.scale.y = hero.scale.y;
+                    ulu.x = hero.x + 10;
+                    ulu.y = hero.y - 20;
+                }
+
+                //Balra fel mozgatás
+                if (hero.rotation === -2.5 && hero.scale.x === 1) {
+                    ulu.x = hero.x - 15;
+                    ulu.y = hero.y - 17;
+                }
+                //Jobbra fel mozgatás
+                if (hero.rotation === 2.5 && hero.scale.x === -1) {
+                    ulu.x = hero.x + 15;
+                    ulu.y = hero.y - 17;
+                }
+                //Balra le mozgatás
+                if (hero.rotation === 2.5 && hero.scale.x === 1) {
+                    ulu.x = hero.x - 15;
+                    ulu.y = hero.y + 17;
+                }
+                //Jobbra le mozgatás
+                if (hero.rotation === -2.5 && hero.scale.x === -1) {
+                    ulu.x = hero.x + 15;
+                    ulu.y = hero.y + 17;
+                }
+                if (mode === 'new') {
+
+                } else {
+
+                }
+            }
+
             //Megnézzük hogy a hős megtalálta-e a kincset a pályán
             if (hitTestRectangle(hero, ulu)) {
                 //Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
-                ulu.x = hero.x + 0;
-                ulu.y = hero.y + 0;
+                uluSetPost(currGameMode);
             }
 
             //Elég életereje van még a hősnek?
@@ -551,10 +714,12 @@ $(document).ready(function($) {
                 }
 
                 if (hitTestRectangle(hero, ulu)) {
-                    message.text = ("You've got the Ulu mulu! \n But it wasn't enough \n There were "+numberOfScavs+" Scavengers \n Survived "+playtime+" seconds");
+                    gotUlu = true;
+                    message.text = ("You've got the Ulu mulu! \n But it wasn't enough \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n and Survived "+playtime+" seconds");
                     positionMessage();
                 } else {
-                    message.text = ("Scavengers feed on your flesh! \n There were "+numberOfScavs+" Scavengers \n Survived "+playtime+" seconds");
+                    gotUlu = false;
+                    message.text = ("Scavengers feed on your flesh! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n and Survived "+playtime+" seconds");
                     positionMessage();
                 }
 
@@ -571,7 +736,8 @@ $(document).ready(function($) {
                 }
                 hpLeft = Math.floor(100 - (healthBar.outer.width * 2));
                 if (hpLeft === 0) {hpLeft = 'no'};
-                message.text = ("You survived the hunt! \n There were "+numberOfScavs+" Scavengers \n Took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
+                gotUlu = true;
+                message.text = ("You survived the hunt! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
                 positionMessage();
             }
         }
@@ -582,9 +748,9 @@ $(document).ready(function($) {
             $('#uluBtns').hide();
             let pointsAquired = false;
             if (pointsAquired) {} else {
-                pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft)) / playtime;
+                pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * ((10 * deadScav) * 2)) / playtime;
                 if (pointsAquired < 0) {pointsAquired = 0;}
-                if (pointsAquired > 24000) {pointsAquired = 0;}
+                if (pointsAquired > 11520000) {pointsAquired = 0;}
             }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
@@ -692,10 +858,11 @@ $(document).ready(function($) {
         }
     };
 
+    getGameSettings();
+
     $('#playBtn').on('click touchstart', function (e) {
-        let controller = $('#ctrlScheme input:checked').attr('value');
-        let scavMod = $('#numberOfScavs').val();
-        startGame(controller, scavMod);
+        getGameSettings();
+        startGame(controller, scavMod, gameMode);
     });
 
     $('#playAgain').on('click touchstart', function () {
@@ -741,17 +908,17 @@ $(document).ready(function($) {
         // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
             // Log a message to the console
-            console.log("Hooray, it worked!");
+            //console.log("Hooray, it worked!");
             location.reload();
         });
 
         // Callback handler that will be called on failure
         request.fail(function (jqXHR, textStatus, errorThrown){
             // Log the error to the console
-            console.error(
-                "The following error occurred: "+
-                textStatus, errorThrown
-            );
+            //console.error(
+            //    "The following error occurred: "+
+            //    textStatus, errorThrown
+            //);
             alert('Send failed, sorry :(');
         });
 

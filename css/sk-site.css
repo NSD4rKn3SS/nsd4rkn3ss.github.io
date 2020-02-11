@@ -182,17 +182,17 @@ body {
 	max-width: 600px
 }
 
-.ctrlScheme,
-.ctrlScheme label {
+.opt-radio-wrap,
+.opt-radio-wrap label {
 	float: left;
 	width: 100%;
 	max-width: 600px;
 }
-.ctrlScheme label {
+.opt-radio-wrap label {
 	cursor: pointer;
 	-webkit-tap-highlight-color: transparent;
 }
-.ctrlScheme .schemeOpt {
+.opt-radio-wrap .opt-radio {
 	width: calc(100% / 3);
 	max-width: 600px;
 	float: left;
@@ -200,7 +200,7 @@ body {
 	padding-top: 20px;
 
 }
-.ctrlScheme .schemeOpt input[type='radio'] {
+.opt-radio-wrap .opt-radio input[type='radio'] {
 	position: absolute;
 	appearance: none;
 	-moz-appearance: none;
@@ -208,7 +208,9 @@ body {
 	width: 100%;
 	border:none;
 }
-.ctrlScheme .schemeOpt span {
+.options-menu [class*='options-'] span,
+.options-menu [class*='options-'] span,
+.opt-radio-wrap .opt-radio span {
 	color: #DDD;
 	line-height: 16px;
 	text-align: center;
@@ -220,8 +222,45 @@ body {
 	width: 100%;
 	float: left;
 }
-.ctrlScheme .schemeOpt input[type='radio']:checked ~ span {
+.opt-radio-wrap .opt-radio input[type='radio']:checked ~ span {
 	color: #ca1b17;
+}
+.options-menu [class*='options-'] {
+	margin-bottom: 15px;
+	border-bottom: 1px solid #DDD;
+	padding-bottom: 15px;
+}
+
+.options-set h2,
+.options-menu h2 {
+	font-size: 36px;
+	width: 100%;
+	float: left;
+	font-family: 'GothicTitle', sans-serif;
+	color: #858c9b;
+}
+
+.options-set span {
+	color: #DDD;
+	line-height: 24px;
+	padding-bottom: 10px;
+	font-size: 32px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	width: 100%;
+	float: left;
+}
+
+.options-set span small {
+	font-size: 12px;
+	font-family: Arial;
+	opacity: 0.6;
+}
+
+.options-set span i {
+	color: #a91d19;
 }
 
 .endscreen,
@@ -328,8 +367,10 @@ body {
 	outline: none;
 	width: auto;
 	float: none;
+	/*
 	display: table;
 	margin: 0 auto;
+	*/
 	font-family: 'GothicTitle', sans-serif;
 	margin-bottom: 20px;
 	padding-bottom: 9.5px;
