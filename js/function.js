@@ -53,19 +53,21 @@ function getGameSettings() {
     controller = checkCookie('ctrlScheme') ? getCookie('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
     scavMod =  checkCookie('numberOfScavs') ? getCookie('numberOfScavs') : $('#numberOfScavs').val();
     gameMode =  checkCookie('gameMode') ? getCookie('gameMode') : $('#gameMode input:checked').attr('value');
-
     updateInfoBox();
-
 }
 
-function setGameSettings() {
-    controller = $('#ctrlScheme input:checked').attr('value');
-    scavMod = $('#numberOfScavs').val();
-    gameMode = $('#gameMode input:checked').attr('value');
+function setGameSettings(from) {
+    if (from === 'settings') {
+        controller = $('#ctrlScheme input:checked').attr('value');
+        gameMode = $('#gameMode input:checked').attr('value');
 
-    setCookie('gameMode', gameMode, 7);
-    setCookie('ctrlScheme', controller, 7);
-    setCookie('numberOfScavs', scavMod, 7);
+        setCookie('gameMode', gameMode, 7);
+        setCookie('ctrlScheme', controller, 7);
+    }
+    if (from === 'mods') {
+        scavMod = $('#numberOfScavs').val();
+        setCookie('numberOfScavs', scavMod, 7);
+    }
 
     updateInfoBox();
 }
