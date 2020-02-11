@@ -209,6 +209,7 @@ body {
 	border:none;
 }
 .options-menu [class*='options-'] span,
+.options-menu [class*='options-'] span,
 .opt-radio-wrap .opt-radio span {
 	color: #DDD;
 	line-height: 16px;
@@ -229,12 +230,31 @@ body {
 	border-bottom: 1px solid #DDD;
 	padding-bottom: 15px;
 }
+
+.options-set h2,
 .options-menu h2 {
 	font-size: 36px;
 	width: 100%;
 	float: left;
 	font-family: 'GothicTitle', sans-serif;
 	color: #858c9b;
+}
+
+.options-set span {
+	color: #DDD;
+	line-height: 24px;
+	padding-bottom: 10px;
+	font-size: 32px;
+	font-weight: normal;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	width: 100%;
+	float: left;
+}
+
+.options-set span i {
+	color: #a91d19;
 }
 
 .endscreen,
@@ -341,8 +361,10 @@ body {
 	outline: none;
 	width: auto;
 	float: none;
+	/*
 	display: table;
 	margin: 0 auto;
+	*/
 	font-family: 'GothicTitle', sans-serif;
 	margin-bottom: 20px;
 	padding-bottom: 9.5px;

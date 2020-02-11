@@ -1,3 +1,45 @@
+function checkLocalStorage() {
+    if (typeof(Storage) !== "undefined") {
+        // Code for localStorage/sessionStorage.
+        return true;
+    } else {
+        // Sorry! No Web Storage support..
+        return false;
+    }
+}
+
+let controller, scavMod, gameMode;
+
+function getGameSettings() {
+    controller = localStorage.getItem('ctrlScheme') ? localStorage.getItem('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
+    scavMod =  localStorage.getItem('numberOfScavs') ? localStorage.getItem('numberOfScavs') : $('#numberOfScavs').val();
+    gameMode =  localStorage.getItem('gameMode') ? localStorage.getItem('gameMode') : $('#gameMode input:checked').attr('value');
+
+    $('#currSettings').empty().append(
+        'Number of scavengers: <i>'+scavMod+'</i>' +
+        '<br>Control scheme: <i>'+controller+'</i>' +
+        '<br>Game mode: <i>'+gameMode+'</i>'
+    );
+}
+
+function setGameSettings() {
+    controller = $('#ctrlScheme input:checked').attr('value');
+    scavMod = $('#numberOfScavs').val();
+    gameMode = $('#gameMode input:checked').attr('value');
+
+    if (checkLocalStorage() === true){
+        localStorage.setItem(gameMode, gameMode);
+        localStorage.setItem(ctrlScheme, controller);
+        localStorage.setItem(numberOfScavs, scavMod);
+    }
+
+    $('#currSettings').empty().append(
+        'Number of scavengers: <i>'+scavMod+'</i>' +
+        '<br>Control scheme: <i>'+controller+'</i>' +
+        '<br>Game mode: <i>'+gameMode+'</i>'
+    );
+}
+
 let startGame = false;
 
 $(document).ready(function($) {
@@ -19,10 +61,12 @@ $(document).ready(function($) {
         return  ((a * 100) / b) / 100;
     };
 
-    startGame = function(ctrlScheme, scavMod) {
+    startGame = function(ctrlScheme, scavMod, gameMode) {
         //többször használatos változók definiálása
         let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft, uluPos;
+            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft, uluPos, currGameMode;
+
+        currGameMode = gameMode;
 
         //PIXI app létrehozása
         let app = new Application({
@@ -532,11 +576,26 @@ $(document).ready(function($) {
                 hero.alpha = 1;
             }
 
+            function uluSetPost(mode) {
+                  if (mode === 'new') {
+                      ulu.x = hero.x - 15;
+                      ulu.y = hero.y + 10;
+                      ulu.scale.x = -1;
+                      /*
+                      ulu.anchor.x = 0.5;
+                      ulu.anchor.y = -1;
+                      */
+                      ulu.rotation = hero.rotation;
+                  } else {
+                      //Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
+                      ulu.x = hero.x + 0;
+                      ulu.y = hero.y + 0;
+                  }
+            }
+
             //Megnézzük hogy a hős megtalálta-e a kincset a pályán
             if (hitTestRectangle(hero, ulu)) {
-                //Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
-                ulu.x = hero.x + 0;
-                ulu.y = hero.y + 0;
+                uluSetPost(currGameMode);
             }
 
             //Elég életereje van még a hősnek?
@@ -692,10 +751,12 @@ $(document).ready(function($) {
         }
     };
 
+    getGameSettings();
+
     $('#playBtn').on('click touchstart', function (e) {
-        let controller = $('#ctrlScheme input:checked').attr('value');
-        let scavMod = $('#numberOfScavs').val();
-        startGame(controller, scavMod);
+        setGameSettings();
+        getGameSettings();
+        startGame(controller, scavMod, gameMode);
     });
 
     $('#playAgain').on('click touchstart', function () {
@@ -740,17 +801,17 @@ $(document).ready(function($) {
         // Callback handler that will be called on success
         request.done(function (response, textStatus, jqXHR){
             // Log a message to the console
-            console.log("Hooray, it worked!");
+            //console.log("Hooray, it worked!");
             location.reload();
         });
 
         // Callback handler that will be called on failure
         request.fail(function (jqXHR, textStatus, errorThrown){
             // Log the error to the console
-            console.error(
-                "The following error occurred: "+
-                textStatus, errorThrown
-            );
+            //console.error(
+            //    "The following error occurred: "+
+            //    textStatus, errorThrown
+            //);
             alert('Send failed, sorry :(');
         });
 

@@ -48,6 +48,10 @@
 					<span class="menu-btn highscore-btn col-a" onclick="loadXML(); $('#mainMenu').removeClass('active'); $('#scoreMenu').addClass('active');">Highscores</span>
 					<span class="menu-btn options-btn col-a" onclick="$('#mainMenu').removeClass('active'); $('#optionsMenu').addClass('active');">Options</span>
 					<span class="menu-btn modifiers-btn col-a" onclick="$('#mainMenu').removeClass('active'); $('#modMenu').addClass('active');">Modifiers</span>
+					<div class="options-set">
+						<h2>Current settings:</h2>
+						<span id="currSettings"></span>
+					</div>
 				</div>
 
 				<div class="menu-sub highscore-menu col-10" id="scoreMenu">
@@ -64,6 +68,7 @@
 							<span>Number of scavengers:</span>
 							<select name="numberOfScavs" id="numberOfScavs">
 								<option value="random" selected>Random between 6-12</option>
+								<option value="1">1 (For testing)</option>
 								<option value="6">6</option>
 								<option value="8">8</option>
 								<option value="10">10</option>
@@ -102,7 +107,7 @@
 					</div>
 
 					<div class="options-mode col-10">
-						<div class="modeSelect opt-radio-wrap col-a" id="ctrlScheme">
+						<div class="modeSelect opt-radio-wrap col-a" id="gameMode">
 							<h2>Game modes</h2>
 							<div class="gameMode opt-radio">
 								<label>
@@ -124,7 +129,7 @@
 						<span class="pad-t-20 col-10">Nothing is here, yet!</span>
 					</div>
 
-					<span class="menu-btn back-btn col-a" onclick="$('#mainMenu').addClass('active'); $('#optionsMenu').removeClass('active');">Back</span>
+					<span class="menu-btn back-btn col-a" onclick="$('#mainMenu').addClass('active'); $('#optionsMenu').removeClass('active');setGameSettings();">Back</span>
 				</div>
 
 
