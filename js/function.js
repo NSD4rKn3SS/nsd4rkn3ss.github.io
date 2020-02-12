@@ -37,7 +37,20 @@ function checkCookie(name) {
 
     if (cookieName) { return true; } else { return false;}
 }
-let controller, scavMod, gameMode, updateInfoBox;
+
+//Időkalkuláció
+function timeDiff(timestamp1, timestamp2) {
+    let difference = timestamp2 - timestamp1;
+    //let daysDifference = Math.floor(difference/1000/60/60/24);
+    let secDifference = Math.floor(difference/1000);
+    return secDifference;
+}
+//többször használatos változók definiálása
+let state, hero, ulu, scavs, plains, waters,
+    portal, healthBar, message, gameScene, gameOverScene,
+    id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption,
+    viewPw, viewPh, positionMessage, hpLeft, hpLost, gotUlu,
+    currGameMode, controller, scavMod, gameMode, updateInfoBox;
 let deadScav = 0;
 
 updateInfoBox = function() {
@@ -60,7 +73,6 @@ function setGameSettings(from) {
     if (from === 'settings') {
         controller = $('#ctrlScheme input:checked').attr('value');
         gameMode = $('#gameMode input:checked').attr('value');
-
         setCookie('gameMode', gameMode, 7);
         setCookie('ctrlScheme', controller, 7);
     }
@@ -68,7 +80,6 @@ function setGameSettings(from) {
         scavMod = $('#numberOfScavs').val();
         setCookie('numberOfScavs', scavMod, 7);
     }
-
     updateInfoBox();
 }
 
@@ -94,9 +105,6 @@ $(document).ready(function($) {
     };
 
     startGame = function(ctrlScheme, scavMod, gameMode) {
-        //többször használatos változók definiálása
-        let state, hero, ulu, scavs, chimes, exit, player, plains, waters,
-            door, healthBar, message, gameScene, gameOverScene, enemies, id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption, viewPw, viewPh, positionMessage, hpLeft, gotUlu, currGameMode;
 
         currGameMode = gameMode;
 
@@ -128,19 +136,6 @@ $(document).ready(function($) {
         //document.body.appendChild(app.view);
         document.getElementById('uluGame').appendChild(app.view);
 
-        //resourceok létrehozása
-        loader
-            .add("img/scav/scavrun.json")
-            .add("img/orcrun/orcrun.json")
-            .add("img/water/water.json")
-            .add("img/ulu.png")
-            .add("img/grass.png")
-            .add("img/treasureHunter.json")
-            .add("img/door.png")
-            .load(setup);
-
-        
-
         hpBarSet = function(x, y) {
             healthBar.position.set(x - 25, y - 20);
         };
@@ -151,9 +146,20 @@ $(document).ready(function($) {
             message.anchor.set(0.5, 0.5);
         };
 
+        //resourceok létrehozása
+        console.log(loader);
+        loader
+            .add("img/scav/scavrun.json")
+            .add("img/orcrun/orcrun.json")
+            .add("img/water/water.json")
+            .add("img/ulu.png")
+            .add("img/grass.png")
+            .add("img/treasureHunter.json")
+            .add("img/portal.png")
+            .load(setup);
+
 
         function setup() {
-
             //alap jelenet hozzáadása a stagehez
             gameScene = new Container();
             app.stage.addChild(gameScene);
@@ -165,7 +171,7 @@ $(document).ready(function($) {
                 'water' : resources["img/water/water.json"].spritesheet,
                 'ulu' : resources["img/ulu.png"].texture,
                 'grass' : resources["img/grass.png"].texture,
-                'door' : resources["img/door.png"].texture,
+                'portal' : resources["img/portal.png"].texture,
                 'orith' : resources["img/treasureHunter.json"].textures,
             };
 
@@ -179,29 +185,38 @@ $(document).ready(function($) {
             gameScene.addChild(plains);
 
             //Kijárat
-            door = new Sprite(id['door']);
-            door.position.set(40, 430);
-            gameScene.addChild(door);
+            portal = new Sprite(id['portal']);
+            if (currGameMode === 'new') {
+                portal.position.set(randomInt(50, 430), randomInt(50, 430));
+            } else {
+                portal.position.set(40, 430);
+            }
+            gameScene.addChild(portal);
 
-            //Játékos karakter
+            //Játékos karakter létrehozása és elhelyezése
             hero = new AnimatedSprite(id['orc'].animations["orcrun"]);
             hero.animationSpeed = 0.2;
-            hero.x = 68;
-            hero.y = gameScene.height / 2 - hero.height / 2;
+            if (currGameMode === 'new') {
+                hero.x = randomInt(60, 450);
+                hero.y = randomInt(60, 450);
+            } else {
+                hero.x = 68;
+                hero.y = gameScene.height / 2 - hero.height / 2;
+            }
             hero.vx = 0;
             hero.vy = 0;
-            gameScene.addChild(hero);
             hero.anchor.y = 0.5;
             hero.anchor.x = 0.5;
+            gameScene.addChild(hero);
 
-            //Item
+            //Fegyver létrehozása és elhelyezése
             ulu = new Sprite(id['ulu']);
 
             //ulu.x = gameScene.width - ulu.width - 48;
             //ulu.y = gameScene.height / 2 - ulu.height / 2;
             if (currGameMode === 'new') {
-                ulu.x = 256;
-                ulu.y = 256;
+                ulu.x = randomInt(60, 450);
+                ulu.y = randomInt(60, 450);
             } else {
                 ulu.x = 450;
                 ulu.y = 60;
@@ -423,7 +438,7 @@ $(document).ready(function($) {
                     const KEY_BITS = [4,1,8,2]; // left up right down
                     const KEY_MASKS = [0b1011,0b1110,0b0111,0b1101]; // left up right down
                     window.onkeydown = window.onkeyup = function (e) {
-                        if (e.keyCode === 17 && gameMode === 'new' ) { heroAttack(); }
+                        if (e.keyCode === 17 && currGameMode === 'new' ) { heroAttack(); }
                         if (e.keyCode >= 37 && e.keyCode <41){
                             if(e.type === "keydown"){
                                 arrowBits |= KEY_BITS[e.keyCode - 37];
@@ -621,7 +636,7 @@ $(document).ready(function($) {
 
                         //Ütközést tesztelünk. Ha bármelyik ellenfél hozzáér a hőshöz,
                         //akkor átállítjuk a `heroHit` attributumot `true`-ra
-                        if(hitTestRectangle(hero, scav)) {
+                        if(hitTestRectangle(hero, scav) && (timerHS['current'] - (timerHS['start']) > 1)) {
                             heroHit = true;
                         }
                     }
@@ -633,13 +648,13 @@ $(document).ready(function($) {
 
             //Ha a hős ütést kap...
             if(heroHit) {
-                //Átlátszóbbá tesszük a hőst
-                hero.alpha = 0.5;
+                //Pirossá tesszük a hőst
+                hero.tint = 0xFF3333;
                 //Majd csökkentjük az életerő vonalát 1 pixellel azaz 2 ponttal
                 healthBar.outer.width -= 1;
             } else {
-                //Ha nem kap ütést, marad ugyan annyira látható
-                hero.alpha = 1;
+                //Ha nem kap ütést, marad normál színű
+                hero.tint = 0xFFFFFF;
             }
 
             //Kincs pozíciónálásának funkciója
@@ -706,7 +721,9 @@ $(document).ready(function($) {
             //Ha az életerő kevesebb mint 0 akkor vége a játéknak
             //És megjelenítjük a végüzenetet
             if (healthBar.outer.width < 0) {
-                state = end;
+                hpLeft = Math.floor(healthBar.outer.width * 2);
+                hpLost = 100 - hpLeft;
+
                 //Megnézzük a végső időt, majd összevetjük a kezdéssel
                 if (!timerHS['end']) {
                     timerHS['end'] = Math.floor(Date.now() / 1000);
@@ -715,50 +732,64 @@ $(document).ready(function($) {
 
                 if (hitTestRectangle(hero, ulu)) {
                     gotUlu = true;
-                    message.text = ("You've got the Ulu mulu! \n But it wasn't enough \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n and Survived "+playtime+" seconds");
+                    message.text = ("You've got the Ulu mulu! \n But it wasn't enough \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLost+" HP");
                     positionMessage();
                 } else {
                     gotUlu = false;
-                    message.text = ("Scavengers feed on your flesh! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n and Survived "+playtime+" seconds");
+                    message.text = ("Scavengers feed on your flesh! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLost+" HP");
                     positionMessage();
                 }
+
+                state = end;
 
             }
 
             //Ha a hős elvitte a kincset az ajtóig,
             //akkor megnyerte a játékot
-            if (hitTestRectangle(ulu, door)) {
-                state = end;
+            if (hitTestRectangle(ulu, portal)) {
+                gotUlu = true;
+                hpLeft = Math.floor(healthBar.outer.width * 2);
+                hpLost = 100 - hpLeft;
                 //Megnézzük a végső időt, majd összevetjük a kezdéssel
                 if (!timerHS['end']) {
                     timerHS['end'] = Math.floor(Date.now() / 1000);
                     playtime = timerHS['end'] - timerHS['start'];
                 }
-                hpLeft = Math.floor(100 - (healthBar.outer.width * 2));
-                if (hpLeft === 0) {hpLeft = 'no'};
-                gotUlu = true;
-                message.text = ("You survived the hunt! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLeft+" HP");
+                //if (hpLeft === 0) {hpLeft = 'no'}
+                message.text = ("You survived the hunt! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLost+" HP");
                 positionMessage();
+                state = end;
             }
         }
 
         //A játék végén, a játék alap jelenete nem látható
         //míg a játék végének jelenete igen
+        let pointsAquired = false;
         function end() {
             $('#uluBtns').hide();
-            let pointsAquired = false;
-            if (!pointsAquired) {
-                if (gameMode === 'new' && gotUlu) {
-                    pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * ((10 * deadScav) * 2)) / playtime;
-                } else if (gameMode === 'new' && !gotUlu) {
-                    pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * (10 * deadScav)) / playtime;
-                } else if (gameMode === 'classic') {
-                    pointsAquired = ((numberOfScavs * 10) * (100 - hpLeft) * 2) / playtime;
+            if (pointsAquired === false) {
+                if (currGameMode === 'new' && gotUlu) {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) * 2)) / playtime;
+                } else if (currGameMode === 'new' && !gotUlu) {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav)) / playtime;
+                } else if (currGameMode === 'classic') {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) * 2) / playtime;
                 }
-                
+
+                pointsAquired = Math.floor(pointsAquired);
+
                 if (pointsAquired < 0) {pointsAquired = '0';}
                 if (pointsAquired > 11520000) {pointsAquired = '0';}
-                console.log(pointsAquired);
+                console.log(
+                    "You've found the Ulu-mulu: "+gotUlu+"\n"+
+                    "Your HP is at: "+hpLeft+"\n"+
+                    "HP lost: "+hpLost+"\n"+
+                    "Spawned Scavengers: "+numberOfScavs+"\n"+
+                    "Killed Scavengers: "+deadScav+"\n"+
+                    "Playtime: "+playtime+"sec\n"+
+                    "Your Score: "+pointsAquired +"\n"+
+                    "The portal was spawned at: X = "+portal.position.x+"px and Y = "+portal.position.y+"px\n"
+                );
             }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
@@ -767,16 +798,6 @@ $(document).ready(function($) {
         }
 
         /* Segítő funkciók */
-
-        //Időkalkuláció
-        function timeDiff(timestamp1, timestamp2) {
-            let difference = timestamp1 - timestamp2;
-            //let daysDifference = Math.floor(difference/1000/60/60/24);
-            let secfference = Math.floor(difference/1000);
-
-            return secDifference;
-        }
-
         //Ütközés a pályával `container`
         function contain(sprite, container) {
 
