@@ -264,14 +264,23 @@ body {
 }
 
 .endscreen,
-.gameModifiers,
-.gameModifiers  label {
+.gameModifiers {
 	padding-top: 20px;
 	padding-left: 10px;
 	padding-right: 10px;
 	float: left;
 	width: 100%;
 	max-width: 600px;
+}
+.gameModifiers  label {
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 20px;
+	float: left;
+	width: 100%;
+	max-width: 600px;
+	border-bottom: 1px solid #DDD;
+	margin-bottom: 20px;
 }
 .gameModifiers span {
 	color: #DDD;
@@ -285,6 +294,7 @@ body {
 	width: 50%;
 	float: left;
 }
+.gameModifiers input,
 .gameModifiers select {
 	float: right;
 	width: auto;
