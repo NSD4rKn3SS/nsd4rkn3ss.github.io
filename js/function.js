@@ -50,14 +50,15 @@ let state, hero, ulu, scavs, plains, waters,
     portal, healthBar, message, gameScene, gameOverScene,
     id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption,
     viewPw, viewPh, positionMessage, hpLeft, hpLost, gotUlu,
-    currGameMode, controller, scavMod, gameMode, updateInfoBox, uluInitialPos, playerInitialPos;
+    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos;
 let deadScav = 0;
 
 updateInfoBox = function() {
     $('#currSettings').empty().append(
-        'Number of scavengers: <i>'+scavMod+'</i>' +
-        '<br>Control scheme: <i>'+controller+'</i>' +
+        'Control scheme: <i>'+controller+'</i>' +
         '<br>Game mode: <i>'+gameMode+'</i>' +
+        '<br>Number of scavengers: <i>'+scavMod+'</i>' +
+        '<br>Scavenger speed multiplier: <i>'+speedOfScavs+'</i>' +
         '<br><small>* Cookies are used to store these data</small>'
     );
 };
@@ -65,6 +66,8 @@ updateInfoBox = function() {
 function getGameSettings() {
     controller = checkCookie('ctrlScheme') ? getCookie('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
     scavMod =  checkCookie('numberOfScavs') ? getCookie('numberOfScavs') : $('#numberOfScavs').val();
+    speedOfScavs = checkCookie('speedOfScavs') ? getCookie('speedOfScavs') : $('#speedOfScavs').val();
+    console.log('get:' +speedOfScavs);
     gameMode =  checkCookie('gameMode') ? getCookie('gameMode') : $('#gameMode input:checked').attr('value');
     updateInfoBox();
 }
@@ -78,7 +81,10 @@ function setGameSettings(from) {
     }
     if (from === 'mods') {
         scavMod = $('#numberOfScavs').val();
+        speedOfScavs = $('#speedOfScavs').val();
+        console.log('set:' +speedOfScavs);
         setCookie('numberOfScavs', scavMod, 7);
+        setCookie('speedOfScavs', speedOfScavs, 7);
     }
     updateInfoBox();
 }
@@ -86,6 +92,15 @@ function setGameSettings(from) {
 let startGame = false;
 
 $(document).ready(function($) {
+    uluInitialPos = {
+        x : 0,
+        y : 0,
+    };
+    playerInitialPos = {
+        x : 0,
+        y : 0,
+    };
+
      //PIXI aliasok definiálása
     let Application = PIXI.Application,
         Container = PIXI.Container,
@@ -198,12 +213,13 @@ $(document).ready(function($) {
             if (currGameMode === 'new') {
                 hero.x = randomInt(60, 450);
                 hero.y = randomInt(60, 450);
-                playerInitialPos['x'] = hero.x;
-                playerInitialPos['y'] = hero.y;
             } else {
                 hero.x = 68;
                 hero.y = gameScene.height / 2 - hero.height / 2;
             }
+            console.log(hero.x);
+            playerInitialPos.x = hero.x;
+            playerInitialPos.y = hero.y;
             hero.vx = 0;
             hero.vy = 0;
             hero.anchor.y = 0.5;
@@ -218,12 +234,12 @@ $(document).ready(function($) {
             if (currGameMode === 'new') {
                 ulu.x = randomInt(60, 450);
                 ulu.y = randomInt(60, 450);
-                uluInitialPos['x'] = ulu.x;
-                uluInitialPos['y'] = ulu.y;
             } else {
                 ulu.x = 450;
                 ulu.y = 60;
             }
+            uluInitialPos.x = ulu.x;
+            uluInitialPos.y = ulu.y;
             ulu.anchor.y = 0.5;
             ulu.anchor.x = 0.5;
             gameScene.addChild(ulu);
@@ -239,7 +255,6 @@ $(document).ready(function($) {
             
             let spacing = 48,
                 xOffset = 150,
-                speed = 2,
                 direction = 1;
 
             scavs = [];
@@ -266,10 +281,10 @@ $(document).ready(function($) {
                 //Az irány avagy `direction` vagy `1` vagy `-1`.
                 //`1` azt jelenti hogy lefele míg a `-1` azt hogy felfele mozognak
                 //`direction` szorzása a `speed` (sebesség) -el, meghatározzás a függőleges mozgás irányt
-                scav.vy = randomInt(1, 4) * direction;
+                scav.vy = (randomInt(1, 4) * direction) * speedOfScavs;
 
                 //Beállítjuk az ellenfél vízszintes gyorsulását a játékos irányába
-                scav.vx = randomInt(2, 4) * direction;
+                scav.vx = (randomInt(2, 4) * direction) * speedOfScavs;
 
                 //Irány megváltoztatása a következő lefutásnál
                 direction *= -1;
@@ -571,14 +586,14 @@ $(document).ready(function($) {
                             if (randomInt(1, 2) === 1) {
                                 if (scav.vx === 0) {
                                     if (randomInt(1, 2) === 1) {
-                                        scav.vx = randomInt(1, 3) * 1;
+                                        scav.vx = (randomInt(1, 3) * 1) * speedOfScavs;
                                     } else {
-                                        scav.vx = randomInt(1, 3) * -1;
+                                        scav.vx = (randomInt(1, 3) * -1) * speedOfScavs;
                                     }
                                 } else if (scav.vy !== 0) {
                                     scav.vx = 0;
                                 } else {
-                                    scav.vx = randomInt(1, 3) * -1;
+                                    scav.vx = (randomInt(1, 3) * -1) * speedOfScavs;
                                 }
                             }
                             scav.vy *= -1;
@@ -587,14 +602,14 @@ $(document).ready(function($) {
                             if (randomInt(1, 2) === 1) {
                                 if (scav.vy === 0) {
                                     if (randomInt(1, 2) === 1) {
-                                        scav.vy = randomInt(1, 3) * 1;
+                                        scav.vy = (randomInt(1, 3) * 1) * speedOfScavs;
                                     } else {
-                                        scav.vy = randomInt(1, 3) * -1;
+                                        scav.vy = (randomInt(1, 3) * -1) * speedOfScavs;
                                     }
                                 } else if (scav.vx !== 0) {
                                     scav.vy = 0;
                                 } else {
-                                    scav.vy = randomInt(1, 3) * -1;
+                                    scav.vy = (randomInt(1, 3) * -1) * speedOfScavs;
                                 }
                             }
                             scav.vx *= -1;
@@ -772,22 +787,23 @@ $(document).ready(function($) {
             $('#uluBtns').hide();
             if (pointsAquired === false) {
                 if (currGameMode === 'new' && gotUlu) {
-                    pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) * 2)) / playtime;
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) + (10 * speedOfScavs) * 2)) / playtime;
                 } else if (currGameMode === 'new' && !gotUlu) {
-                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav)) / playtime;
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav) + (10 * speedOfScavs)) / playtime;
                 } else if (currGameMode === 'classic') {
-                    pointsAquired = (((numberOfScavs * 10) + hpLost) * 2) / playtime;
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * speedOfScavs) * 2) / playtime;
                 }
 
                 pointsAquired = Math.floor(pointsAquired);
 
                 if (pointsAquired < 0) {pointsAquired = '0';}
-                if (pointsAquired > 11520000) {pointsAquired = '0';}
+                if (pointsAquired > 9999999999) {pointsAquired = '0';}
                 console.log(
                     "You've found the Ulu-mulu: "+gotUlu+"\n"+
                     "Your HP is at: "+hpLeft+"\n"+
                     "HP lost: "+hpLost+"\n"+
                     "Spawned Scavengers: "+numberOfScavs+"\n"+
+                    "Scavengers had a speed multiplier of: "+speedOfScavs+"\n"+
                     "Killed Scavengers: "+deadScav+"\n"+
                     "Playtime: "+playtime+"sec\n"+
                     "Your Score: "+pointsAquired +"\n"+
