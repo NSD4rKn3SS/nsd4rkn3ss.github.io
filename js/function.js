@@ -50,7 +50,7 @@ let state, hero, ulu, scavs, plains, waters,
     portal, healthBar, message, gameScene, gameOverScene,
     id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption,
     viewPw, viewPh, positionMessage, hpLeft, hpLost, gotUlu,
-    currGameMode, controller, scavMod, gameMode, updateInfoBox;
+    currGameMode, controller, scavMod, gameMode, updateInfoBox, uluInitialPos, playerInitialPos;
 let deadScav = 0;
 
 updateInfoBox = function() {
@@ -147,7 +147,6 @@ $(document).ready(function($) {
         };
 
         //resourceok létrehozása
-        console.log(loader);
         loader
             .add("img/scav/scavrun.json")
             .add("img/orcrun/orcrun.json")
@@ -199,6 +198,8 @@ $(document).ready(function($) {
             if (currGameMode === 'new') {
                 hero.x = randomInt(60, 450);
                 hero.y = randomInt(60, 450);
+                playerInitialPos['x'] = hero.x;
+                playerInitialPos['y'] = hero.y;
             } else {
                 hero.x = 68;
                 hero.y = gameScene.height / 2 - hero.height / 2;
@@ -217,6 +218,8 @@ $(document).ready(function($) {
             if (currGameMode === 'new') {
                 ulu.x = randomInt(60, 450);
                 ulu.y = randomInt(60, 450);
+                uluInitialPos['x'] = ulu.x;
+                uluInitialPos['y'] = ulu.y;
             } else {
                 ulu.x = 450;
                 ulu.y = 60;
@@ -788,7 +791,9 @@ $(document).ready(function($) {
                     "Killed Scavengers: "+deadScav+"\n"+
                     "Playtime: "+playtime+"sec\n"+
                     "Your Score: "+pointsAquired +"\n"+
-                    "The portal was spawned at: X = "+portal.position.x+"px and Y = "+portal.position.y+"px\n"
+                    "The portal was spawned at: X = "+portal.position.x+"px and Y = "+portal.position.y+"px\n"+
+                    "The player was spawned at: X = "+playerInitialPos['x']+"px and Y = "+playerInitialPos['y']+"px\n"+
+                    "The ulu-mulu was spawned at: X = "+uluInitialPos['x']+"px and Y = "+uluInitialPos['y']+"px\n"
                 );
             }
             $('#scorePoints').val(pointsAquired);
