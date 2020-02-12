@@ -1,5 +1,5 @@
 <?php
-header("Access-Control-Allow-Origin: *");
+//header("Access-Control-Allow-Origin: *");
 if (!isset($_GET['points']) || !isset($_GET['name'])) {
 	
 } else {
@@ -23,4 +23,3 @@ if (!isset($_GET['points']) || !isset($_GET['name'])) {
 	$done = $xml_doc->save("highscores.xml");
 }
 ?>
-
