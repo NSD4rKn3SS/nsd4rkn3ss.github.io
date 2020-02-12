@@ -50,10 +50,16 @@ let state, hero, ulu, scavs, plains, waters,
     portal, healthBar, message, gameScene, gameOverScene,
     id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption,
     viewPw, viewPh, positionMessage, hpLeft, hpLost, gotUlu,
-    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos;
+    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos, uluHitBox;
 let deadScav = 0;
+let testedUlu = false;
 
 updateInfoBox = function() {
+    $('#ctrlScheme input[value="'+controller+'"]').attr('checked', 'checked');
+    $('#numberOfScavs').val(scavMod);
+    $('#speedOfScavs').val(speedOfScavs);
+    $('#multiText').html(speedOfScavs);
+    $('#gameMode input[value="'+gameMode+'"]').attr('checked', 'checked');
     $('#currSettings').empty().append(
         'Control scheme: <i>'+controller+'</i>' +
         '<br>Game mode: <i>'+gameMode+'</i>' +
@@ -67,7 +73,6 @@ function getGameSettings() {
     controller = checkCookie('ctrlScheme') ? getCookie('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
     scavMod =  checkCookie('numberOfScavs') ? getCookie('numberOfScavs') : $('#numberOfScavs').val();
     speedOfScavs = checkCookie('speedOfScavs') ? getCookie('speedOfScavs') : $('#speedOfScavs').val();
-    console.log('get:' +speedOfScavs);
     gameMode =  checkCookie('gameMode') ? getCookie('gameMode') : $('#gameMode input:checked').attr('value');
     updateInfoBox();
 }
@@ -82,7 +87,6 @@ function setGameSettings(from) {
     if (from === 'mods') {
         scavMod = $('#numberOfScavs').val();
         speedOfScavs = $('#speedOfScavs').val();
-        console.log('set:' +speedOfScavs);
         setCookie('numberOfScavs', scavMod, 7);
         setCookie('speedOfScavs', speedOfScavs, 7);
     }
@@ -104,12 +108,12 @@ $(document).ready(function($) {
      //PIXI aliasok definiálása
     let Application = PIXI.Application,
         Container = PIXI.Container,
-        loader = PIXI.loader,
-        resources = PIXI.loader.resources,
+        loader = PIXI.Loader.shared,
+        resources = PIXI.Loader.shared.resources,
         Graphics = PIXI.Graphics,
         TextureCache = PIXI.utils.TextureCache,
         Sprite = PIXI.Sprite,
-        AnimatedSprite =  PIXI.extras.AnimatedSprite,
+        AnimatedSprite =  PIXI.AnimatedSprite,
         Text = PIXI.Text,
         TextStyle = PIXI.TextStyle;
 
@@ -217,7 +221,6 @@ $(document).ready(function($) {
                 hero.x = 68;
                 hero.y = gameScene.height / 2 - hero.height / 2;
             }
-            console.log(hero.x);
             playerInitialPos.x = hero.x;
             playerInitialPos.y = hero.y;
             hero.vx = 0;
@@ -243,6 +246,16 @@ $(document).ready(function($) {
             ulu.anchor.y = 0.5;
             ulu.anchor.x = 0.5;
             gameScene.addChild(ulu);
+
+            //Hitbox adása a fegyvernek
+            uluHitBox = new Graphics();
+            uluHitBox.beginFill(0xFFFFFF);
+            uluHitBox.drawRect(0.5, 0.5, 50, 25);
+            uluHitBox.position.x = ulu.x - 25;
+            uluHitBox.position.y = ulu.y - 25;
+            uluHitBox.endFill();
+            uluHitBox.tint = 0x00FF00;
+            gameScene.addChild(uluHitBox);
 
             //Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
             if (scavMod) {
@@ -335,27 +348,34 @@ $(document).ready(function($) {
             gameOverScene.addChild(message);
 
             //Mozgatás funkciók definiálása
-            let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop, heroAttack;
+            let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop, heroAttack, heroAttackStop;
 
             heroAttack = function() {
-                ulu.hitArea = new PIXI.Rectangle(0, 0, 45, 45);
-                $.each(scavs, function (i,v) {
-                    if (scavs[i]._destroyed === false) {
-                        if (hitTestRectangle(ulu, scavs[i])) {
-                            deadScav += + 1;
-                            gameScene.removeChild(scavs[i]);
-                            scavs[i].destroy();
-                            scavs[i].visible = false;
-                            scavs[i].renderable = false;
-                            scavs[i].tint = 0xFF3333;
-                            //console.log(scavs[i]);
-                            //scavs.splice(i, 1);
-                            //delete(scavs[i]);
-                        } else {
-                            scavs[i].tint = 0xFFFFFF;
+                uluHitBox.tint = 0x0000FF;
+                //if (hitTestRectangle(hero, ulu)) {
+                    $.each(scavs, function (i,v) {
+                        if (scavs[i]._destroyed === false) {
+                            if (hitTestRectangle(uluHitBox, scavs[i])) {
+                                uluHitBox.tint = 0xFF0000;
+                                deadScav += + 1;
+                                gameScene.removeChild(scavs[i]);
+                                scavs[i].destroy();
+                                scavs[i].visible = false;
+                                scavs[i].renderable = false;
+                                scavs[i].tint = 0xFF3333;
+                                //console.log(scavs[i]);
+                                //scavs.splice(i, 1);
+                                //delete(scavs[i]);
+                            } else {
+                                scavs[i].tint = 0xFFFFFF;
+                            }
                         }
-                    }
-                });
+                    });
+                //}
+            };
+
+            heroAttackStop = function() {
+                uluHitBox.tint = 0x00FF00;
             };
 
             //Bal oldalra mozgatás
@@ -456,7 +476,11 @@ $(document).ready(function($) {
                     const KEY_BITS = [4,1,8,2]; // left up right down
                     const KEY_MASKS = [0b1011,0b1110,0b0111,0b1101]; // left up right down
                     window.onkeydown = window.onkeyup = function (e) {
-                        if (e.keyCode === 17 && currGameMode === 'new' ) { heroAttack(); }
+                        if (e.keyCode === 17 && currGameMode === 'new' && e.type === "keydown" ) {
+                            heroAttack();
+                        } else if (e.keyCode === 17 && e.type === 'keyup') {
+                            heroAttackStop();
+                        }
                         if (e.keyCode >= 37 && e.keyCode <41){
                             if(e.type === "keydown"){
                                 arrowBits |= KEY_BITS[e.keyCode - 37];
@@ -519,6 +543,10 @@ $(document).ready(function($) {
                     $('#touchRightUp')  .bind('touchstart', function(e) { rightUpStart();})  .bind('touchend', function(e) { mvmntStop();});
                     //JobbLe gomb
                     $('#touchRightDown').bind('touchstart', function(e) { rightDownStart();}).bind('touchend', function(e) { mvmntStop();});
+                    //Támadás gomb
+                    if (currGameMode === 'new') {
+                        $('#touchAttack').bind('touchstart', function(e) { heroAttack(); }).bind('touchend', function (e) { heroAttackStop(); });
+                    }
                 }
             };
 
@@ -677,61 +705,96 @@ $(document).ready(function($) {
 
             //Kincs pozíciónálásának funkciója
             function uluSetPost(mode) {
+                //Balra
                 ulu.scale.x = hero.scale.x;
                 if (hero.scale.x === -1) {
                     ulu.x = hero.x - 23;
                     ulu.scale.y = -1;
                     ulu.y = hero.y + 6;
+                    uluHitBox.position.x = hero.x - 40;
+                    uluHitBox.position.y = hero.y - 20;
+                    uluHitBox.angle = 90;
                 }
+                //Jobbra
                 if (hero.scale.x === 1) {
                     ulu.x = hero.x + 19;
                     ulu.scale.y = 1;
                     ulu.y = hero.y + 4;
+                    uluHitBox.position.x = hero.x + 60;
+                    uluHitBox.position.y = hero.y - 20;
+                    uluHitBox.angle = 90;
                 }
+                //Le
                 ulu.rotation = hero.rotation;
                 if (hero.rotation === -5) {
                     ulu.scale.x = hero.scale.x;
                     ulu.scale.y = hero.scale.y;
                     ulu.x = hero.x + 4;
                     ulu.y = hero.y + 22;
+                    uluHitBox.position.x = hero.x - 25;
+                    uluHitBox.position.y = hero.y + 40;
+                    uluHitBox.angle = 0;
                 }
+                //Fel
                 if (hero.rotation === 5) {
                     ulu.scale.x = hero.scale.x;
                     ulu.scale.y = hero.scale.y;
                     ulu.x = hero.x + 10;
                     ulu.y = hero.y - 20;
+                    uluHitBox.position.x = hero.x - 25;
+                    uluHitBox.position.y = hero.y - 60;
+                    uluHitBox.angle = 0;
                 }
 
                 //Balra fel mozgatás
                 if (hero.rotation === -2.5 && hero.scale.x === 1) {
                     ulu.x = hero.x - 15;
                     ulu.y = hero.y - 17;
+                    uluHitBox.position.x = hero.x - 60;
+                    uluHitBox.position.y = hero.y - 30;
+                    uluHitBox.angle = -45;
                 }
                 //Jobbra fel mozgatás
                 if (hero.rotation === 2.5 && hero.scale.x === -1) {
                     ulu.x = hero.x + 15;
                     ulu.y = hero.y - 17;
+                    uluHitBox.position.x = hero.x + 25;
+                    uluHitBox.position.y = hero.y - 65;
+                    uluHitBox.angle = 45;
                 }
                 //Balra le mozgatás
                 if (hero.rotation === 2.5 && hero.scale.x === 1) {
                     ulu.x = hero.x - 15;
                     ulu.y = hero.y + 17;
+                    uluHitBox.position.x = hero.x - 50;
+                    uluHitBox.position.y = hero.y;
+                    uluHitBox.angle = 45;
                 }
                 //Jobbra le mozgatás
                 if (hero.rotation === -2.5 && hero.scale.x === -1) {
                     ulu.x = hero.x + 15;
                     ulu.y = hero.y + 17;
+                    uluHitBox.position.x = hero.x + 10;
+                    uluHitBox.position.y = hero.y + 35;
+                    uluHitBox.angle = -45;
                 }
                 if (mode === 'new') {
-
+                    //uluHitBox.position.x = hero.x - 25;
+                    //uluHitBox.position.y = hero.y - 50;
+                    //uluHitBox.angle = 0;
                 } else {
 
                 }
             }
 
-            //Megnézzük hogy a hős megtalálta-e a kincset a pályán
-            if (hitTestRectangle(hero, ulu)) {
-                //Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
+            if (testedUlu === false) {
+                //Megnézzük hogy a hős megtalálta-e a kincset a pályán
+                if (hitTestRectangle(hero, ulu)) {
+                    testedUlu = true;
+                    //Ha a kincs hozzá ér a hőshöz, ráhelyezzük a hősre
+                    uluSetPost(currGameMode);
+                }
+            } else {
                 uluSetPost(currGameMode);
             }
 

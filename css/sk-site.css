@@ -141,7 +141,7 @@ body {
 	transform: translate(-50%, 0) rotate(175deg);
 	bottom: 0px;
 	left: 50%;
-	color: #333;
+	/*color: #333;*/
 }
 
 .ulutouch-wrapper {
