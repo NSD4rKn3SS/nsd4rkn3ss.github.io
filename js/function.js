@@ -797,7 +797,7 @@ $(document).ready(function($) {
                 pointsAquired = Math.floor(pointsAquired);
 
                 if (pointsAquired < 0) {pointsAquired = '0';}
-                if (pointsAquired > 11520000) {pointsAquired = '0';}
+                if (pointsAquired > 9999999999) {pointsAquired = '0';}
                 console.log(
                     "You've found the Ulu-mulu: "+gotUlu+"\n"+
                     "Your HP is at: "+hpLeft+"\n"+
