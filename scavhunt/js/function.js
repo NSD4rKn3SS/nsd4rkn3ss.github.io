@@ -1041,8 +1041,8 @@ $(document).ready(function($) {
         let localPath = location.href.replace(/[^/]*$/, '');
         // Fire off the request to /form.php
         request = $.ajax({
-            //url: localPath+"scorePost.php",
-            url: "https://nsd4rkn3ss.000webhostapp.com/scorePost.php",
+            url: localPath+"scorePost.php",
+            //url: "https://nsd4rkn3ss.github.io/scorePost.php",
             type: "get",
             data: serializedData
         });

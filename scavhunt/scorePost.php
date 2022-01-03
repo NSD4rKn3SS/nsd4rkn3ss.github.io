@@ -1,5 +1,5 @@
 <?php
-//header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");
 if (!isset($_GET['points']) || !isset($_GET['name'])) {
 	
 } else {
