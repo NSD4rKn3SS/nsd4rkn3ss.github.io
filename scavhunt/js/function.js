@@ -353,31 +353,35 @@ $(document).ready(function($) {
             let leftStart, rightStart, upStart, downStart, leftUpStart, rightUpStart, leftDownStart, rightDownStart, mvmntStop, heroAttack, heroAttackStop;
 
             heroAttack = function() {
-                uluHitBox.tint = 0x0000FF;
-                //if (hitTestRectangle(hero, ulu)) {
-                    $.each(scavs, function (i,v) {
-                        if (scavs[i]._destroyed === false) {
-                            if (hitTestRectangle(uluHitBox, scavs[i])) {
-                                uluHitBox.tint = 0xFF0000;
-                                deadScav += + 1;
-                                gameScene.removeChild(scavs[i]);
-                                scavs[i].destroy();
-                                scavs[i].visible = false;
-                                scavs[i].renderable = false;
-                                scavs[i].tint = 0xFF3333;
-                                //console.log(scavs[i]);
-                                //scavs.splice(i, 1);
-                                //delete(scavs[i]);
-                            } else {
-                                scavs[i].tint = 0xFFFFFF;
+                if (currGameMode === 'new') {
+                    uluHitBox.tint = 0x0000FF;
+                    //if (hitTestRectangle(hero, ulu)) {
+                        $.each(scavs, function (i,v) {
+                            if (scavs[i]._destroyed === false) {
+                                if (hitTestRectangle(uluHitBox, scavs[i])) {
+                                    uluHitBox.tint = 0xFF0000;
+                                    deadScav += + 1;
+                                    gameScene.removeChild(scavs[i]);
+                                    scavs[i].destroy();
+                                    scavs[i].visible = false;
+                                    scavs[i].renderable = false;
+                                    scavs[i].tint = 0xFF3333;
+                                    //console.log(scavs[i]);
+                                    //scavs.splice(i, 1);
+                                    //delete(scavs[i]);
+                                } else {
+                                    scavs[i].tint = 0xFFFFFF;
+                                }
                             }
-                        }
-                    });
-                //}
+                        });
+                    //}
+                }
             };
 
             heroAttackStop = function() {
-                uluHitBox.tint = 0x00FF00;
+                if (currGameMode === 'new') {
+                    uluHitBox.tint = 0x00FF00;
+                }
             };
 
             //Bal oldalra mozgatás
