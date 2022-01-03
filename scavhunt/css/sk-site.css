@@ -225,6 +225,7 @@ body {
 .opt-radio-wrap .opt-radio input[type='radio']:checked ~ span {
 	color: #ca1b17;
 }
+.opt-radio.disabled { pointer-events: none; color: #333;}
 .options-menu [class*='options-'] {
 	margin-bottom: 15px;
 	border-bottom: 1px solid #DDD;
