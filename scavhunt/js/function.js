@@ -901,6 +901,7 @@ $(document).ready(function($) {
                     "The ulu-mulu was spawned at: X = "+uluInitialPos['x']+"px and Y = "+uluInitialPos['y']+"px\n"
                 );
             }
+            message.text = (message.text +'\n Your Score: '+pointsAquired);
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
             gameScene.visible = false;
