@@ -1081,8 +1081,8 @@ function loadXML() {
             parseXML(this);
         }
     };
-    //xhttp.open("GET", "highscores.xml", true);
-    xhttp.open("GET", "https://nsd4rkn3ss.000webhostapp.com/highscores.xml", true);
+    xhttp.open("GET", "highscores.xml", true);
+    //xhttp.open("GET", "https://nsd4rkn3ss.github.io/scavhunt/highscores.xml", true);
     xhttp.send();
 }
 

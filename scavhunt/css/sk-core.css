@@ -389,6 +389,7 @@ section {
 
 .txt-on-img {
 	background: inherit;
+	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
 }
@@ -398,6 +399,8 @@ section {
 a.boxfill {
 	display: inline-block;
 	float: left;
+	-ms-user-select: none;
+	-webkit-user-select: none;
 	user-select: none;
 	width: 100%;
 	height: 100%;
