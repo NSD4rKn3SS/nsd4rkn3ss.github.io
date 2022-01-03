@@ -50,7 +50,7 @@ let state, hero, ulu, scavs, plains, waters,
     portal, healthBar, message, gameScene, gameOverScene,
     id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption,
     viewPw, viewPh, positionMessage, hpLeft, hpLost, gotUlu,
-    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos, uluHitBox;
+    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos, uluHitBox, pointsAquired, calcScore;
 let deadScav = 0;
 let testedUlu = false;
 
@@ -824,6 +824,37 @@ $(document).ready(function($) {
                 uluSetPost(currGameMode);
             }
 
+            //Végső pontszám kalkulásás funkciója
+            function calcScore() {
+                if (currGameMode === 'new' && gotUlu) {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) + (10 * speedOfScavs) * 2)) / playtime;
+                } else if (currGameMode === 'new' && !gotUlu) {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav) + (10 * speedOfScavs)) / playtime;
+                } else if (currGameMode === 'classic') {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * speedOfScavs) * 2) / playtime;
+                }
+
+                pointsAquired = Math.floor(pointsAquired);
+
+                if (pointsAquired < 0) { pointsAquired = '0'; }
+                if (pointsAquired > 9999999999) { pointsAquired = '0'; }
+                console.log(
+                    "You've found the Ulu-mulu: " + gotUlu + "\n" +
+                    "Your HP is at: " + hpLeft + "\n" +
+                    "HP lost: " + hpLost + "\n" +
+                    "Spawned Scavengers: " + numberOfScavs + "\n" +
+                    "Scavengers had a speed multiplier of: " + speedOfScavs + "\n" +
+                    "Killed Scavengers: " + deadScav + "\n" +
+                    "Playtime: " + playtime + "sec\n" +
+                    "Your Score: " + pointsAquired + "\n" +
+                    "The portal was spawned at: X = " + portal.position.x + "px and Y = " + portal.position.y + "px\n" +
+                    "The player was spawned at: X = " + playerInitialPos['x'] + "px and Y = " + playerInitialPos['y'] + "px\n" +
+                    "The ulu-mulu was spawned at: X = " + uluInitialPos['x'] + "px and Y = " + uluInitialPos['y'] + "px\n"
+                );
+
+                return pointsAquired;
+            }
+
             //Elég életereje van még a hősnek?
             //Ha az életerő kevesebb mint 0 akkor vége a játéknak
             //És megjelenítjük a végüzenetet
@@ -839,11 +870,11 @@ $(document).ready(function($) {
 
                 if (hitTestRectangle(hero, ulu)) {
                     gotUlu = true;
-                    message.text = ("You've got the Ulu mulu! \n But it wasn't enough \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLost+" HP");
+                    message.text = ("You've got the Ulu mulu! \n But it wasn't enough \n There were " + numberOfScavs + " Scavengers \n From which you killed " + deadScav + " \n all this took you " + playtime + " seconds \n and you lost " + hpLost + " HP \n Your Score: " + calcScore());
                     positionMessage();
                 } else {
                     gotUlu = false;
-                    message.text = ("Scavengers feed on your flesh! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLost+" HP");
+                    message.text = ("Scavengers feed on your flesh! \n There were " + numberOfScavs + " Scavengers \n From which you killed " + deadScav + " \n all this took you " + playtime + " seconds \n and you lost " + hpLost + " HP \n Your Score: " + calcScore());
                     positionMessage();
                 }
 
@@ -863,7 +894,7 @@ $(document).ready(function($) {
                     playtime = timerHS['end'] - timerHS['start'];
                 }
                 //if (hpLeft === 0) {hpLeft = 'no'}
-                message.text = ("You survived the hunt! \n There were "+numberOfScavs+" Scavengers \n From which you killed "+deadScav+" \n all this took you "+playtime+" seconds \n and you lost "+hpLost+" HP");
+                message.text = ("You survived the hunt! \n There were " + numberOfScavs + " Scavengers \n From which you killed " + deadScav + " \n all this took you " + playtime + " seconds \n and you lost " + hpLost + " HP \n Your Score: " + calcScore());
                 positionMessage();
                 state = end;
             }
@@ -871,37 +902,8 @@ $(document).ready(function($) {
 
         //A játék végén, a játék alap jelenete nem látható
         //míg a játék végének jelenete igen
-        let pointsAquired = false;
         function end() {
             $('#uluBtns').hide();
-            if (pointsAquired === false) {
-                if (currGameMode === 'new' && gotUlu) {
-                    pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) + (10 * speedOfScavs) * 2)) / playtime;
-                } else if (currGameMode === 'new' && !gotUlu) {
-                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav) + (10 * speedOfScavs)) / playtime;
-                } else if (currGameMode === 'classic') {
-                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * speedOfScavs) * 2) / playtime;
-                }
-
-                pointsAquired = Math.floor(pointsAquired);
-
-                if (pointsAquired < 0) {pointsAquired = '0';}
-                if (pointsAquired > 9999999999) {pointsAquired = '0';}
-                console.log(
-                    "You've found the Ulu-mulu: "+gotUlu+"\n"+
-                    "Your HP is at: "+hpLeft+"\n"+
-                    "HP lost: "+hpLost+"\n"+
-                    "Spawned Scavengers: "+numberOfScavs+"\n"+
-                    "Scavengers had a speed multiplier of: "+speedOfScavs+"\n"+
-                    "Killed Scavengers: "+deadScav+"\n"+
-                    "Playtime: "+playtime+"sec\n"+
-                    "Your Score: "+pointsAquired +"\n"+
-                    "The portal was spawned at: X = "+portal.position.x+"px and Y = "+portal.position.y+"px\n"+
-                    "The player was spawned at: X = "+playerInitialPos['x']+"px and Y = "+playerInitialPos['y']+"px\n"+
-                    "The ulu-mulu was spawned at: X = "+uluInitialPos['x']+"px and Y = "+uluInitialPos['y']+"px\n"
-                );
-                message.text = (message.text + '\n Your Score: ' + pointsAquired);
-            }
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
             gameScene.visible = false;
