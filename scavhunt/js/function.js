@@ -900,8 +900,8 @@ $(document).ready(function($) {
                     "The player was spawned at: X = "+playerInitialPos['x']+"px and Y = "+playerInitialPos['y']+"px\n"+
                     "The ulu-mulu was spawned at: X = "+uluInitialPos['x']+"px and Y = "+uluInitialPos['y']+"px\n"
                 );
+                message.text = (message.text + '\n Your Score: ' + pointsAquired);
             }
-            message.text = (message.text +'\n Your Score: '+pointsAquired);
             $('#scorePoints').val(pointsAquired);
             $('#endScreen').show();
             gameScene.visible = false;
