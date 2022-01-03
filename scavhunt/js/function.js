@@ -350,7 +350,7 @@ $(document).ready(function($) {
                 align : 'center',
                 fill: 'white'
             });
-            message = new Text("You Died! \n and survived \n X seconds \n Your Score: " + calcScore(), style);
+            message = new Text("You Died! \n and survived \n X seconds", style);
             positionMessage();
             gameOverScene.addChild(message);
 
