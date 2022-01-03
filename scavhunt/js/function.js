@@ -50,9 +50,7 @@ let state, hero, ulu, scavs, plains, waters,
     portal, healthBar, message, gameScene, gameOverScene,
     id, timerHS, playtime, hpBarSet, numberOfScavs, schemeOption,
     viewPw, viewPh, positionMessage, hpLeft, hpLost, gotUlu,
-    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos, uluHitBox;
-let calcScore = false;
-let pointsAquired = false;
+    currGameMode, controller, scavMod, gameMode, updateInfoBox, speedOfScavs, uluInitialPos, playerInitialPos, uluHitBox, pointsAquired, calcScore;
 let deadScav = 0;
 let testedUlu = false;
 
@@ -70,37 +68,6 @@ updateInfoBox = function() {
         '<br><small>* Cookies are used to store these data</small>'
     );
 };
-
-//Végső pontszám kalkulásás funkciója
-function calcScore() {
-    if (currGameMode === 'new' && gotUlu) {
-        pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) + (10 * speedOfScavs) * 2)) / playtime;
-    } else if (currGameMode === 'new' && !gotUlu) {
-        pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav) + (10 * speedOfScavs)) / playtime;
-    } else if (currGameMode === 'classic') {
-        pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * speedOfScavs) * 2) / playtime;
-    }
-
-    pointsAquired = Math.floor(pointsAquired);
-
-    if (pointsAquired < 0) { pointsAquired = '0'; }
-    if (pointsAquired > 9999999999) { pointsAquired = '0'; }
-    console.log(
-        "You've found the Ulu-mulu: " + gotUlu + "\n" +
-        "Your HP is at: " + hpLeft + "\n" +
-        "HP lost: " + hpLost + "\n" +
-        "Spawned Scavengers: " + numberOfScavs + "\n" +
-        "Scavengers had a speed multiplier of: " + speedOfScavs + "\n" +
-        "Killed Scavengers: " + deadScav + "\n" +
-        "Playtime: " + playtime + "sec\n" +
-        "Your Score: " + pointsAquired + "\n" +
-        "The portal was spawned at: X = " + portal.position.x + "px and Y = " + portal.position.y + "px\n" +
-        "The player was spawned at: X = " + playerInitialPos['x'] + "px and Y = " + playerInitialPos['y'] + "px\n" +
-        "The ulu-mulu was spawned at: X = " + uluInitialPos['x'] + "px and Y = " + uluInitialPos['y'] + "px\n"
-    );
-
-    return pointsAquired;
-}
 
 function getGameSettings() {
     controller = checkCookie('ctrlScheme') ? getCookie('ctrlScheme') : $('#ctrlScheme input:checked').attr('value');
@@ -860,6 +827,37 @@ $(document).ready(function($) {
                 }
             } else {
                 uluSetPost(currGameMode);
+            }
+
+            //Végső pontszám kalkulásás funkciója
+            function calcScore() {
+                if (currGameMode === 'new' && gotUlu) {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + ((10 * deadScav) + (10 * speedOfScavs) * 2)) / playtime;
+                } else if (currGameMode === 'new' && !gotUlu) {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * deadScav) + (10 * speedOfScavs)) / playtime;
+                } else if (currGameMode === 'classic') {
+                    pointsAquired = (((numberOfScavs * 10) + hpLost) + (10 * speedOfScavs) * 2) / playtime;
+                }
+
+                pointsAquired = Math.floor(pointsAquired);
+
+                if (pointsAquired < 0) { pointsAquired = '0'; }
+                if (pointsAquired > 9999999999) { pointsAquired = '0'; }
+                console.log(
+                    "You've found the Ulu-mulu: " + gotUlu + "\n" +
+                    "Your HP is at: " + hpLeft + "\n" +
+                    "HP lost: " + hpLost + "\n" +
+                    "Spawned Scavengers: " + numberOfScavs + "\n" +
+                    "Scavengers had a speed multiplier of: " + speedOfScavs + "\n" +
+                    "Killed Scavengers: " + deadScav + "\n" +
+                    "Playtime: " + playtime + "sec\n" +
+                    "Your Score: " + pointsAquired + "\n" +
+                    "The portal was spawned at: X = " + portal.position.x + "px and Y = " + portal.position.y + "px\n" +
+                    "The player was spawned at: X = " + playerInitialPos['x'] + "px and Y = " + playerInitialPos['y'] + "px\n" +
+                    "The ulu-mulu was spawned at: X = " + uluInitialPos['x'] + "px and Y = " + uluInitialPos['y'] + "px\n"
+                );
+
+                return pointsAquired;
             }
 
             //Elég életereje van még a hősnek?
