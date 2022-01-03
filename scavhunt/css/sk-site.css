@@ -46,6 +46,9 @@ body {
 	width: 100vw;
 	height: 100vh;
 	overflow: hidden;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 [class*=mw-][class*=-inner],
@@ -225,7 +228,7 @@ body {
 .opt-radio-wrap .opt-radio input[type='radio']:checked ~ span {
 	color: #ca1b17;
 }
-.opt-radio.disabled { pointer-events: none; color: #333;}
+.opt-radio.disabled { pointer-events: none; color: #333; cursor: not-allowed;}
 .options-menu [class*='options-'] {
 	margin-bottom: 15px;
 	border-bottom: 1px solid #DDD;
