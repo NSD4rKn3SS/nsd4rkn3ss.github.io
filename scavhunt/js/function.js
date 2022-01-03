@@ -247,15 +247,17 @@ $(document).ready(function($) {
             ulu.anchor.x = 0.5;
             gameScene.addChild(ulu);
 
-            //Hitbox adása a fegyvernek
-            uluHitBox = new Graphics();
-            uluHitBox.beginFill(0xFFFFFF);
-            uluHitBox.drawRect(0.5, 0.5, 50, 25);
-            uluHitBox.position.x = ulu.x - 25;
-            uluHitBox.position.y = ulu.y - 25;
-            uluHitBox.endFill();
-            uluHitBox.tint = 0x00FF00;
-            gameScene.addChild(uluHitBox);
+            if (currGameMode === 'new') {
+                //Hitbox adása a fegyvernek
+                uluHitBox = new Graphics();
+                uluHitBox.beginFill(0xFFFFFF);
+                uluHitBox.drawRect(0.5, 0.5, 50, 25);
+                uluHitBox.position.x = ulu.x - 25;
+                uluHitBox.position.y = ulu.y - 25;
+                uluHitBox.endFill();
+                uluHitBox.tint = 0x00FF00;
+                gameScene.addChild(uluHitBox);
+            }
 
             //Ellenfelek létrehozása és tömb létesítése az eltárolásukhoz
             if (scavMod) {
@@ -477,9 +479,13 @@ $(document).ready(function($) {
                     const KEY_MASKS = [0b1011,0b1110,0b0111,0b1101]; // left up right down
                     window.onkeydown = window.onkeyup = function (e) {
                         if (e.keyCode === 17 && currGameMode === 'new' && e.type === "keydown" ) {
-                            heroAttack();
+                            if (hitTestRectangle(hero, ulu)) {
+                                heroAttack();
+                            }
                         } else if (e.keyCode === 17 && e.type === 'keyup') {
-                            heroAttackStop();
+                            if (hitTestRectangle(hero, ulu)) {
+                                heroAttackStop();
+                            }
                         }
                         if (e.keyCode >= 37 && e.keyCode <41){
                             if(e.type === "keydown"){
