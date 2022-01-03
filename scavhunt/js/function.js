@@ -717,18 +717,22 @@ $(document).ready(function($) {
                     ulu.x = hero.x - 23;
                     ulu.scale.y = -1;
                     ulu.y = hero.y + 6;
-                    uluHitBox.position.x = hero.x - 40;
-                    uluHitBox.position.y = hero.y - 20;
-                    uluHitBox.angle = 90;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x - 40;
+                        uluHitBox.position.y = hero.y - 20;
+                        uluHitBox.angle = 90;
+                    }
                 }
                 //Jobbra
                 if (hero.scale.x === 1) {
                     ulu.x = hero.x + 19;
                     ulu.scale.y = 1;
                     ulu.y = hero.y + 4;
-                    uluHitBox.position.x = hero.x + 60;
-                    uluHitBox.position.y = hero.y - 20;
-                    uluHitBox.angle = 90;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x + 60;
+                        uluHitBox.position.y = hero.y - 20;
+                        uluHitBox.angle = 90;
+                    }
                 }
                 //Le
                 ulu.rotation = hero.rotation;
@@ -737,9 +741,11 @@ $(document).ready(function($) {
                     ulu.scale.y = hero.scale.y;
                     ulu.x = hero.x + 4;
                     ulu.y = hero.y + 22;
-                    uluHitBox.position.x = hero.x - 25;
-                    uluHitBox.position.y = hero.y + 40;
-                    uluHitBox.angle = 0;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x - 25;
+                        uluHitBox.position.y = hero.y + 40;
+                        uluHitBox.angle = 0;
+                    }
                 }
                 //Fel
                 if (hero.rotation === 5) {
@@ -747,42 +753,52 @@ $(document).ready(function($) {
                     ulu.scale.y = hero.scale.y;
                     ulu.x = hero.x + 10;
                     ulu.y = hero.y - 20;
-                    uluHitBox.position.x = hero.x - 25;
-                    uluHitBox.position.y = hero.y - 60;
-                    uluHitBox.angle = 0;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x - 25;
+                        uluHitBox.position.y = hero.y - 60;
+                        uluHitBox.angle = 0;
+                    }
                 }
 
                 //Balra fel mozgatás
                 if (hero.rotation === -2.5 && hero.scale.x === 1) {
                     ulu.x = hero.x - 15;
                     ulu.y = hero.y - 17;
-                    uluHitBox.position.x = hero.x - 60;
-                    uluHitBox.position.y = hero.y - 30;
-                    uluHitBox.angle = -45;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x - 60;
+                        uluHitBox.position.y = hero.y - 30;
+                        uluHitBox.angle = -45;
+                    }
                 }
                 //Jobbra fel mozgatás
                 if (hero.rotation === 2.5 && hero.scale.x === -1) {
                     ulu.x = hero.x + 15;
                     ulu.y = hero.y - 17;
-                    uluHitBox.position.x = hero.x + 25;
-                    uluHitBox.position.y = hero.y - 65;
-                    uluHitBox.angle = 45;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x + 25;
+                        uluHitBox.position.y = hero.y - 65;
+                        uluHitBox.angle = 45;
+                    }
                 }
                 //Balra le mozgatás
                 if (hero.rotation === 2.5 && hero.scale.x === 1) {
                     ulu.x = hero.x - 15;
                     ulu.y = hero.y + 17;
-                    uluHitBox.position.x = hero.x - 50;
-                    uluHitBox.position.y = hero.y;
-                    uluHitBox.angle = 45;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x - 50;
+                        uluHitBox.position.y = hero.y;
+                        uluHitBox.angle = 45;
+                    }
                 }
                 //Jobbra le mozgatás
                 if (hero.rotation === -2.5 && hero.scale.x === -1) {
                     ulu.x = hero.x + 15;
                     ulu.y = hero.y + 17;
-                    uluHitBox.position.x = hero.x + 10;
-                    uluHitBox.position.y = hero.y + 35;
-                    uluHitBox.angle = -45;
+                    if (currGameMode === 'new') {
+                        uluHitBox.position.x = hero.x + 10;
+                        uluHitBox.position.y = hero.y + 35;
+                        uluHitBox.angle = -45;
+                    }
                 }
                 if (mode === 'new') {
                     //uluHitBox.position.x = hero.x - 25;
