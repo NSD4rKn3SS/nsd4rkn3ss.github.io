@@ -207,7 +207,7 @@ $(document).ready(function($) {
             if (currGameMode === 'new') {
                 portal.position.set(randomInt(50, 430), randomInt(50, 430));
             } else {
-                portal.position.set(randomInt(50, 430), randomInt(50, 430));
+                portal.position.set(randomInt(40, 430), randomInt(40, 430));
                 //portal.position.set(40, 430);
             }
             gameScene.addChild(portal);
@@ -219,8 +219,8 @@ $(document).ready(function($) {
                 hero.x = randomInt(60, 450);
                 hero.y = randomInt(60, 450);
             } else {
-                hero.x = randomInt(60, 450);
-                hero.y = randomInt(60, 450);
+                hero.x = randomInt(68, 450);
+                hero.y = randomInt(68, 450);
                 //hero.x = 68;
                 //hero.y = gameScene.height / 2 - hero.height / 2;
             }
@@ -241,8 +241,8 @@ $(document).ready(function($) {
                 ulu.x = randomInt(60, 450);
                 ulu.y = randomInt(60, 450);
             } else {
-                ulu.x = randomInt(60, 450);
-                ulu.y = randomInt(60, 450);
+                ulu.x = randomInt(30, 450);
+                ulu.y = randomInt(30, 450);
                 //ulu.x = 450;
                 //ulu.y = 60;
             }
