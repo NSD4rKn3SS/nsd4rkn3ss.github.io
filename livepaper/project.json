@@ -1,0 +1,255 @@
+{
+	"contentrating" : "Everyone",
+	"description" : "[h1] ! IMPORTANT ! [/h1]\r\nThis wallpaper is in early stages, i'd appreciate some feedback\r\n\r\n[b] Description: [/b] \r\nI've wanted to try and replace my Rainmeter widgets with a feature equal web background, this is what came out of it.\r\nIt needs some configuration and some third party apps to get it to work, but after that it's pretty usable and highly modifiable to your needs.\r\n\r\n[b] Features: [/b] \r\n-Weather feed from OpenWeatherMap,\r\n-Progress of day with sunrise and sunset marks,\r\n-Series watch list shows 10 upcoming episodes,\r\n-Hardware Monitoring with HWinfo and RemoteSensorMonitor,\r\n-Custom décor image of your choosing,\r\n-Changes background color based on time (currently Day/Night)\r\n\r\n[b] Planned Features:[/b] \r\n-[strike]Custom colors for the background cycle[/strike] [b]DONE[/b]\r\n-More color schemes will be available in later versions\r\n-[strike]Grouping in the hardware feed[/strike] [b]DONE[/b]\r\n-Making the design better looking\r\n-More language options (on request)\r\n-and more...\r\n\r\n[h1]Getting things to start:[/h1]\r\n\r\n[b] -Weather feed:[/b] \r\n 1.) To get weather data you need to provide an OpenWeatherMap API key to fetch the needed data.\r\n      [url=https://openweathermap.org/api]Go to OpenWeatherMap to grab one[/url].\r\n      \r\n 2.)Sadly automatic geolocation is not supported in Wallpaper Engine.\r\n      You have to manually provide the needed information for it.\r\n      [url=https://www.latlong.net/]Go to this site[/url] to get your Latitude/Longitude, Altitude can be set to 0.\r\n\r\n[b] -Watch list feed:[/b] \r\n 1.) [url=https://showrss.info/]Go to showRSS and register[/url].\r\n      Subscribe to your favorite shows, and generate a link to your own watch list feed.\r\n      Copy that and paste it in the \"showRSS Feed\" input filed.\r\n\r\n[b] -Custom image:[/b]\r\n 1.) Paste any direct link to an online image here to show it on the middle of your wallpaper.\r\n      Max height/width is half your desktop resolution.\r\n      Works best with a completely white logo that has a transparent background.\r\n\r\n[b] -Hardware monitoring:[/b] \r\n You'll need a couple of things for this.\r\n 1.) [url=https://www.hwinfo.com/]Download HWInfo [/url]run it in sensors only mode, and set up what you want to monitor.\r\n\r\n 2.) [url=https://www.hwinfo.com/files/RemoteSensorMonitor/Remote.Sensor.Monitor.v.2.1.0.zip]Download Remote Sensor Monitor[/url] and run it.\r\n       You can see which port it is using in the window, (Default is: 55555) If it's different you'll need to enter that in the \"RemSenMon Port\" input field.\r\n\r\n[h1]That's it, you're all set.[/h1]",
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"altitude" : 
+			{
+				"condition" : "weather_geolocation.value == 2",
+				"order" : 115,
+				"text" : "Altitude",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"bgcolor_type" : 
+			{
+				"condition" : "use_custom_colors.value == true",
+				"options" : 
+				[
+					{
+						"label" : "Default",
+						"value" : "1"
+					},
+					{
+						"label" : "Custom Colors",
+						"value" : "2"
+					},
+					{
+						"label" : "RGB Gradient",
+						"value" : "3"
+					}
+				],
+				"order" : 102,
+				"text" : "Color Schemes",
+				"type" : "combo",
+				"value" : "1"
+			},
+			"enable_custompos" : 
+			{
+				"order" : 101,
+				"text" : "Enable Positioning",
+				"type" : "bool",
+				"value" : false
+			},
+			"enable_hwmon" : 
+			{
+				"order" : 121,
+				"text" : "Enable HWMon",
+				"type" : "bool",
+				"value" : true
+			},
+			"enable_showrss" : 
+			{
+				"order" : 116,
+				"text" : "Enable showRSS",
+				"type" : "bool",
+				"value" : true
+			},
+			"enable_weather" : 
+			{
+				"order" : 107,
+				"text" : "Enable Weather",
+				"type" : "bool",
+				"value" : true
+			},
+			"geolocation_description" : 
+			{
+				"order" : 112,
+				"text" : "Sadly automatic geolocation is not supported by Wallpaper Engine. You have to manually provide the needed info for it. Go to https://www.latlong.net/ to get your Latitude/Longitude, Altitude can be 0",
+				"type" : "text",
+				"value" : ""
+			},
+			"hwmonitor_description" : 
+			{
+				"order" : 122,
+				"text" : "You'll need a couple of things for this. 1.) Download HWInfo (https://www.hwinfo.com/) run it in sensors only mode, and set up what you want to monitor. 2.) Download Remote Sensor Monitor (https://www.hwinfo.com/files/RemoteSensorMonitor/Remote.Sensor.Monitor.v.2.1.0.zip) and run it. You can see which port it is started on, you'll need to enter that below (Default is: 55555)",
+				"type" : "text",
+				"value" : ""
+			},
+			"image" : 
+			{
+				"order" : 120,
+				"text" : "Image",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"image_description" : 
+			{
+				"order" : 119,
+				"text" : "Paste any link to an online image here to show it on the middle of your wallpaper (max height/width is half your resolution) [works best with a completely white logo that has a transparent background]",
+				"type" : "text",
+				"value" : ""
+			},
+			"language" : 
+			{
+				"options" : 
+				[
+					{
+						"label" : "English",
+						"value" : "en"
+					},
+					{
+						"label" : "Hungarian",
+						"value" : "hu"
+					}
+				],
+				"order" : 106,
+				"text" : "Language",
+				"type" : "combo",
+				"value" : "en"
+			},
+			"latitude" : 
+			{
+				"condition" : "weather_geolocation.value == 2",
+				"order" : 113,
+				"text" : "Latitude",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"longitude" : 
+			{
+				"condition" : "weather_geolocation.value == 2",
+				"order" : 114,
+				"text" : "Longitude",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"openweathermap_api_key" : 
+			{
+				"condition" : "enable_weather.value == true",
+				"order" : 109,
+				"text" : "OWM API Key",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"primary_color" : 
+			{
+				"condition" : "use_custom_colors.value == true && bgcolor_type.value == 2",
+				"order" : 103,
+				"text" : "Primary Color",
+				"type" : "color",
+				"value" : "0 0.3843137254901961 1"
+			},
+			"remsenmon_port" : 
+			{
+				"condition" : "enable_hwmon.value == true",
+				"order" : 123,
+				"text" : "RemSenMon Port",
+				"type" : "textinput",
+				"value" : "55555"
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0.47058823529411764 1"
+			},
+			"secondary_color" : 
+			{
+				"condition" : "use_custom_colors.value == true && bgcolor_type.value == 2",
+				"order" : 104,
+				"text" : "Secondary Color",
+				"type" : "color",
+				"value" : "0.06274509803921569 0.6823529411764706 0.3803921568627451"
+			},
+			"showrss_description" : 
+			{
+				"order" : 117,
+				"text" : "Go to https://showrss.info/ register, subscribe to your favorite shows, and generate a link to your own watch list feed, that you can paste below.",
+				"type" : "text",
+				"value" : ""
+			},
+			"showrss_feed" : 
+			{
+				"condition" : "enable_showrss.value == true",
+				"order" : 118,
+				"text" : "showRSS Feed",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"temperature" : 
+			{
+				"condition" : "enable_weather.value == true",
+				"options" : 
+				[
+					{
+						"label" : "Celsius",
+						"value" : "1"
+					},
+					{
+						"label" : "Fahrenheit",
+						"value" : "2"
+					},
+					{
+						"label" : "Kelvin",
+						"value" : "3"
+					}
+				],
+				"order" : 110,
+				"text" : "Temperature",
+				"type" : "combo",
+				"value" : "1"
+			},
+			"textcolor" : 
+			{
+				"order" : 105,
+				"text" : "Text Color",
+				"type" : "color",
+				"value" : "1 1 1"
+			},
+			"use_custom_colors" : 
+			{
+				"order" : 100,
+				"text" : "Enable Color Schemes",
+				"type" : "bool",
+				"value" : false
+			},
+			"weather_decription" : 
+			{
+				"order" : 108,
+				"text" : "You need to provide an OpenWeatherMap API key to fetch the needed data. Go to https://openweathermap.org/api to grab one.",
+				"type" : "text",
+				"value" : ""
+			},
+			"weather_geolocation" : 
+			{
+				"condition" : "enable_weather.value == true",
+				"options" : 
+				[
+					{
+						"label" : "Automatic (Not Supported)",
+						"value" : "1"
+					},
+					{
+						"label" : "Manual",
+						"value" : "2"
+					}
+				],
+				"order" : 111,
+				"text" : "Weather GeoLocation",
+				"type" : "combo",
+				"value" : "2"
+			}
+		}
+	},
+	"preview" : "preview.png",
+	"tags" : [ "Unspecified" ],
+	"title" : "TimeReact v0.2a",
+	"type" : "web",
+	"visibility" : "public",
+	"workshopid" : "1839579533"
+}

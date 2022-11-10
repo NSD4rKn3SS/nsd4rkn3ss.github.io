@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<!-- META -->
+		<title></title>
+		<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+		<meta name='viewport' content='width=device-width,height=device-height,initial-scale=1, user-scalable=no'>
+
+		<!-- FONTS -->
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700,700italic,300italic,300' rel='stylesheet' type='text/css'>
+		<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,300i,400,400i,700,700i&display=swap" rel="stylesheet">
+
+		<!--STYLES -->
+		<link href='css/sk.css' rel='stylesheet' type='text/css'>
+		<link href='css/sk-mq.css' rel='stylesheet' type='text/css'>
+		<link href='css/font-awesome.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/weather-icons.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/weather-icons-wind.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/owl.carousel.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/owl.theme.default.min.css' rel='stylesheet' type='text/css'>
+		<link href='css/Chart.css' rel='stylesheet' type='text/css'>
+		<link href='css/style.css' rel='stylesheet' type='text/css'>
+
+		<!--SCRIPTS -->
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+		<script src="https://code.createjs.com/easeljs-0.7.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+		<script src="js/moment-with-locales.js"></script>
+		<script src="js/moment-timezone-with-data.js"></script>
+		<script src="js/jquery.rss.min.js"></script>
+		<script src="js/smoothie.js"></script>
+		<script src="js/owl.carousel.min.js"></script>
+		<script src="js/Chart.js"></script>
+		<script src='js/matrixutils.js'></script>
+		<script src='js/function.js'></script>
+
+	</head>
+
+	<body>
+
+		<!-- COLOR SCHEMES START -->
+		<div class="colorscheme-default" id="csDefault"><span></span></div>
+		<div class="colorscheme-twotone" id=csTwoTone></div>
+		<div class="colorscheme-rgb" id="csRGB"></div>
+		<div class="colorscheme-particledaynight" id="csParticle"><canvas id="projector">Your browser does not support the Canvas element.</canvas></div>
+		
+		<!-- COLOR SCHEMES END -->
+
+		<!-- CONTENT START -->
+		<div class="row content-outer">
+			<div class="content-inner" id="mainCnt">
+
+				<!-- SERIES FEED -->
+				<div class="feed-wrapper" id="showRSS">
+					<h3 class="feed-wtitle" id="showTitle"></h3>
+					<div class="col-10" id="showFeed"></div>
+				</div>
+
+				<!-- WEATHER FEED -->
+				<div class="weather-wrapper" id="wMain"></div>
+
+				<!-- TIME-LINE -->
+				<div class="time-line" id="tlMain">
+					<span class="sunrise" id="tlRise"></span>
+					<span class="sunset" id="tlSet"></span>
+					<i class="time-line-icon" id="tlCurr">
+						<!-- TIME -->
+						<div class="clock" id="clock"></div>
+					</i>
+				</div>
+
+				<!-- IMAGE -->
+				<div class="middle-img" style="background-image: url('');" id="middleIMG"></div>
+
+				
+
+				<!-- NEWS -->
+				<div class="feed-wrapper news" id="newsRSS">
+					<h3 class="feed-wtitle" id="newsTitle"></h3>
+					<div class="col-10" id="newsFeed"></div>
+				</div>
+
+
+				<!-- BTC -->
+				<div class="btc-rates-cnt">
+					<div class="col-10" id="BTCRates">
+						
+					</div>
+
+					<canvas id="chart" width="600" height="400"></canvas>
+				</div>
+			</div>
+		</div>
+		<!-- CONTENT END -->
+
+
+	</body>
+
+</html>
+
+

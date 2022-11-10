@@ -1,0 +1,51 @@
+
+
+/*
+	Google:Oswald
+	INCLUDE TO HTML HEAD : 		
+	<link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' type='text/css'>
+*/
+.txt-ff-oswald{
+	
+	font-family: "Oswald";
+}
+.txt-ff-oswald.i{	
+	font-family: "Oswald" !important; 
+}
+
+/*
+	Google:Open Sans
+	INCLUDE TO HTML HEAD : 		
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700,300,800' rel='stylesheet' type='text/css'>
+*/
+.txt-ff-open-sans{
+	font-family: "Open Sans";
+}
+.txt-ff-open-sans.i{
+	font-family: "Open Sans" !important;
+}
+
+/*
+	Google:Ubuntu
+	INCLUDE TO HTML HEAD : 		
+	<link href='https://fonts.googleapis.com/css?family=Ubuntu:400,500,700,300' rel='stylesheet' type='text/css'>
+*/
+.txt-ff-ubuntu-cond {
+	font-family: 'Ubuntu';
+}
+.txt-ff-ubuntu-cond.i {
+	
+	font-family: 'Ubuntu' !important;
+}
+
+/*
+	Google:Roboto
+	INCLUDE TO HTML HEAD : 		
+	 <link href='https://fonts.googleapis.com/css?family=Roboto:400,500,400italic,700,500italic,300' rel='stylesheet' type='text/css'>
+*/
+.txt-ff-roboto{
+	font-family: 'Roboto';
+}
+.txt-ff-roboto.i{
+	font-family: 'Roboto' !important;
+}
