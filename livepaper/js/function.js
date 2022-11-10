@@ -280,7 +280,7 @@ var init = function(props) {
 					alt_text.html(', '+alt);
 				}
 				
-				$.getJSON("http://api.weatherapi.com/v1/forecast.json?key="+apiKey+"&lat="+lat+"&lon="+lon+"&days=4&lang="+MM_lang+"&q="+MM_City, function(data) {
+				$.getJSON("https://api.weatherapi.com/v1/forecast.json?key="+apiKey+"&lat="+lat+"&lon="+lon+"&days=4&lang="+MM_lang+"&q="+MM_City, function(data) {
 					city_name = data["location"]["name"];
 					region_name = data["location"]["region"];
 					country_name = data["location"]["country"];

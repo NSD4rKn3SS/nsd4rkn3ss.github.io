@@ -134,7 +134,7 @@ function matrixSetIcon(devAddress, pluginUid, file) {
 
     return utils.makeRequest({
         method: "POST",
-        url: "http://"+devAddress+"/rest/api/v1/display/uid/" + pluginUid + "/bitmap",
+        url: "https://"+devAddress+"/rest/api/v1/display/uid/" + pluginUid + "/bitmap",
         isJsonResponse: true,
         parameter: {
             file: file
@@ -158,7 +158,7 @@ function matrixGetText(devAddress, pluginUid, justTextId) {
     //disableUI();
     return utils.makeRequest({
         method: "GET",
-        url: "http://"+devAddress+"/rest/api/v1/display/uid/" + pluginUid + "/text",
+        url: "https://"+devAddress+"/rest/api/v1/display/uid/" + pluginUid + "/text",
         isJsonResponse: true,
         headers: {
             "Access-Control-Allow-Origin": '*'
@@ -180,7 +180,7 @@ function matrixSetText(devAddress, pluginUid, justText) {
 
     return utils.makeRequest({
         method: "POST",
-        url: "http://"+devAddress+"/rest/api/v1/display/uid/" + pluginUid + "/text",
+        url: "https://"+devAddress+"/rest/api/v1/display/uid/" + pluginUid + "/text",
         isJsonResponse: true,
         parameter: {
             show: justText
