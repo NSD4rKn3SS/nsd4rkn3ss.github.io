@@ -588,7 +588,7 @@ var MMConfig = {
 	newsrss_feed 			: 'https://444.hu/feed', //link to the news feed you'd like
 
 	//BTC Report
-	enable_btcreport		: true
+	enable_btcreport		: false
 };
 
 $(document).ready(function() {
