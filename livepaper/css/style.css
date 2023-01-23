@@ -114,8 +114,7 @@ html, body {
 }
 
 .colorscheme-particledaynight {
-	transition: background 1s ease-in-out,
-				filter 1s ease-in-out;
+	transition: background 1s ease-in-out;
 }
 
 .colorscheme-particledaynight[data-dntime="00"] { 
