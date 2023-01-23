@@ -17,7 +17,7 @@ marquee.hidden {
 	opacity: 0;
 }
 
-img, svg {
+img, svg, canvas {
 	object-fit: contain;
 	object-position: center;
 	height: 100vh;
