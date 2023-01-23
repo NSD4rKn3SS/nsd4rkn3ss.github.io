@@ -1,8 +1,8 @@
 
-function animation(image) {
+function animation(rand, image) {
 
     let anims = [
-        1 = pict2pix.animate({
+        pict2pix.animate({
             image: image,
             particleType: 'led-matrix',
             type: 'random',
@@ -11,7 +11,7 @@ function animation(image) {
             ledSize: 4
         }),
 
-        2 = pict2pix.animate({
+        pict2pix.animate({
             image: image,
             numberOfParticles: 800,
             horizontalSpeed: 1,
@@ -19,7 +19,7 @@ function animation(image) {
             particleType: 'twisted-particle'
         }),
 
-        3 = pict2pix.animate({
+        pict2pix.animate({
             image: image,
             particleType: 'halftone', 
             transitionTime: 10000,
@@ -29,11 +29,12 @@ function animation(image) {
         })
     ];
     
+    anims[rand];
 };
 
 function startAnimation(image) {
     var rand = Math.floor(Math.random() * 3) + 1;
-    animation(image);
+    animation(rand, image);
 };
 
 
