@@ -1,5 +1,10 @@
+/*let matrixIP = '192.168.0.4';
+let matrixID = '27970';
+let matrixTEXT = '';
+let matrixColor = '\\calign\\#ff4900';*/
 
-let lat = '47.2309',
+let locale = 'hu-HU', //en-US
+    lat = '47.2309',
     lng = '16.621';
 let openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current_weather=true&timezone=auto';
 let weather,
@@ -21,11 +26,14 @@ function updateDateTime() {
       month: "long",
       day: "numeric",
     };
-    var formattedDate = date.toLocaleDateString("en-US", options);
-    var formattedTime = date.toLocaleTimeString("en-US", { hour12: false });
+    var formattedDate = date.toLocaleDateString("hu-HU", options);
+    var formattedTime = date.toLocaleTimeString("hu-HU", { hour12: false });
   
     var dateTimeElement = document.getElementById("datetime");
-    dateTimeElement.innerHTML = formattedDate +'. '+ formattedTime +'<br>'+formattedWeather;
+    dateTimeElement.innerHTML = formattedDate +' '+ formattedTime +'<br>'+formattedWeather;
+    //matrixSetIcon('192.168.0.2', '50459', temp_bit);
+    //matrixTEXT = formattedTime;
+	//matrixSetText(matrixIP, matrixID, matrixColor+matrixTEXT);
 }
 
 function updateBG() {
