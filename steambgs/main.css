@@ -1,6 +1,7 @@
 :root {
-    --font1: 'Librum';
+    --font1: 'Librium';
     --font2: 'Dash Digital-7';
+    --offset: 45px;
 }
 
 .fullscreen-bg {
@@ -44,7 +45,7 @@
     pointer-events: none;
 }
 .page_background_holder {
-    background-position: top center;
+    background-position: calc(50% + var(--offset)) 0;
     background-repeat: no-repeat;
     position: fixed;
     z-index: 2;
@@ -59,7 +60,7 @@
 .page_text_holder {
     position: fixed;
     top: 174px;
-    left: calc((100% / 2) - (566px / 2) - 45px);
+    left: calc((100% / 2) - (566px / 2));
     width: 566px;
     color: #FFF;
     z-index: 3;
