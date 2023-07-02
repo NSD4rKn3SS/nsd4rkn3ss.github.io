@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'Librium';
+    src: url('Librium.woff2') format('woff2'),
+        url('Librium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Dash Digital-7';
+    src: url('DashDigital-7.woff2') format('woff2'),
+        url('DashDigital-7.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Librium';
+    src: url('Librium.woff2') format('woff2'),
+        url('Librium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Dash Digital-7';
+    src: url('DashDigital-7.woff2') format('woff2'),
+        url('DashDigital-7.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
