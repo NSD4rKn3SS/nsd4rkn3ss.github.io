@@ -24,8 +24,11 @@
     z-index: 0;
     background-position: center;
     background-attachment: fixed;
+    transition: filter 0.2s ease-in-out;
 }
-
+.page_pattern_holder.night {
+    filter: contrast(1.05) brightness(1.5);
+}
 .fullscreen-bg__video {
     margin-left: 50%;
     transform: translateX(-50%);

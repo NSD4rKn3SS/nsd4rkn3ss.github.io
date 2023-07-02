@@ -33,8 +33,10 @@ function updateBG() {
     let curDate = new Date();
     if ( curDate.getHours() >= 18 || curDate.getHours() < 6 ) {
         strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
+        $('.page_pattern_holder').addClass('night');
     } else {
         strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif"
+        $('.page_pattern_holder').removeClass('night');
     }
     $( '.page_background_holder' ).css( 'background-image', 'url("' + strBackgroundDesktop + '")' );
 }
