@@ -3,9 +3,43 @@ let matrixID = '27970';
 let matrixTEXT = '';
 let matrixColor = '\\calign\\#ff4900';*/
 
-let locale = 'hu-HU', //en-US
-    lat = '47.2309',
-    lng = '16.621';
+function getURLParameters() {
+  var query = window.location.search.substring(1); // Exclude the '?' character
+  var params = {};
+
+  // Split the query string into an array of parameters
+  var pairs = query.split('&');
+
+  // Iterate over each parameter and split it into a key/value pair
+  for (var i = 0; i < pairs.length; i++) {
+    var pair = pairs[i].split('=');
+    var key = decodeURIComponent(pair[0]);
+    var value = decodeURIComponent(pair[1] || '');
+
+    // Store the key/value pair in the params object
+    if (key) {
+      // If the key already exists, convert it into an array of values
+      if (params[key]) {
+        if (Array.isArray(params[key])) {
+          params[key].push(value);
+        } else {
+          params[key] = [params[key], value];
+        }
+      } else {
+        params[key] = value;
+      }
+    }
+  }
+
+  return params;
+}
+
+// Usage:
+var param = getURLParameters();
+
+let locale = param.locale ? param.locale : 'hu-HU', //en-US
+    lat = param.lat ? param.lat : '47.2309',
+    lng = param.lng ? param.lng : '16.621';
 let openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current_weather=true&timezone=auto';
 let weather,
     formattedWeather;
