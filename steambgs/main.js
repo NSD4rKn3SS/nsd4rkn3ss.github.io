@@ -65,7 +65,7 @@ function updateDateTime() {
     var formattedTime = date.toLocaleTimeString(locale, { hour12: hour12set });
   
     var dateTimeElement = document.getElementById("datetime");
-    dateTimeElement.innerHTML = formattedDate +' '+ formattedTime +'<br>'+formattedWeather;
+    dateTimeElement.innerHTML = formattedDate +'<br>'+ formattedTime +' - '+formattedWeather;
     //matrixSetIcon('192.168.0.2', '50459', temp_bit);
     //matrixTEXT = formattedTime;
 	//matrixSetText(matrixIP, matrixID, matrixColor+matrixTEXT);
