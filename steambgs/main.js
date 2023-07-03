@@ -39,7 +39,8 @@ var param = getURLParameters();
 
 let locale = param.locale ? param.locale : 'hu-HU', //en-US
     lat = param.lat ? param.lat : '47.2309',
-    lng = param.lng ? param.lng : '16.621';
+    lng = param.lng ? param.lng : '16.621',
+    hour12set = param.hour12 ? param.hour12 : false;
 let openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current_weather=true&timezone=auto';
 let weather,
     formattedWeather;
@@ -60,8 +61,8 @@ function updateDateTime() {
       month: "long",
       day: "numeric",
     };
-    var formattedDate = date.toLocaleDateString("hu-HU", options);
-    var formattedTime = date.toLocaleTimeString("hu-HU", { hour12: false });
+    var formattedDate = date.toLocaleDateString(locale, options);
+    var formattedTime = date.toLocaleTimeString(locale, { hour12: hour12set });
   
     var dateTimeElement = document.getElementById("datetime");
     dateTimeElement.innerHTML = formattedDate +' '+ formattedTime +'<br>'+formattedWeather;
