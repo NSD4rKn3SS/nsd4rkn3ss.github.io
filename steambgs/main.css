@@ -26,6 +26,12 @@
     background-attachment: fixed;
     transition: filter 0.2s ease-in-out;
 }
+.page_pattern_holder.summer.y2023 {
+    background-image: urL('./images/summersale/2023/Steam_Summer_Sale_pattern-04-day_lighter.gif');
+}
+.page_pattern_holder.spring.y2023 {
+    background-image: urL('./images/springsale/2023/steam_spring_sale_pipes_animation-02.gif');
+}
 .page_pattern_holder.night {
     filter: contrast(1.05) brightness(1.5);
 }

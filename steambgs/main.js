@@ -44,6 +44,8 @@ let locale = param.locale ? param.locale : 'hu-HU', //en-US
 let openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current_weather=true&timezone=auto';
 let weather,
     formattedWeather;
+let season = param.season ? param.season : 'summer';
+let year = param.year ? param.year : '2023';
 
 function updateWeather() {
     $.getJSON(openMeteoURL, function(data) {
@@ -71,7 +73,19 @@ function updateDateTime() {
 	//matrixSetText(matrixIP, matrixID, matrixColor+matrixTEXT);
 }
 
-function updateBG() {
+function updateBG(season, year) {
+  if (season && year) {
+    let strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
+    let curDate = new Date();
+    if (curDate.getHours() >= 18 || curDate.getHours() < 6) {
+      strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
+      $('.page_pattern_holder').addClass('night');
+    } else {
+      strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif"
+      $('.page_pattern_holder').removeClass('night');
+    }
+    $('.page_background_holder').css('background-image', 'url("' + strBackgroundDesktop + '")');
+  } else {
     let strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
     let curDate = new Date();
     if ( curDate.getHours() >= 18 || curDate.getHours() < 6 ) {
@@ -82,6 +96,7 @@ function updateBG() {
         $('.page_pattern_holder').removeClass('night');
     }
     $( '.page_background_holder' ).css( 'background-image', 'url("' + strBackgroundDesktop + '")' );
+  }
 }
 // Refresh date and time every second (1000 milliseconds)
 setInterval(updateDateTime, 1000);
@@ -91,5 +106,5 @@ setInterval(updateBG, 3600000);
 $(document).ready(function () {
     updateDateTime();
     updateWeather();
-    updateBG();
+  updateBG(season, year);
 });
