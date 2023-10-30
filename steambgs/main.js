@@ -82,14 +82,14 @@ function updateBG(season, year) {
         strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
       }
       if (season === "spring") {
-        strBackgroundDesktop = "././images/" + season + "sale/" + year +"/page_bg_english.gif";
+        strBackgroundDesktop = "./images/"+season+"sale/"+year+"/page_bg_english.gif";
       } else {
         strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
       }
       $('.page_pattern_holder').addClass(season+' y'+year+' night');
     } else {
-      strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif"
-      $('.page_pattern_holder').addClass(season + ' y' + year);
+      strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
+      $('.page_pattern_holder').addClass(season+ ' y'+ year);
       $('.page_pattern_holder').removeClass('night');
     }
     $('.page_background_holder').css('background-image', 'url("' + strBackgroundDesktop + '")');
