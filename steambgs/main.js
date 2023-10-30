@@ -78,14 +78,23 @@ function updateBG(season, year) {
     let strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
     let curDate = new Date();
     if (curDate.getHours() >= 18 || curDate.getHours() < 6) {
-      strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
-      $('.page_pattern_holder').addClass('night');
+      if (season === "summer") {
+        strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
+      }
+      if (season === "spring") {
+        strBackgroundDesktop = "././images/" + season + "sale/" + year +"/page_bg_english.gif";
+      } else {
+        strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
+      }
+      $('.page_pattern_holder').addClass(season+' y'+year+' night');
     } else {
       strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif"
+      $('.page_pattern_holder').addClass(season + ' y' + year);
       $('.page_pattern_holder').removeClass('night');
     }
     $('.page_background_holder').css('background-image', 'url("' + strBackgroundDesktop + '")');
-  } else {
+  }
+  else {
     let strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
     let curDate = new Date();
     if ( curDate.getHours() >= 18 || curDate.getHours() < 6 ) {
