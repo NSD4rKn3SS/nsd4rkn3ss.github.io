@@ -35,17 +35,17 @@ function getURLParameters() {
 }
 
 // Usage:
-var param = getURLParameters();
+let param = getURLParameters();
 
 let locale = param.locale ? param.locale : 'hu-HU', //en-US
     lat = param.lat ? param.lat : '47.2309',
     lng = param.lng ? param.lng : '16.621',
-    hour12set = param.hour12 ? param.hour12 : false;
+    hour12set = param.hour12 ? param.hour12 : false,
+    season = param.season ? param.season : 'summer',
+    year = param.year ? param.year : '2023';
 let openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lng+'&current_weather=true&timezone=auto';
 let weather,
     formattedWeather;
-let season = param.season ? param.season : 'summer';
-let year = param.year ? param.year : '2023';
 
 function updateWeather() {
     $.getJSON(openMeteoURL, function(data) {
@@ -88,11 +88,11 @@ function updateBG(season, year) {
       }
       $('.page_pattern_holder').addClass(season+' y'+year+' night');
     } else {
-      strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
+      strBackgroundDesktop = "./images/summersale/2023/home_header_bg_day_notext.gif";
       $('.page_pattern_holder').addClass(season+ ' y'+ year);
       $('.page_pattern_holder').removeClass('night');
     }
-    $('.page_background_holder').css('background-image', 'url("' + strBackgroundDesktop + '")');
+    $('.page_background_holder').css('background-image', 'url(' + strBackgroundDesktop + ')');
   }
   else {
     let strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
@@ -104,7 +104,7 @@ function updateBG(season, year) {
         strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif"
         $('.page_pattern_holder').removeClass('night');
     }
-    $( '.page_background_holder' ).css( 'background-image', 'url("' + strBackgroundDesktop + '")' );
+    $( '.page_background_holder' ).css( 'background-image', 'url(' + strBackgroundDesktop + ')' );
   }
 }
 // Refresh date and time every second (1000 milliseconds)
@@ -113,7 +113,8 @@ setInterval(updateWeather, 3600000);
 setInterval(updateBG, 3600000);
 
 $(document).ready(function () {
+    param = getURLParameters();
     updateDateTime();
     updateWeather();
-  updateBG(season, year);
+    updateBG(season, year);
 });
