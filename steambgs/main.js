@@ -75,8 +75,13 @@ function updateDateTime() {
 
 function updateBG(season, year) {
   if (season && year) {
+    //set default BG
     let strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
+
+    //get current date
     let curDate = new Date();
+
+    //its night
     if (curDate.getHours() >= 18 || curDate.getHours() < 6) {
       if (season === "summer") {
         strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
@@ -86,21 +91,40 @@ function updateBG(season, year) {
       } else {
         strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
       }
-      $('.page_pattern_holder').addClass(season+' y'+year+' night');
-    } else {
-      strBackgroundDesktop = "./images/summersale/2023/home_header_bg_day_notext.gif";
+      $('.page_pattern_holder').addClass(season+' y'+year);
+      $('.page_pattern_holder').addClass('night');
+    }
+
+    //its day
+    else {
+      if (season === "summer") {
+        strBackgroundDesktop = "./images/" + season + "sale/" + year + "/home_header_bg_day_notext.gif";
+      }
+      if (season === "spring") {
+        strBackgroundDesktop = "./images/" + season + "sale/" + year + "/page_bg_english.gif";
+      } else {
+        strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
+      }
       $('.page_pattern_holder').addClass(season+ ' y'+ year);
       $('.page_pattern_holder').removeClass('night');
     }
+
+    //set BG
     $('.page_background_holder').css('background-image', 'url(' + strBackgroundDesktop + ')');
   }
+
   else {
+    //set default BG
     let strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
+    //get current date
     let curDate = new Date();
+    //its night
     if ( curDate.getHours() >= 18 || curDate.getHours() < 6 ) {
         strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
         $('.page_pattern_holder').addClass('night');
-    } else {
+    }
+    //its day
+    else {
         strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif"
         $('.page_pattern_holder').removeClass('night');
     }
