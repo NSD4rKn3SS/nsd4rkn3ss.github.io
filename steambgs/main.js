@@ -7,8 +7,8 @@ class SteamBG {
 	season = this.param.season 		? this.param.season : 'summer'
 	year = this.param.year 			? this.param.year 	: '2023'
 	openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+this.lat+'&longitude='+this.lng+'&current_weather=true&timezone=auto'
-	weather = false
-	formattedWeather = false
+	weather
+	formattedWeather
 	timeofday = 'day'
 	bgs = {
 		'years' : ["2023"],
@@ -51,8 +51,11 @@ class SteamBG {
 		let fn = this;
 		$.getJSON(fn.openMeteoURL, function(data) {
 			fn.weather = data;
-			fn.formattedWeather = fn.weather['current_weather']['temperature']+'°C';
-		});
+			fn.formattedWeather = data['current_weather']['temperature']+'°C';
+			let weatherElement = document.getElementById("weather");
+			weatherElement.innerHTML = fn.formattedWeather;
+		});			
+
 	}
 
 	updateDateTime() {
@@ -67,8 +70,8 @@ class SteamBG {
 		let formattedDate = date.toLocaleDateString(fn.locale, options);
 		let formattedTime = date.toLocaleTimeString(fn.locale, { hour12: fn.hour12set });
 	  
-		let dateTimeElement = document.getElementById("datetime");
-		dateTimeElement.innerHTML = formattedDate +'<br>'+ formattedTime +' - '+fn.formattedWeather;
+		let dateTimeElement = document.getElementById("time");
+		dateTimeElement.innerHTML = formattedDate +'<br>'+formattedTime;
 
 		if ( date.getHours() >= 18 || date.getHours() < 6 ) { fn.timeofday = 'night' } else { fn.timeofday = 'day' }
 
