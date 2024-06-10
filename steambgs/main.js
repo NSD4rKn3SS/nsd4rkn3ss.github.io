@@ -48,18 +48,16 @@ class SteamBG {
 	}
 
 	updateWeather() {
-		let fn = this;
-		$.getJSON(fn.openMeteoURL, function(data) {
-			fn.weather = data;
-			fn.formattedWeather = data['current_weather']['temperature']+'°C';
+		$.getJSON(this.openMeteoURL, function(data) {
+			this.weather = data;
+			this.formattedWeather = data['current_weather']['temperature']+'°C';
 			let weatherElement = document.getElementById("weather");
-			weatherElement.innerHTML = fn.formattedWeather;
+			weatherElement.innerHTML = this.formattedWeather;
 		});			
 
 	}
 
 	updateDateTime() {
-		let fn = this
 		let date = new Date();
 	  
 		let options = {
@@ -67,26 +65,24 @@ class SteamBG {
 		  month: "long",
 		  day: "numeric",
 		};
-		let formattedDate = date.toLocaleDateString(fn.locale, options);
-		let formattedTime = date.toLocaleTimeString(fn.locale, { hour12: fn.hour12set });
+		let formattedDate = date.toLocaleDateString(this.locale, options);
+		let formattedTime = date.toLocaleTimeString(this.locale, { hour12: this.hour12set });
 	  
 		let dateTimeElement = document.getElementById("time");
 		dateTimeElement.innerHTML = formattedDate +'<br>'+formattedTime;
 
-		if ( date.getHours() >= 18 || date.getHours() < 6 ) { fn.timeofday = 'night' } else { fn.timeofday = 'day' }
+		if ( date.getHours() >= 18 || date.getHours() < 6 ) { this.timeofday = 'night' } else { this.timeofday = 'day' }
 
 
 	}
 
 	updateBG(season, year) {
-		let fn = this
-
 		if (season && year) {
 		  //set default BG
 		  let strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
 	  
 		  //its night
-		  if (fn.timeofday === 'night') {
+		  if (this.timeofday === 'night') {
 			if (season === "summer") {
 			  strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
 			}
@@ -122,7 +118,7 @@ class SteamBG {
 		  let strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
 
 		  //its night
-		  if ( fn.timeofday === 'night') {
+		  if ( this.timeofday === 'night') {
 			  strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
 			  $('.page_pattern_holder').addClass('night');
 		  }
