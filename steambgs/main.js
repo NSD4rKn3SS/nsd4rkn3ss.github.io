@@ -1,11 +1,11 @@
 class SteamBG {
-	param = this.getURLParameters()
-	locale = this.param.locale 		? this.param.locale : 'hu-HU' //en-US
-	lat = this.param.lat 			? this.param.lat 	: '47.2309'
-	lng = this.param.lng 			? this.param.lng 	: '16.621'
-	hour12set = this.param.hour12 	? this.param.hour12 : false
-	season = this.param.season 		? this.param.season : 'summer'
-	year = this.param.year 			? this.param.year 	: '2023'
+	param = 	this.param				?? this.getURLParameters()
+	locale = 	this.param.locale 		?? 'hu-HU' //en-US
+	lat = 		this.param.lat 			?? '47.2309'
+	lng = 		this.param.lng 			?? '16.621'
+	hour12set = this.param.hour12 		?? false
+	season = 	this.param.season 		?? 'summer'
+	year = 		this.param.year 		??  '2023'
 	openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+this.lat+'&longitude='+this.lng+'&current_weather=true&timezone=auto'
 	weather
 	formattedWeather
@@ -151,8 +151,3 @@ class SteamBG {
 	}
 	
 }
-  
-$(document).ready(function () {
-	let bg = new SteamBG
-	bg.init()
-});
