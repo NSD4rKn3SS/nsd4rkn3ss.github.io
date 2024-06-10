@@ -12,7 +12,7 @@ class SteamBG {
 	timeofday = 'day'
 	bgs = {
 		'years' : ["2023"],
-		'seasons' : ["spring", "summer"]
+		'seasons' : ["spring", "summer", "fall", "winter"]
 		
 	}
 
