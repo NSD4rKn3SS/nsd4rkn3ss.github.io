@@ -59,14 +59,15 @@ class SteamBG {
 
 	updateDateTime() {
 		let date = new Date();
+		let dateLocale = this.locale ?? this.param.locale;
 	  
 		let options = {
 		  year: "numeric",
 		  month: "long",
 		  day: "numeric",
 		};
-		let formattedDate = date.toLocaleDateString(this.locale, options);
-		let formattedTime = date.toLocaleTimeString(this.locale, { hour12: this.hour12set });
+		let formattedDate = date.toLocaleDateString(dateLocale, options);
+		let formattedTime = date.toLocaleTimeString(dateLocale, { hour12: this.hour12set });
 	  
 		let dateTimeElement = document.getElementById("time");
 		dateTimeElement.innerHTML = formattedDate +'<br>'+formattedTime;
