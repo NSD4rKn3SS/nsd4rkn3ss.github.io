@@ -92,6 +92,3 @@ class SteamBG {
 		this.intervals();
 	}
 }
-
-const steamBG = new SteamBG();
-steamBG.init();
