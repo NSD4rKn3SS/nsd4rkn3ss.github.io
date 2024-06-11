@@ -1,37 +1,31 @@
 class SteamBG {
-	param = 	this.param				?? this.getURLParameters()
-	locale = 	this.param.locale 		?? 'hu-HU' //en-US
-	lat = 		this.param.lat 			?? '47.2309'
-	lng = 		this.param.lng 			?? '16.621'
-	hour12set = this.param.hour12 		?? false
-	season = 	this.param.season 		?? 'summer'
-	year = 		this.param.year 		??  '2023'
-	openMeteoURL = 'https://api.open-meteo.com/v1/forecast?latitude='+this.lat+'&longitude='+this.lng+'&current_weather=true&timezone=auto'
-	weather
-	formattedWeather
-	timeofday = 'day'
-	bgs = {
-		'years' : ["2023"],
-		'seasons' : ["spring", "summer", "fall", "winter"]
-		
+	constructor() {
+		this.param = this.getURLParameters();
+		this.locale = this.param.locale || 'hu-HU';
+		this.lat = this.param.lat || '47.2309';
+		this.lng = this.param.lng || '16.621';
+		this.hour12set = this.param.hour12 || false;
+		this.season = this.param.season || 'summer';
+		this.year = this.param.year || '2023';
+		this.openMeteoURL = `https://api.open-meteo.com/v1/forecast?latitude=${this.lat}&longitude=${this.lng}&current_weather=true&timezone=auto`;
+		this.weather = null;
+		this.formattedWeather = null;
+		this.timeofday = 'day';
+		this.bgs = {
+			'years': ["2023"],
+			'seasons': ["spring", "summer", "fall", "winter"]
+		};
 	}
 
 	getURLParameters() {
-		let query = window.location.search.substring(1); // Exclude the '?' character
+		let query = window.location.search.substring(1);
 		let params = {};
-
-		// Split the query string into an array of parameters
 		let pairs = query.split('&');
-
-		// Iterate over each parameter and split it into a key/value pair
-		for (var i = 0; i < pairs.length; i++) {
-			let pair = pairs[i].split('=');
-			let key = decodeURIComponent(pair[0]);
-			let value = decodeURIComponent(pair[1] || '');
-
-			// Store the key/value pair in the params object
+		for (let pair of pairs) {
+			let [key, value] = pair.split('=');
+			key = decodeURIComponent(key);
+			value = decodeURIComponent(value || '');
 			if (key) {
-				// If the key already exists, convert it into an array of values
 				if (params[key]) {
 					if (Array.isArray(params[key])) {
 						params[key].push(value);
@@ -43,108 +37,61 @@ class SteamBG {
 				}
 			}
 		}
-
 		return params;
 	}
 
 	updateWeather() {
-		$.getJSON(this.openMeteoURL, function(data) {
-			this.weather = data;
-			this.formattedWeather = data['current_weather']['temperature']+'°C';
-			let weatherElement = document.getElementById("weather");
-			weatherElement.innerHTML = this.formattedWeather;
-		});			
-
+		fetch(this.openMeteoURL)
+			.then(response => response.json())
+			.then(data => {
+				this.weather = data;
+				this.formattedWeather = data['current_weather']['temperature'] + '°C';
+				let weatherElement = document.getElementById("weather");
+				weatherElement.innerHTML = this.formattedWeather;
+			})
+			.catch(error => console.error(error));
 	}
 
 	updateDateTime() {
 		let date = new Date();
-		let dateLocale = this.locale ?? this.param.locale;
-	  
+		let dateLocale = this.locale || this.param.locale;
 		let options = {
-		  year: "numeric",
-		  month: "long",
-		  day: "numeric",
+			year: "numeric",
+			month: "long",
+			day: "numeric",
 		};
 		let formattedDate = date.toLocaleDateString(dateLocale, options);
 		let formattedTime = date.toLocaleTimeString(dateLocale, { hour12: this.hour12set });
-	  
 		let dateTimeElement = document.getElementById("time");
-		dateTimeElement.innerHTML = formattedDate +'<br>'+formattedTime;
-
-		if ( date.getHours() >= 18 || date.getHours() < 6 ) { this.timeofday = 'night' } else { this.timeofday = 'day' }
-
-
+		dateTimeElement.innerHTML = formattedDate + '<br>' + formattedTime;
+		this.timeofday = date.getHours() >= 18 || date.getHours() < 6 ? 'night' : 'day';
 	}
 
 	updateBG(season, year) {
+		let strBackgroundDesktop;
 		if (season && year) {
-		  //set default BG
-		  let strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_day_notext.gif";
-	  
-		  //its night
-		  if (this.timeofday === 'night') {
-			if (season === "summer") {
-			  strBackgroundDesktop = "./images/"+season+"sale/"+year+"/home_header_bg_night_notext.gif";
-			}
-			if (season === "spring") {
-			  strBackgroundDesktop = "./images/"+season+"sale/"+year+"/page_bg_english.gif";
-			} else {
-			  strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
-			}
-			$('.page_pattern_holder').addClass(season+' y'+year);
-			$('.page_pattern_holder').addClass('night');
-		  }
-	  
-		  //its day
-		  else {
-			if (season === "summer") {
-			  strBackgroundDesktop = "./images/" + season + "sale/" + year + "/home_header_bg_day_notext.gif";
-			}
-			if (season === "spring") {
-			  strBackgroundDesktop = "./images/" + season + "sale/" + year + "/page_bg_english.gif";
-			} else {
-			  strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
-			}
-			$('.page_pattern_holder').addClass(season+ ' y'+ year);
-			$('.page_pattern_holder').removeClass('night');
-		  }
-	  
-		  //set BG
-		  $('.page_background_holder').css('background-image', 'url(' + strBackgroundDesktop + ')');
+			strBackgroundDesktop = `./images/${season}sale/${year}/home_header_bg_${this.timeofday === 'night' ? 'night' : 'day'}_notext.gif`;
+			$('.page_pattern_holder').addClass(`${season} y${year}`).toggleClass('night', this.timeofday === 'night');
+		} else {
+			strBackgroundDesktop = `./summersale2023/home_header_bg_${this.timeofday === 'night' ? 'night' : 'day'}_notext.gif`;
+			$('.page_pattern_holder').toggleClass('night', this.timeofday === 'night');
 		}
-	  
-		else {
-		  //set default BG
-		  let strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif";
-
-		  //its night
-		  if ( this.timeofday === 'night') {
-			  strBackgroundDesktop = "./summersale2023/home_header_bg_night_notext.gif";
-			  $('.page_pattern_holder').addClass('night');
-		  }
-		  //its day
-		  else {
-			  strBackgroundDesktop = "./summersale2023/home_header_bg_day_notext.gif"
-			  $('.page_pattern_holder').removeClass('night');
-		  }
-		  $( '.page_background_holder' ).css( 'background-image', 'url(' + strBackgroundDesktop + ')' );
-		}
+		$('.page_background_holder').css('background-image', `url(${strBackgroundDesktop})`);
 	}
 
 	intervals() {
-		setInterval(this.updateDateTime, 1000);
-		setInterval(this.updateWeather, 3600000);
-		setInterval(this.updateBG, 3600000);
+		setInterval(() => this.updateDateTime(), 1000);
+		setInterval(() => this.updateWeather(), 3600000);
+		setInterval(() => this.updateBG(this.season, this.year), 3600000);
 	}
 
 	init() {
-		this.param = this.getURLParameters();
 		this.updateDateTime();
 		this.updateWeather();
 		this.updateBG(this.season, this.year);
 		this.intervals();
-
 	}
-	
 }
+
+const steamBG = new SteamBG();
+steamBG.init();
